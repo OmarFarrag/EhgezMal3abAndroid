@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">EhgezMal3ab</string>
+    <string name="signIn">Login</string>
+    <string name="register">Register</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="number">Number</string>
+    <string name="fullName">Full name</string>
+    <string name="fieldIsRequired">This field is required</string>
+    <string name="shortPassword">The password must be eight characters or more</string>
+    <string name="invalidEmail">Invalid email</string>
+    <string name="invalidNumber">Invalid number</string>
+    <string name="playerRegisterURL">http:localhost</string>
+    <string name="successfulRegistration">You have registered successfully</string>
+    <string name="loggedIn">Logged In</string>
+    <string name="incorrectUP">Incorrect username or password</string>
+</resources>

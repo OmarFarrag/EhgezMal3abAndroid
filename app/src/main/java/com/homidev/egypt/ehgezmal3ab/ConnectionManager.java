@@ -1,0 +1,304 @@
+package com.homidev.egypt.ehgezmal3ab;
+import android.app.Activity;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.RequiresApi;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+public class ConnectionManager {
+    private static ConnectionManager instance = null;
+    private OkHttpClient connectionClient;
+
+    private ConnectionManager()
+    {
+        connectionClient = new OkHttpClient();
+    }
+
+    public static ConnectionManager getConnectionManager()
+    {
+        if ( instance==null)
+        {
+            instance = new ConnectionManager();
+        }
+        return instance;
+    }
+
+    public String registerPlayer(Player player)
+    {
+
+        JSONObject playerJson = createJsonToRegisterPlayer(player);
+
+        RequestBody registerPlayerRequestBody = createPlayerRequestBody(playerJson);
+
+        final Request registerPlayerRequest = createRegisterPlayerRequest(registerPlayerRequestBody);
+
+        //This is to hack the final-assigning-innerclass problem
+        final Response[] response = new Response[1];
+
+        final String[] responseString = new String[1];
+
+        //Run the request on another thread to avoid errors
+        Thread registerThread = new Thread(new Runnable() {
+            public void run() {
+
+                try {
+                    response[0] = connectionClient.newCall(registerPlayerRequest).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if(response[0].code()==201){
+                    responseString[0] = "You have registered successfully";
+                    return;
+                }
+
+
+                try {
+                    responseString[0] = response[0].body().string();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                JSONObject responseJson;
+                try {
+                    responseJson = new JSONObject(responseString[0]);
+                    responseString[0] = responseJson.getString("text");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        registerThread.start();
+
+        try {
+            registerThread.join();
+        }
+        catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        return responseString[0];
+
+
+    }
+
+    public void loginPlayer(Player playerToLogin,final LogInFragment loginFragment)
+    {
+        JSONObject playerTologinJson = createJsonToLoginPlayer(playerToLogin);
+
+        RequestBody loginPlayerRequestBody = createPlayerRequestBody(playerTologinJson);
+
+        final Request loginPlayerRequest = createLoginPlayerRequest(loginPlayerRequestBody);
+
+        connectionClient.newCall(loginPlayerRequest).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+
+                    int code = response.code();
+                    boolean temp;
+                    if(code==200) temp=true;
+                    else temp=false;
+
+                    final boolean isSuccessful = temp;
+
+
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        public void run() {
+                            loginFragment.showLoginResponseMessage(isSuccessful);
+                        }
+                    });
+                }
+
+
+            });
+    }
+
+    protected JSONObject createJsonToLoginPlayer(Player playerToLogin)
+    {
+        JSONObject playerJson = new JSONObject();
+
+        try {
+            playerJson.put("userName", playerToLogin.getUsername());
+            playerJson.put("password", playerToLogin.getPassword());
+        }catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        return playerJson;
+    }
+
+    protected JSONObject createJsonToRegisterPlayer(Player player)
+    {
+        JSONObject playerJson = new JSONObject();
+
+        try {
+            playerJson.put("userName", player.getUsername());
+            playerJson.put("password", player.getPassword());
+            playerJson.put("email", player.getEmail());
+            playerJson.put("phoneNumber", player.getNumber());
+            playerJson.put("name", player.getName());
+
+        }catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        return playerJson;
+    }
+
+    //fires HTTP GET request to get all venues, returns it in an ArrayList<Venue>
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    protected List<Venue> getAllVenues () {
+
+        //assigned as final to access inner class (Thread)
+        //the list that will be returned.
+        final List<Venue> venuesList = new ArrayList<>();
+        //create a GET request to get all venues
+        final Request getVenuesRequest = createGetAllVenueRequest();
+        //store the response here for further processing
+        final Response[] response = new Response[1];
+
+        //make the GET request, parsing of JSON string, and adding venues to the list in a separate thread
+        Thread getAllVenuesThread = new Thread(new Runnable() {
+            public void run() {
+
+                try {
+                    //execute the request and store it in response[0]
+                    response[0] = connectionClient.newCall(getVenuesRequest).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    //parsing the JSONArray returned
+                    JSONArray venuesResponse = null;
+                    try {
+                        venuesResponse = new JSONArray(response[0].body().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //parse each JSONObject in the JSONArray and add it to the venueList
+                    for(int i = 0; i < venuesResponse.length(); i++) {
+                        JSONObject venueObject = venuesResponse.getJSONObject(i);
+                        venuesList.add(new Venue(
+                                venueObject.getString("venueName"),
+                                venueObject.getString("phoneNumber"),
+                                venueObject.getString("area"),
+                                venueObject.getString("street")
+                        ));
+                    }
+                }catch(JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        });
+
+        //start running the thread
+        getAllVenuesThread.start();
+
+        try {
+            //await main thread to join this thread to be able to update interface with data retrieve
+            getAllVenuesThread .join();
+        }
+        catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return venuesList;
+    }
+
+
+    protected RequestBody createPlayerRequestBody(JSONObject playerJson)
+    {
+        //Standard way of constructing the request body
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON,playerJson.toString());
+        return body;
+    }
+
+
+
+    //creates a GET HTTP request to retrieve all venues.
+    protected Request createGetAllVenueRequest() {
+        return new Request.Builder()
+                .url("http://192.168.1.21:56718/api/venues")
+                .get()
+                .addHeader("Content-Type", "application/json")
+                .build();
+    }
+
+    protected Request createRegisterPlayerRequest(RequestBody registerRequestBody)
+    {
+        //constructing the request
+        return  new Request .Builder()
+                .url("http://192.168.1.21:56718/api/users/register")
+                .post(registerRequestBody)
+                .build();
+    }
+
+    protected Request createLoginPlayerRequest(RequestBody loginRequestBody)
+    {
+        //constructing the request
+        return  new Request .Builder()
+                .url("http://192.168.1.21:56718/api/token")
+                .post(loginRequestBody)
+                .build();
+    }
+
+    //A function that checks if the application is connected to the internet
+    public boolean isConnectedToInternet() {
+        //Run the check on another thread
+        final boolean isCOnnected[] = new boolean[1];
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    InetAddress ipAddr = InetAddress.getByName("google.com");
+                    isCOnnected[0] = (!ipAddr.equals(""));
+                } catch (Exception e) {
+                    isCOnnected[0] = false;
+                }
+            }
+        });
+
+        t.start();
+        try {
+            t.join();
+        }
+        catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return isCOnnected[0];
+    }
+
+
+
+}
