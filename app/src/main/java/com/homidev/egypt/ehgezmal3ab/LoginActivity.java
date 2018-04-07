@@ -33,9 +33,10 @@ public class LoginActivity extends AppCompatActivity {
         connectionManager = ConnectionManager.getConnectionManager();
 
         //Check if there is internet connection
-        while (!connectionManager.isConnectedToInternet())
+        if (!connectionManager.isConnectedToInternet())
         {
-
+            setContentView(R.layout.no_internet_connection);
+            return;
         }
 
 

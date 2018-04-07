@@ -15,4 +15,5 @@
     <string name="successfulRegistration">You have registered successfully</string>
     <string name="loggedIn">Logged In</string>
     <string name="incorrectUP">Incorrect username or password</string>
+    <string name="noConnection">No internet connection</string>
 </resources>
