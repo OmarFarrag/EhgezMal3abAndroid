@@ -19,6 +19,7 @@ import com.homidev.egypt.ehgezmal3ab.R;
 
 public class LogInFragment extends Fragment {
 
+
     protected ConnectionManager connectionManager;
     LogInFragment me;
 
