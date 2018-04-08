@@ -26,11 +26,15 @@ public class ConnectionManager {
     private static ConnectionManager instance = null;
     private OkHttpClient connectionClient;
 
+    //private constructor to implement a singleton pattern, initiates the connection client
     private ConnectionManager()
     {
         connectionClient = new OkHttpClient();
     }
 
+
+
+    //The public interface for getting the connection manager
     public static ConnectionManager getConnectionManager()
     {
         if ( instance==null)
@@ -40,6 +44,12 @@ public class ConnectionManager {
         return instance;
     }
 
+
+
+    /*
+    This function sends a register request to the server, handles the response and return the proper
+    message
+     */
     public String registerPlayer(Player player)
     {
 
@@ -51,10 +61,11 @@ public class ConnectionManager {
 
         //This is to hack the final-assigning-innerclass problem
         final Response[] response = new Response[1];
-
         final String[] responseString = new String[1];
 
-        //Run the request on another thread to avoid errors
+
+
+        //Run the request on another thread
         Thread registerThread = new Thread(new Runnable() {
             public void run() {
 
@@ -69,13 +80,14 @@ public class ConnectionManager {
                     return;
                 }
 
-
+                //Get the response's text
                 try {
                     responseString[0] = response[0].body().string();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
+                //Construct the json response then extracts the message
                 JSONObject responseJson;
                 try {
                     responseJson = new JSONObject(responseString[0]);
@@ -89,6 +101,7 @@ public class ConnectionManager {
 
         registerThread.start();
 
+        //join the thread on the UI, to get the response
         try {
             registerThread.join();
         }
@@ -102,6 +115,12 @@ public class ConnectionManager {
 
     }
 
+
+
+    /*
+    This function sends a login request to the server, handles the response and then calls the proper
+    UI message display
+    */
     public void loginPlayer(Player playerToLogin,final LogInFragment loginFragment)
     {
         JSONObject playerTologinJson = createJsonToLoginPlayer(playerToLogin);
@@ -121,14 +140,19 @@ public class ConnectionManager {
             public void onResponse(Call call, final Response response) throws IOException {
 
                     int code = response.code();
+
+                    //temps is used to hack the final-assignment-innerClass problem
                     boolean temp;
+
                     if(code==200) temp=true;
                     else temp=false;
 
                     final boolean isSuccessful = temp;
 
-
+                    //The handler refers to the main loop (UI), as the UI must be updated
+                    //On UI thread only
                     Handler handler = new Handler(Looper.getMainLooper());
+
                     handler.post(new Runnable() {
                         public void run() {
                             loginFragment.showLoginResponseMessage(isSuccessful);
@@ -140,6 +164,10 @@ public class ConnectionManager {
             });
     }
 
+
+    /*
+    This function creates a JSON object of a player who wants to login
+     */
     protected JSONObject createJsonToLoginPlayer(Player playerToLogin)
     {
         JSONObject playerJson = new JSONObject();
@@ -154,6 +182,11 @@ public class ConnectionManager {
         return playerJson;
     }
 
+
+
+    /*
+    This function creates a JSON object of a player who wants to register
+     */
     protected JSONObject createJsonToRegisterPlayer(Player player)
     {
         JSONObject playerJson = new JSONObject();
@@ -237,6 +270,10 @@ public class ConnectionManager {
     }
 
 
+
+    /*
+    Create a request body for a player from a JSON player object
+     */
     protected RequestBody createPlayerRequestBody(JSONObject playerJson)
     {
         //Standard way of constructing the request body
@@ -256,6 +293,9 @@ public class ConnectionManager {
                 .build();
     }
 
+    /*
+    Create a player register request from a register request body
+     */
     protected Request createRegisterPlayerRequest(RequestBody registerRequestBody)
     {
         //constructing the request
@@ -265,6 +305,9 @@ public class ConnectionManager {
                 .build();
     }
 
+    /*
+    Create a player login request from a register request body
+     */
     protected Request createLoginPlayerRequest(RequestBody loginRequestBody)
     {
         //constructing the request
@@ -274,10 +317,15 @@ public class ConnectionManager {
                 .build();
     }
 
-    //A function that checks if the application is connected to the internet
+    /*
+    A function that checks if the application is connected to the internet by calling a dummy
+    api and check if the connection was successful
+    */
     public boolean isConnectedToInternet() {
+
         //Run the check on another thread
         final boolean isCOnnected[] = new boolean[1];
+
         Thread t = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -296,6 +344,7 @@ public class ConnectionManager {
         catch(InterruptedException e) {
             e.printStackTrace();
         }
+
 
         return isCOnnected[0];
     }

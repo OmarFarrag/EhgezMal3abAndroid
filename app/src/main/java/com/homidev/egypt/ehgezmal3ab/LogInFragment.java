@@ -28,7 +28,7 @@ public class LogInFragment extends Fragment {
     }
 
     /**
-     * This function returns the view of the log in fragment
+     * This function returns the view of the login fragment
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +44,8 @@ public class LogInFragment extends Fragment {
 
     }
 
+
+    //Set the listeners for the interactive elements on the login fragment
     protected void setListeners(final View loginView)
     {
         Button registerButton = (Button) loginView.findViewById(R.id.loginBtn);
@@ -66,6 +68,10 @@ public class LogInFragment extends Fragment {
         });
     }
 
+
+    /*
+    Verify that the user's input is valid so as to send it to the server or display error
+     */
     protected boolean verifyUserInput(View loginView)
     {
         boolean isValidInput= true;
@@ -82,27 +88,40 @@ public class LogInFragment extends Fragment {
         return isValidInput;
     }
 
+
+    /*
+    Check if the username is valid (not empty)
+     */
     private boolean isValidUsername(View loginView)
     {
         TextView usernameText = (TextView) loginView.findViewById(R.id.usernameText);
         String username = usernameText.getText().toString();
+
         //Set error initially to null so if it is a callback , the previous error goes away
         usernameText.setError(null);
+
         if(TextUtils.isEmpty(username))
         {
             usernameText.setError(getString(R.string.fieldIsRequired));
             return false;
         }
+
         return true;
     }
 
+
+    /*
+    Check if the password is valid (not empty / more than 8 chars)
+     */
     protected boolean isValidPassword(View loginView)
     {
 
         TextView passwordText = (TextView) loginView.findViewById(R.id.passwordText);
         String password =  passwordText.getText().toString();
+
         //Set error initially to null so if it is a callback , the previous error goes away
         passwordText.setError(null);
+
         if( TextUtils.isEmpty(password)  )
         {
             passwordText.setError(getString(R.string.fieldIsRequired));
@@ -117,6 +136,10 @@ public class LogInFragment extends Fragment {
         return true;
     }
 
+
+    /*
+    get the user input from the text fields and construct the player object
+     */
     protected Player readLoginInfo(View loginView)
     {
         TextView usernameText = (TextView) loginView.findViewById(R.id.usernameText);
@@ -128,11 +151,17 @@ public class LogInFragment extends Fragment {
         return new Player(username,password);
     }
 
+
+    /*
+    Show the response message after attempting to login
+     */
     protected void showLoginResponseMessage(boolean loggedIn)
     {
         Toast toast = null;
         Context context = getContext();
+
         int duration = Toast.LENGTH_SHORT;
+
         if(loggedIn) {
              toast = Toast.makeText(context, getString(R.string.loggedIn), duration);
         }
@@ -140,6 +169,7 @@ public class LogInFragment extends Fragment {
         {
             toast = Toast.makeText(context, getString(R.string.incorrectUP), duration);
         }
+
         toast.show();
     }
 

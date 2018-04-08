@@ -19,10 +19,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     RecyclerView allVenuesRecyclerView;
     RecyclerView.Adapter recyclerAdapter;
     ConnectionManager connectionManager;
+    ViewPager loginAndRegisterViewPager;
+    LoginAndRegisterAdapter logRegAdapter;
+    TabLayout logRegTab;
+
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -43,35 +47,18 @@ public class LoginActivity extends AppCompatActivity {
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.welcome_layout);
 
-        //initialize recycler view
-        allVenuesRecyclerView = findViewById(R.id.recyclerView);
+        initializeVenuesList();
 
-        //set fixed size for recycler view
-        allVenuesRecyclerView.setHasFixedSize(true);
-        //Layout manager is responsible for positioning item views (venues for now) within the allVenuesRecyclerView
-        allVenuesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //create an adapter, automatically fires a GET request to get all venues(for now)
-        recyclerAdapter = new VenueItemAdapter(this);
-        //set VenueItemAdapter to adapt allVenuesRecyclerView for displaying the venues(for now)
-        allVenuesRecyclerView.setAdapter(recyclerAdapter);
-
-        // Find the view pager that will allow the user to swipe between fragments
-        ViewPager loginAndRegisterViewPager = (ViewPager) findViewById(R.id.loginViewpager);
-
-        // Create an adapter that knows which fragment should be shown on each page
-        LoginAndRegisterAdapter adapter = new LoginAndRegisterAdapter( getSupportFragmentManager());
-
-        // Set the adapter onto the view pager
-        loginAndRegisterViewPager.setAdapter(adapter);
-
-        // Find the tab layout that shows the tabs
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.loginRegisterTab);
-
-        tabLayout.setupWithViewPager(loginAndRegisterViewPager);
+        initializeLoginAndRegisterPage();
 
         setListeners();
 
     }
+
+    /*
+    This function calls the listeners setters for all the interactive components in the main
+    activity
+     */
 
     protected void setListeners () {
         closeLoginAndRegisterBtnListener();
@@ -80,6 +67,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    /*
+    This function sets the action that happens after clicking on the close button of
+    the login and register layout
+     */
     protected void closeLoginAndRegisterBtnListener()
         {
             final Context root = getBaseContext();
@@ -96,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                     final LinearLayout loginAndRegisterLayout =  (LinearLayout) findViewById(R.id.loginAndRegisterLayout);
 
                     Animation animation = AnimationUtils.loadAnimation(root, R.anim.slide_down);
-                    //use this to make it longer:  animation.setDuration(1000);
+
                     animation.setAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {}
@@ -117,6 +108,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    /*
+    This function attaches the action of showing login/register layout to both register and login
+    button of the main activity
+     */
     protected void attachShowLoginAndRegister(int btnNo)
     {
         Button btn=null;
@@ -146,16 +141,25 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    Sets the listener for the register button of the main activity by calling the attach function
+     */
     protected void registerBtnListener()
     {
         attachShowLoginAndRegister(0);
     }
 
+    /*
+    Sets the listener for the login button of the main activity by calling the attach function
+     */
     protected void loginBtnListener()
     {
         attachShowLoginAndRegister(1);
     }
 
+    /*
+    returns a full slide up animation
+     */
     protected TranslateAnimation createSlideUpAnimation(View animatedLayout)
     {
         TranslateAnimation animate = new TranslateAnimation(
@@ -167,6 +171,46 @@ public class LoginActivity extends AppCompatActivity {
         animate.setFillAfter(true);
         return animate;
     }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    protected void initializeVenuesList()
+    {
+        //initialize recycler view
+        allVenuesRecyclerView = findViewById(R.id.recyclerView);
+
+        //set fixed size for recycler view
+        allVenuesRecyclerView.setHasFixedSize(true);
+
+        //Layout manager is responsible for positioning item views (venues for now) within the allVenuesRecyclerView
+        allVenuesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //create an adapter, automatically fires a GET request to get all venues(for now)
+        recyclerAdapter = new VenueItemAdapter(this);
+
+        //set VenueItemAdapter to adapt allVenuesRecyclerView for displaying the venues(for now)
+        allVenuesRecyclerView.setAdapter(recyclerAdapter);
+    }
+
+    /*
+    This function initializes the login/register layout by initiating the viewpager, adapter and tab,
+    then links the three together
+     */
+    protected void initializeLoginAndRegisterPage()
+    {
+        loginAndRegisterViewPager = (ViewPager) findViewById(R.id.loginViewpager);
+
+        // Create an adapter that knows which fragment should be shown on each page
+        logRegAdapter = new LoginAndRegisterAdapter( getSupportFragmentManager());
+
+        loginAndRegisterViewPager.setAdapter(logRegAdapter );
+
+        logRegTab = (TabLayout) findViewById(R.id.loginRegisterTab);
+
+        logRegTab.setupWithViewPager(loginAndRegisterViewPager);
+    }
+
+
 
 
 }
