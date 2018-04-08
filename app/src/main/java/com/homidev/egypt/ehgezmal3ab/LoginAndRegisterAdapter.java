@@ -10,8 +10,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class LoginAndRegisterAdapter extends FragmentPagerAdapter {
 
+    LogInFragment logInFragment;
+    RegisterFragment registerFragment;
+
     public LoginAndRegisterAdapter( FragmentManager fm) {
         super(fm);
+        logInFragment = new LogInFragment();
+        registerFragment = new RegisterFragment();
 
     }
 
@@ -21,9 +26,9 @@ public class LoginAndRegisterAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return new LogInFragment();
+            return logInFragment;
         } else {
-            return new RegisterFragment();
+            return registerFragment;
         }
     }
 
