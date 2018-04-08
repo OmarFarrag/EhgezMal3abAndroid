@@ -191,9 +191,7 @@ public class ConnectionManager {
                 try {
                     //execute the request and store it in response[0]
                     response[0] = connectionClient.newCall(getVenuesRequest).execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
 
                 try {
                     //parsing the JSONArray returned
@@ -214,6 +212,9 @@ public class ConnectionManager {
                         ));
                     }
                 }catch(JSONException e) {
+                    e.printStackTrace();
+                }
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
 
