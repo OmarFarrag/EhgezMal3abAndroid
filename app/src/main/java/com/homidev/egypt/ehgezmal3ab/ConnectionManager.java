@@ -269,6 +269,48 @@ public class ConnectionManager {
         return venuesList;
     }
 
+    public ArrayList<Pitch> getPitches(int venueID) {
+        final List<Pitch> pitchList = new ArrayList<>();
+
+        final Request getPitchesRequest = createGetPitchesRequest(venueID);
+
+        final Response[] response = new Response[1];
+        Thread getPitchesThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //execute the request and store it in response[0]
+                    response[0] = connectionClient.newCall(getPitchesRequest).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    //parsing the JSONArray returned
+                    JSONArray venuesResponse = null;
+                    try {
+                        venuesResponse = new JSONArray(response[0].body().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //parse each JSONObject in the JSONArray and add it to the venueList
+                    for(int i = 0; i < venuesResponse.length(); i++) {
+                        JSONObject pitchObject = venuesResponse.getJSONObject(i);
+                        pitchList.add(new Pitch(
+                                pitchObject.getString("pitchName"),
+                                pitchObject.getString("pitchDescription")
+                        ));
+                    }
+                }catch(JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        return (ArrayList<Pitch>) pitchList;
+    }
+
 
 
     /*
@@ -348,6 +390,14 @@ public class ConnectionManager {
 
         return isCOnnected[0];
     }
+
+    protected Request createGetPitchesRequest(int venueID) {
+        return new Request.Builder()
+                .url("http://192.168.1.4:56718/api/pitches/" + venueID)
+                .get()
+                .build();
+    }
+
 
 
 
