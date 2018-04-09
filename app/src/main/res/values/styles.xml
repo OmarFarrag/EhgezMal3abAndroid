@@ -15,9 +15,9 @@
 
     <!-- Style for a tab that displays a category name -->
     <style name="CategoryTab" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">@color/white</item>
-        <item name="tabTextColor">@color/mainGreen</item>
-        <item name="tabSelectedTextColor">@color/white</item>
+        <item name="tabIndicatorColor">@color/mainGreen</item>
+        <item name="tabTextColor">@color/white</item>
+        <item name="tabSelectedTextColor">@color/mainGreen</item>
 
     </style>
 
