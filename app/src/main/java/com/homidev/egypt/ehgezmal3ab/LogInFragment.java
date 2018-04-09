@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,8 @@ public class LogInFragment extends Fragment {
                              Bundle savedInstanceState)
     {
         View loginView = inflater.inflate(R.layout.login_layout, container, false);
+
+
 
         setListeners(loginView);
 

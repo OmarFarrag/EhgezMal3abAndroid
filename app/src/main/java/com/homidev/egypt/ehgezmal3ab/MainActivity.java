@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         initializeLoginAndRegisterPage();
 
         setListeners();
+
+        setWindowSlideUpOnKeyboard();
 
     }
 
@@ -208,6 +211,15 @@ public class MainActivity extends AppCompatActivity {
         logRegTab = (TabLayout) findViewById(R.id.loginRegisterTab);
 
         logRegTab.setupWithViewPager(loginAndRegisterViewPager);
+    }
+
+    /*
+    Initialize the window slide up when keyboard is visible
+     */
+
+    protected void setWindowSlideUpOnKeyboard()
+    {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
 
