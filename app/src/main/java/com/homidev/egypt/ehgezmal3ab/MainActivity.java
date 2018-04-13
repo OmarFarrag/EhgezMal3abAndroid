@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
         setWindowSlideUpOnKeyboard();
 
+        connectionManager.setMainActivity(this);
+
     }
 
     /*
@@ -76,35 +78,14 @@ public class MainActivity extends AppCompatActivity {
      */
     protected void closeLoginAndRegisterBtnListener()
         {
-            final Context root = getBaseContext();
-
             ImageButton closeButton = (ImageButton) findViewById(R.id.closeLoginAndRegisterBtn);
 
             closeButton.setOnClickListener(new View.OnClickListener()
             {
                 public void onClick(View v)
                 {
-                    RelativeLayout logoLayout =  (RelativeLayout) findViewById(R.id.logoLayout);
-                    logoLayout.setVisibility(View.INVISIBLE);
+                    closeLoginAndRegister();
 
-                    final LinearLayout loginAndRegisterLayout =  (LinearLayout) findViewById(R.id.loginAndRegisterLayout);
-
-                    Animation animation = AnimationUtils.loadAnimation(root, R.anim.slide_down);
-
-                    animation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {}
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {}
-
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            loginAndRegisterLayout.setVisibility(View.INVISIBLE);
-                        }
-                    });
-
-                    loginAndRegisterLayout.startAnimation(animation);
                 }
             });
 
@@ -220,6 +201,45 @@ public class MainActivity extends AppCompatActivity {
     protected void setWindowSlideUpOnKeyboard()
     {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+    }
+
+    /*
+    Close the login and register fragments by sliding down
+     */
+    public void closeLoginAndRegister()
+    {
+        final Context root = getBaseContext();
+
+        RelativeLayout logoLayout =  (RelativeLayout) findViewById(R.id.logoLayout);
+        logoLayout.setVisibility(View.INVISIBLE);
+
+        final LinearLayout loginAndRegisterLayout =  (LinearLayout) findViewById(R.id.loginAndRegisterLayout);
+
+        Animation animation = AnimationUtils.loadAnimation(root, R.anim.slide_down);
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                loginAndRegisterLayout.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        loginAndRegisterLayout.startAnimation(animation);
+    }
+
+    /*
+    Discard login/register buttons after login
+    */
+    public void discardLoginAndRegisterButtons()
+    {
+        LinearLayout loginAndRegisterBottom = (LinearLayout) findViewById(R.id.loginAndRegisterBottom);
+        loginAndRegisterBottom.setVisibility(View.INVISIBLE);
     }
 
 
