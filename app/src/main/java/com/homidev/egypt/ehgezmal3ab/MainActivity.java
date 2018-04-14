@@ -1,14 +1,19 @@
 package com.homidev.egypt.ehgezmal3ab;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -21,12 +26,12 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    RecyclerView allVenuesRecyclerView;
-    RecyclerView.Adapter recyclerAdapter;
+
     ConnectionManager connectionManager;
     ViewPager loginAndRegisterViewPager;
     LoginAndRegisterAdapter logRegAdapter;
     TabLayout logRegTab;
+    BottomNavigationView mainBNV;
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -38,17 +43,17 @@ public class MainActivity extends AppCompatActivity {
         connectionManager = ConnectionManager.getConnectionManager();
 
         //Check if there is internet connection
-        if (!connectionManager.isConnectedToInternet())
+       /* if (!connectionManager.isConnectedToInternet())
         {
             setContentView(R.layout.no_internet_connection);
             return;
         }
-
+*/
 
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.welcome_layout);
 
-        initializeVenuesList();
+        initMainBNV();
 
         initializeLoginAndRegisterPage();
 
@@ -157,24 +162,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    protected void initializeVenuesList()
-    {
-        //initialize recycler view
-        allVenuesRecyclerView = findViewById(R.id.recyclerView);
 
-        //set fixed size for recycler view
-        allVenuesRecyclerView.setHasFixedSize(true);
-
-        //Layout manager is responsible for positioning item views (venues for now) within the allVenuesRecyclerView
-        allVenuesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        //create an adapter, automatically fires a GET request to get all venues(for now)
-        recyclerAdapter = new VenueItemAdapter(this);
-
-        //set VenueItemAdapter to adapt allVenuesRecyclerView for displaying the venues(for now)
-        allVenuesRecyclerView.setAdapter(recyclerAdapter);
-    }
 
     /*
     This function initializes the login/register layout by initiating the viewpager, adapter and tab,
@@ -234,12 +222,64 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /*
+    A function called by the connection manager in case of successful login
+     */
+    public void loggedIn()
+    {
+        discardLoginAndRegisterButtons();
+
+        showMainBNV();
+    }
+
+
+    /*
+    Shows the main bottom navigation bar
+     */
+    private void showMainBNV()
+    {
+        mainBNV.setVisibility(View.VISIBLE);
+    }
+
+
+    /*
     Discard login/register buttons after login
     */
-    public void discardLoginAndRegisterButtons()
+    private void discardLoginAndRegisterButtons()
     {
         LinearLayout loginAndRegisterBottom = (LinearLayout) findViewById(R.id.loginAndRegisterBottom);
         loginAndRegisterBottom.setVisibility(View.INVISIBLE);
+    }
+
+    /*
+    Initialize the main bottom navigation bar with the fragment layout
+     */
+    protected void initMainBNV()
+    {
+        mainBNV = (BottomNavigationView) findViewById(R.id.mainBNV);
+        mainBNV.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
+
+                android.support.v4.app.Fragment selectedFragment=null;
+
+                switch (item.getItemId())
+                {
+                    case R.id.allVenuesBNVItem:
+                        selectedFragment = new AllVenuesFragment();
+                        break;
+                }
+
+                android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.mainFrameLayout,selectedFragment);
+                transaction.commit();
+                return ;
+            }
+        });
+
+        //Manually displaying the first fragment - one time only
+        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainFrameLayout, new AllVenuesFragment());
+        transaction.commit();
     }
 
 

@@ -161,7 +161,7 @@ public class ConnectionManager {
 
                             if(isSuccessful) {
 
-                                mainActivity.discardLoginAndRegisterButtons();
+                                mainActivity.loggedIn();
                                 mainActivity.closeLoginAndRegister();
                             }
                         }
@@ -337,7 +337,7 @@ public class ConnectionManager {
     //creates a GET HTTP request to retrieve all venues.
     protected Request createGetAllVenueRequest() {
         return new Request.Builder()
-                .url("http://192.168.1.12:56718/api/venues")
+                .url("http://192.168.1.2:56718/api/venues")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -350,7 +350,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://192.168.1.12:56718/api/users/register")
+                .url("http://192.168.1.2:56718/api/users/register")
                 .post(registerRequestBody)
                 .build();
     }
@@ -362,7 +362,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://192.168.1.12:56718/api/token")
+                .url("http://192.168.1.2:56718/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -401,7 +401,7 @@ public class ConnectionManager {
 
     protected Request createGetPitchesRequest(int venueID) {
         return new Request.Builder()
-                .url("http://192.168.1.12:56718/api/pitches/" + venueID)
+                .url("http://192.168.1.2:56718/api/pitches/" + venueID)
                 .get()
                 .build();
     }

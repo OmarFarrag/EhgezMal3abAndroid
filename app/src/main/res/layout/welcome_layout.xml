@@ -15,12 +15,23 @@
         android:background="@color/white">
 
 
-            <android.support.v7.widget.RecyclerView
+            <FrameLayout
+                android:id="@+id/mainFrameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/recyclerView">
+                android:animateLayoutChanges="true"
+                android:layout_above="@id/mainBNV"/>
 
-            </android.support.v7.widget.RecyclerView>
+            <android.support.design.widget.BottomNavigationView
+                android:id="@+id/mainBNV"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/white"
+                app:itemIconTint="@color/mainGreen"
+                app:itemTextColor="@color/mainGreen"
+                app:menu="@menu/main_bnv_menu"/>
 
         <LinearLayout
             android:id="@+id/loginAndRegisterBottom"
