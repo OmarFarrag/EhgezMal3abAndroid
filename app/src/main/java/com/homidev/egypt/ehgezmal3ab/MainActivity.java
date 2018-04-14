@@ -43,12 +43,12 @@ public class MainActivity extends AppCompatActivity {
         connectionManager = ConnectionManager.getConnectionManager();
 
         //Check if there is internet connection
-       /* if (!connectionManager.isConnectedToInternet())
+       if (!connectionManager.isConnectedToInternet())
         {
             setContentView(R.layout.no_internet_connection);
             return;
         }
-*/
+
 
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.welcome_layout);
