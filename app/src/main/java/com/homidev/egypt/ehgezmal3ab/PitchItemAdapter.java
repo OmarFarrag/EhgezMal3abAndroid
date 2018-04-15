@@ -22,7 +22,7 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
     public PitchItemAdapter(Context context) {
         this.context = context;
         this.connectionManager = ConnectionManager.getConnectionManager();
-        //pitchList = connectionManager.getPitches(Venue venue);
+       // pitchList = connectionManager.getPitches(venueID);
     }
 
     @Override
@@ -34,9 +34,11 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
 
     @Override
     public void onBindViewHolder(PitchItemViewHolder holder, int position) {
-        Pitch pitch = pitchList.get(position);
-        holder.pitchTitle.setText(pitch.getPitchTitle());
-        holder.pitchDescription.setText(pitch.getPitchDescription());
+        if(holder instanceof PitchItemViewHolder) {
+            Pitch pitch = pitchList.get(position);
+            holder.pitchTitle.setText(pitch.getPitchTitle());
+            //holder.pitchDescription.setText(pitch.getPitchDescription());
+        }
     }
 
     @Override
@@ -47,12 +49,12 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
     public class PitchItemViewHolder extends RecyclerView.ViewHolder {
 
         private TextView pitchTitle;
-        private TextView pitchDescription;
+        //private TextView pitchDescription;
 
         public PitchItemViewHolder(View itemView) {
             super(itemView);
             pitchTitle = (TextView) itemView.findViewById(R.id.pitchTitle);
-            pitchDescription = (TextView) itemView.findViewById(R.id.pitchDescription);
+            //pitchDescription = (TextView) itemView.findViewById(R.id.pitchDescription);
         }
     }
 

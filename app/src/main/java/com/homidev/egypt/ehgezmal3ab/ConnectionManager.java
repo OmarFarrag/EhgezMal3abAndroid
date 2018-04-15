@@ -23,6 +23,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ConnectionManager {
+
     private static ConnectionManager instance = null;
     private OkHttpClient connectionClient;
     private MainActivity mainActivity;
@@ -34,7 +35,6 @@ public class ConnectionManager {
     }
 
 
-
     //The public interface for getting the connection manager
     public static ConnectionManager getConnectionManager()
     {
@@ -44,7 +44,6 @@ public class ConnectionManager {
         }
         return instance;
     }
-
 
 
     /*
@@ -249,7 +248,10 @@ public class ConnectionManager {
                                 venueObject.getString("venueName"),
                                 venueObject.getString("phoneNumber"),
                                 venueObject.getString("area"),
-                                venueObject.getString("street")
+                                venueObject.getString("street"),
+                                venueObject.getString("longitude"),
+                                venueObject.getString("lattitude"),
+                                venueObject.getString("venueID")
                         ));
                     }
                 }catch(JSONException e) {
@@ -295,24 +297,22 @@ public class ConnectionManager {
 
                 try {
                     //parsing the JSONArray returned
-                    JSONArray venuesResponse = null;
+                    JSONArray pitchesResponse = null;
                     try {
-                        venuesResponse = new JSONArray(response[0].body().string());
+                        pitchesResponse = new JSONArray(response[0].body().string());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     //parse each JSONObject in the JSONArray and add it to the venueList
-                    for(int i = 0; i < venuesResponse.length(); i++) {
-                        JSONObject pitchObject = venuesResponse.getJSONObject(i);
+                    for(int i = 0; i < pitchesResponse.length(); i++) {
+                        JSONObject pitchObject = pitchesResponse.getJSONObject(i);
                         pitchList.add(new Pitch(
-                                pitchObject.getString("pitchName"),
-                                pitchObject.getString("pitchDescription")
+                                pitchObject.getString("pitchName")
                         ));
                     }
                 }catch(JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         });
 
@@ -333,11 +333,10 @@ public class ConnectionManager {
     }
 
 
-
     //creates a GET HTTP request to retrieve all venues.
     protected Request createGetAllVenueRequest() {
         return new Request.Builder()
-                .url("http://192.168.1.2:56718/api/venues")
+                .url("http://192.168.43.44:56719/api/venues")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -350,7 +349,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://192.168.1.2:56718/api/users/register")
+                .url("http://192.168.43.44:56719/api/users/register")
                 .post(registerRequestBody)
                 .build();
     }
@@ -362,7 +361,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://192.168.1.2:56718/api/token")
+                .url("http://192.168.43.44:56719/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -401,7 +400,7 @@ public class ConnectionManager {
 
     protected Request createGetPitchesRequest(int venueID) {
         return new Request.Builder()
-                .url("http://192.168.1.2:56718/api/pitches/" + venueID)
+                .url("http://192.168.43.44:56719/api/pitches/" + venueID)
                 .get()
                 .build();
     }
@@ -411,7 +410,7 @@ public class ConnectionManager {
     */
     public void setMainActivity(MainActivity f_mainActivity)
     {
-        mainActivity=f_mainActivity;
+        mainActivity = f_mainActivity;
     }
 
 

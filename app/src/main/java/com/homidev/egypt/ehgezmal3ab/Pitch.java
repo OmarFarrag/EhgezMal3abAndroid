@@ -15,6 +15,10 @@ public class Pitch {
         this.pitchDescription = pitchDescription;
     }
 
+    public Pitch(String pitchTitle) {
+        this.pitchTitle = pitchTitle;
+    }
+
     public String getPitchTitle() {
         return pitchTitle;
     }
