@@ -8,6 +8,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ public class AllVenuesFragment extends android.support.v4.app.Fragment {
 
     private RecyclerView allVenuesRecyclerView;
     private RecyclerView.Adapter recyclerAdapter;
+    private Toolbar allVenuesToolbar;
+
     ConnectionManager connectionManager = ConnectionManager.getConnectionManager();
 
     @Override
@@ -69,6 +72,13 @@ public class AllVenuesFragment extends android.support.v4.app.Fragment {
 
         //set VenueItemAdapter to adapt allVenuesRecyclerView for displaying the venues(for now)
         allVenuesRecyclerView.setAdapter(recyclerAdapter);
+    }
+
+    public void setToolbar(Toolbar f_toolbar)
+    {
+        allVenuesToolbar = f_toolbar;
+
+
     }
 
 

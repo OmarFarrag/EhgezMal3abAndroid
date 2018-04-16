@@ -5,5 +5,9 @@
         android:id="@+id/allVenuesBNVItem"
         android:icon="@drawable/close_image"
         android:title="@string/venues"/>
+    <item
+        android:id="@+id/reservationsBNVItem"
+        android:icon="@drawable/reservations_icon"
+        android:title="@string/reservations"/>
 
 </menu>

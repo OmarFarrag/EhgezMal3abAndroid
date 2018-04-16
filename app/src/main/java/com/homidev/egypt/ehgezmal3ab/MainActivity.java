@@ -1,5 +1,6 @@
 package com.homidev.egypt.ehgezmal3ab;
 
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -13,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.ToolbarWidgetWrapper;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -255,10 +258,13 @@ public class MainActivity extends AppCompatActivity {
      */
     protected void initMainBNV()
     {
+        final Toolbar mainToolbar = (Toolbar) findViewById(R.id.mainToolbar);
+
         mainBNV = (BottomNavigationView) findViewById(R.id.mainBNV);
-        mainBNV.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+
+        mainBNV.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onNavigationItemReselected(@NonNull MenuItem item) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 android.support.v4.app.Fragment selectedFragment=null;
 
@@ -266,20 +272,53 @@ public class MainActivity extends AppCompatActivity {
                 {
                     case R.id.allVenuesBNVItem:
                         selectedFragment = new AllVenuesFragment();
+                        ((AllVenuesFragment)selectedFragment).setToolbar(mainToolbar);
+                        createAllVenuesActionbar(mainToolbar);
+                        break;
+
+                    case R.id.reservationsBNVItem:
+                        selectedFragment = new ReservationsFragment();
+                        createReservationsToolbar(mainToolbar);
                         break;
                 }
 
                 android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.mainFrameLayout,selectedFragment);
                 transaction.commit();
-                return ;
+                return true;
             }
         });
 
         //Manually displaying the first fragment - one time only
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainFrameLayout, new AllVenuesFragment());
+        createAllVenuesActionbar(mainToolbar);
         transaction.commit();
+
+    }
+
+
+    /*
+    create all venues action bar
+     */
+
+    private void createAllVenuesActionbar(Toolbar mainToolbar)
+    {
+        mainToolbar.removeAllViews();
+        getLayoutInflater().inflate(R.layout.all_venues_toolbar,mainToolbar);
+
+    }
+
+
+    /*
+    create reservations toolbar
+     */
+
+    protected void createReservationsToolbar(Toolbar mainToolbar)
+    {
+        mainToolbar.removeAllViews();
+        getLayoutInflater().inflate(R.layout.reservations_toolbar,mainToolbar);
+
     }
 
 
