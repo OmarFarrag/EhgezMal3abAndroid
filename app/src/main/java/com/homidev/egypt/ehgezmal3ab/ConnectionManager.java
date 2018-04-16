@@ -23,6 +23,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ConnectionManager {
+
     private static ConnectionManager instance = null;
     private OkHttpClient connectionClient;
     private MainActivity mainActivity;
@@ -34,7 +35,6 @@ public class ConnectionManager {
     }
 
 
-
     //The public interface for getting the connection manager
     public static ConnectionManager getConnectionManager()
     {
@@ -44,7 +44,6 @@ public class ConnectionManager {
         }
         return instance;
     }
-
 
 
     /*
@@ -314,9 +313,18 @@ public class ConnectionManager {
                 }catch(JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         });
+
+        getPitchesThread.start();
+
+        try {
+            //await main thread to join this thread to be able to update interface with data retrieve
+            getPitchesThread.join();
+        }
+        catch(InterruptedException e) {
+            e.printStackTrace();
+        }
 
         return (ArrayList<Pitch>) pitchList;
     }
@@ -335,11 +343,10 @@ public class ConnectionManager {
     }
 
 
-
     //creates a GET HTTP request to retrieve all venues.
     protected Request createGetAllVenueRequest() {
         return new Request.Builder()
-                .url("http://192.168.1.105:56718/api/venues")
+                .url("http://192.168.43.44:56719/api/venues")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -352,7 +359,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://192.168.1.105:56718/api/users/register")
+                .url("http://192.168.43.44:56719/api/users/register")
                 .post(registerRequestBody)
                 .build();
     }
@@ -364,7 +371,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://192.168.1.105:56718/api/token")
+                .url("http://192.168.43.44:56719/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -403,7 +410,7 @@ public class ConnectionManager {
 
     protected Request createGetPitchesRequest(int venueID) {
         return new Request.Builder()
-                .url("http://192.168.1.105:56718/api/pitches/" + venueID)
+                .url("http://192.168.43.44:56719/api/pitches/" + venueID)
                 .get()
                 .build();
     }
@@ -413,7 +420,7 @@ public class ConnectionManager {
     */
     public void setMainActivity(MainActivity f_mainActivity)
     {
-        mainActivity=f_mainActivity;
+        mainActivity = f_mainActivity;
     }
 
 

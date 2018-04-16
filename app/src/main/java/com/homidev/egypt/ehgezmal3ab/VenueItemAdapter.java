@@ -59,6 +59,10 @@ public class VenueItemAdapter extends RecyclerView.Adapter<VenueItemAdapter.Venu
         return (ArrayList<Venue>) venueList;
     }
 
+    public static Venue getItem(int position) {
+        return venueList.get(position);
+    }
+
 
     @Override
     public int getItemCount() {

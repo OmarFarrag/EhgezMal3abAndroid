@@ -19,10 +19,10 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
     private List<Pitch> pitchList;
     private Context context;
 
-    public PitchItemAdapter(Context context) {
+    public PitchItemAdapter(Context context, int venueID) {
         this.context = context;
         this.connectionManager = ConnectionManager.getConnectionManager();
-       // pitchList = connectionManager.getPitches(venueID);
+        pitchList = connectionManager.getPitches(venueID);
     }
 
     @Override
@@ -43,6 +43,9 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
 
     @Override
     public int getItemCount() {
+        if(pitchList == null) {
+            return 0;
+        }
         return pitchList.size();
     }
 

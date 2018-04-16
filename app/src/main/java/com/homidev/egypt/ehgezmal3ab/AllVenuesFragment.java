@@ -48,7 +48,7 @@ public class AllVenuesFragment extends android.support.v4.app.Fragment {
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    protected void initializeVenuesList(View allVenuesView)
+    protected void initializeVenuesList(final View allVenuesView)
     {
         //initialize recycler view
         allVenuesRecyclerView = allVenuesView.findViewById(R.id.allVenuesRecyclerView);
@@ -63,6 +63,8 @@ public class AllVenuesFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View view, int position) {
                 Intent intent = new Intent(getActivity(), ViewVenueActivity.class);
+                String venueID = VenueItemAdapter.getItem(position).getVenueID();
+                intent.putExtra("venueID", venueID);
                 startActivity(intent);
             }
         };
