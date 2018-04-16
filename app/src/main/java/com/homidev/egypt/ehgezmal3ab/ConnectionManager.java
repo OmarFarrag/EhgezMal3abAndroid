@@ -190,7 +190,6 @@ public class ConnectionManager {
     }
 
 
-
     /*
     This function creates a JSON object of a player who wants to register
      */
@@ -316,6 +315,16 @@ public class ConnectionManager {
             }
         });
 
+        getPitchesThread.start();
+
+        try {
+            //await main thread to join this thread to be able to update interface with data retrieve
+            getPitchesThread.join();
+        }
+        catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+
         return (ArrayList<Pitch>) pitchList;
     }
 
@@ -336,7 +345,7 @@ public class ConnectionManager {
     //creates a GET HTTP request to retrieve all venues.
     protected Request createGetAllVenueRequest() {
         return new Request.Builder()
-                .url("http://192.168.43.44:56719/api/venues")
+                .url("http://10.0.2.2:56718/api/venues")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -349,7 +358,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://192.168.43.44:56719/api/users/register")
+                .url("http://10.0.2.2:56718/api/users/register")
                 .post(registerRequestBody)
                 .build();
     }
@@ -361,7 +370,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://192.168.43.44:56719/api/token")
+                .url("http://10.0.2.2:56718/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -400,7 +409,7 @@ public class ConnectionManager {
 
     protected Request createGetPitchesRequest(int venueID) {
         return new Request.Builder()
-                .url("http://192.168.43.44:56719/api/pitches/" + venueID)
+                .url("http://10.0.2.2:56718/api/pitches/" + venueID)
                 .get()
                 .build();
     }

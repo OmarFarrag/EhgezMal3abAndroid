@@ -29,7 +29,13 @@ public class ViewVenueActivity extends AppCompatActivity {
 
         pitchesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        pitchItemAdapter = new PitchItemAdapter(this);
+        Bundle extras = getIntent().getExtras();
+        int venueID = 0;
+        if (extras != null) {
+            venueID = Integer.parseInt(extras.getString("venueID"));
+        }
+
+        pitchItemAdapter = new PitchItemAdapter(this, venueID);
 
         pitchesRecyclerView.setAdapter(pitchItemAdapter);
 
