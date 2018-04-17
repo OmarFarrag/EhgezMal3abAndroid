@@ -1,6 +1,7 @@
 package com.homidev.egypt.ehgezmal3ab;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,20 +17,22 @@ import java.util.List;
 public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.PitchItemViewHolder> {
 
     private ConnectionManager connectionManager;
-    private List<Pitch> pitchList;
+    private static List<Pitch> pitchList;
     private Context context;
+    private IRecyclerViewClickListener listener;
 
-    public PitchItemAdapter(Context context, int venueID) {
+    public PitchItemAdapter(Context context, int venueID, IRecyclerViewClickListener listener) {
         this.context = context;
         this.connectionManager = ConnectionManager.getConnectionManager();
         pitchList = connectionManager.getPitches(venueID);
+        this.listener = listener;
     }
 
     @Override
     public PitchItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.view_pitches_layout, parent, false);
-        return new PitchItemViewHolder(view);
+        return new PitchItemViewHolder(view, listener);
     }
 
     @Override
@@ -37,7 +40,6 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
         if(holder instanceof PitchItemViewHolder) {
             Pitch pitch = pitchList.get(position);
             holder.pitchTitle.setText(pitch.getPitchTitle());
-            //holder.pitchDescription.setText(pitch.getPitchDescription());
         }
     }
 
@@ -49,15 +51,33 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
         return pitchList.size();
     }
 
-    public class PitchItemViewHolder extends RecyclerView.ViewHolder {
+    public static Pitch getItem(int position) {
+        return pitchList.get(position);
+    }
+
+    public class PitchItemViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
 
         private TextView pitchTitle;
-        //private TextView pitchDescription;
+        private TextView pitchCapacity;
+        private TextView pitchType;
+        private TextView pitchPrice;
+        private IRecyclerViewClickListener listener;
+        CardView cardView;
 
-        public PitchItemViewHolder(View itemView) {
+        public PitchItemViewHolder(View itemView, IRecyclerViewClickListener listener) {
             super(itemView);
-            pitchTitle = (TextView) itemView.findViewById(R.id.pitchTitle);
-            //pitchDescription = (TextView) itemView.findViewById(R.id.pitchDescription);
+            pitchTitle = itemView.findViewById(R.id.pitchTitle);
+            pitchCapacity = itemView.findViewById(R.id.pitchCapacity);
+            pitchPrice = itemView.findViewById(R.id.pitchPrice);
+            pitchType = itemView.findViewById(R.id.pitchType);
+            this.listener = listener;
+            cardView = itemView.findViewById(R.id.pitchCardView);
+            cardView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            listener.onClick(v, getAdapterPosition());
         }
     }
 

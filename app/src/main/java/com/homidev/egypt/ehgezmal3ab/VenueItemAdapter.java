@@ -24,9 +24,9 @@ public class VenueItemAdapter extends RecyclerView.Adapter<VenueItemAdapter.Venu
     private ConnectionManager connectionManager;
     private static List<Venue> venueList;
     private Context context;
-    private VenueItemClickListener listener;
+    private IRecyclerViewClickListener listener;
 
-    public VenueItemAdapter(Context context, VenueItemClickListener listener) {
+    public VenueItemAdapter(Context context, IRecyclerViewClickListener listener) {
         this.context = context;
         connectionManager = ConnectionManager.getConnectionManager();
         venueList = connectionManager.getAllVenues();
@@ -63,7 +63,6 @@ public class VenueItemAdapter extends RecyclerView.Adapter<VenueItemAdapter.Venu
         return venueList.get(position);
     }
 
-
     @Override
     public int getItemCount() {
         return venueList.size();
@@ -76,12 +75,12 @@ public class VenueItemAdapter extends RecyclerView.Adapter<VenueItemAdapter.Venu
         TextView venueStreet;
         TextView venueArea;
         TextView venuePhoneNumber;
-        private VenueItemClickListener listener;
+        private IRecyclerViewClickListener listener;
         CardView cardView;
 
-        public VenueItemViewHolder(View itemView, VenueItemClickListener listener) {
+        public VenueItemViewHolder(View itemView, IRecyclerViewClickListener listener) {
             super(itemView);
-            cardView = (CardView) itemView.findViewById(R.id.cardView);
+            cardView = (CardView) itemView.findViewById(R.id.venueCardView);
             venueTitle = (TextView) itemView.findViewById(R.id.venueTitle);
             venueStreet = (TextView) itemView.findViewById(R.id.venueStreet);
             venueArea = (TextView) itemView.findViewById(R.id.venueArea);

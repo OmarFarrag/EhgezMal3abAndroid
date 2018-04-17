@@ -14,7 +14,7 @@
         card_view:cardElevation="10dp"
         card_view:cardBackgroundColor="@color/mainGreen"
         android:clickable="true"
-        android:id="@+id/cardView">
+        android:id="@+id/venueCardView">
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -11,7 +11,8 @@
         android:layout_margin="15dp"
         card_view:cardCornerRadius="10dp"
         card_view:cardElevation="10dp"
-        card_view:cardBackgroundColor="@color/mainGreen">
+        card_view:cardBackgroundColor="@color/mainGreen"
+        android:id="@+id/pitchCardView">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,6 +27,27 @@
                 android:text="mal3ab el abtal"
                 android:textSize="20sp"
                 android:textColor="@color/white"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="capacity"
+                android:textColor="@color/white"
+                android:id="@+id/pitchCapacity"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price"
+                android:textColor="@color/white"
+                android:id="@+id/pitchPrice"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="type"
+                android:id="@+id/pitchType"/>
 
 
         </LinearLayout>

@@ -1,12 +1,13 @@
 package com.homidev.egypt.ehgezmal3ab;
 
+import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
-import java.util.zip.Inflater;
 
 public class ViewVenueActivity extends AppCompatActivity {
 
@@ -35,10 +36,25 @@ public class ViewVenueActivity extends AppCompatActivity {
             venueID = Integer.parseInt(extras.getString("venueID"));
         }
 
-        pitchItemAdapter = new PitchItemAdapter(this, venueID);
+        IRecyclerViewClickListener listener = new IRecyclerViewClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onClick(View view, int position) {
+                launchPitchActivity(position);
+            }
+        };
+
+        pitchItemAdapter = new PitchItemAdapter(this, venueID, listener);
 
         pitchesRecyclerView.setAdapter(pitchItemAdapter);
 
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void launchPitchActivity(int position) {
+        Intent intent = new Intent(this, PitchActivity.class);
+        String pitchName = PitchItemAdapter.getItem(position).getPitchTitle();
+        intent.putExtra("pitchName", pitchName);
+        startActivity(intent);
     }
 }

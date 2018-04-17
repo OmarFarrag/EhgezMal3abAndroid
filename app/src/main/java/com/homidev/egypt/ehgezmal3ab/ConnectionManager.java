@@ -34,7 +34,6 @@ public class ConnectionManager {
         connectionClient = new OkHttpClient();
     }
 
-
     //The public interface for getting the connection manager
     public static ConnectionManager getConnectionManager()
     {
@@ -307,7 +306,11 @@ public class ConnectionManager {
                     for(int i = 0; i < pitchesResponse.length(); i++) {
                         JSONObject pitchObject = pitchesResponse.getJSONObject(i);
                         pitchList.add(new Pitch(
-                                pitchObject.getString("pitchName")
+                                pitchObject.getString("pitchName"),
+                                pitchObject.getString("type"),
+                                Integer.parseInt(pitchObject.getString("capacity")),
+                                Double.parseDouble(pitchObject.getString("price")),
+                                pitchObject.getString("venueID")
                         ));
                     }
                 }catch(JSONException e) {
@@ -346,7 +349,7 @@ public class ConnectionManager {
     //creates a GET HTTP request to retrieve all venues.
     protected Request createGetAllVenueRequest() {
         return new Request.Builder()
-                .url("http://192.168.43.44:56719/api/venues")
+                .url("http://10.0.2.2:56718/api/venues")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -359,7 +362,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://192.168.43.44:56719/api/users/register")
+                .url("http://10.0.2.2:56718/api/users/register")
                 .post(registerRequestBody)
                 .build();
     }
@@ -371,7 +374,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://192.168.43.44:56719/api/token")
+                .url("http://10.0.2.2:56718/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -410,7 +413,7 @@ public class ConnectionManager {
 
     protected Request createGetPitchesRequest(int venueID) {
         return new Request.Builder()
-                .url("http://192.168.43.44:56719/api/pitches/" + venueID)
+                .url("http://10.0.2.2:56718/api/pitches/" + venueID)
                 .get()
                 .build();
     }

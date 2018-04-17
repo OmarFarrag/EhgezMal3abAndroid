@@ -1,18 +1,15 @@
 package com.homidev.egypt.ehgezmal3ab;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 /**
  * Created by User on 14/04/2018.
@@ -59,7 +56,7 @@ public class AllVenuesFragment extends android.support.v4.app.Fragment {
         //Layout manager is responsible for positioning item views (venues for now) within the allVenuesRecyclerView
         allVenuesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        VenueItemClickListener listener = new VenueItemClickListener() {
+        IRecyclerViewClickListener listener = new IRecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Intent intent = new Intent(getActivity(), ViewVenueActivity.class);
@@ -79,8 +76,6 @@ public class AllVenuesFragment extends android.support.v4.app.Fragment {
     public void setToolbar(Toolbar f_toolbar)
     {
         allVenuesToolbar = f_toolbar;
-
-
     }
 
 
