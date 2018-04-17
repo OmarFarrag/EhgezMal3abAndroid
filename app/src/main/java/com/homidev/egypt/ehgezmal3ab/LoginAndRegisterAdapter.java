@@ -30,6 +30,7 @@ public class LoginAndRegisterAdapter extends FragmentPagerAdapter {
         } else {
             return registerFragment;
         }
+
     }
 
     /**

@@ -1,14 +1,17 @@
 package com.homidev.egypt.ehgezmal3ab;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +24,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ConnectionManager {
 
@@ -148,6 +153,7 @@ public class ConnectionManager {
 
                     final boolean isSuccessful = temp;
 
+
                     //The handler refers to the main loop (UI), as the UI must be updated
                     //On UI thread only
                     Handler handler = new Handler(Looper.getMainLooper());
@@ -161,6 +167,7 @@ public class ConnectionManager {
 
                                 mainActivity.loggedIn();
                                 mainActivity.closeLoginAndRegister();
+                                storeUserToken(response);
                             }
                         }
                     });
@@ -349,7 +356,7 @@ public class ConnectionManager {
     //creates a GET HTTP request to retrieve all venues.
     protected Request createGetAllVenueRequest() {
         return new Request.Builder()
-                .url("http://10.0.2.2:56718/api/venues")
+                .url("http://192.168.1.105:56718/api/venues")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -362,7 +369,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://10.0.2.2:56718/api/users/register")
+                .url("http://192.168.1.105:56718/api/users/register")
                 .post(registerRequestBody)
                 .build();
     }
@@ -374,7 +381,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://10.0.2.2:56718/api/token")
+                .url("http://192.168.1.105:56718/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -413,7 +420,7 @@ public class ConnectionManager {
 
     protected Request createGetPitchesRequest(int venueID) {
         return new Request.Builder()
-                .url("http://10.0.2.2:56718/api/pitches/" + venueID)
+                .url("http://192.168.1.105:56718/api/pitches/" + venueID)
                 .get()
                 .build();
     }
@@ -427,7 +434,32 @@ public class ConnectionManager {
     }
 
 
+    /*
+    Gets the token from the login response and store it
+     */
 
+    protected void storeUserToken(Response response)
+    {
+        String responseString=null;
+        try {
+            responseString = response.body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Construct the json response then extracts the message
+        JSONObject responseJson;
+        try {
+            responseJson = new JSONObject(responseString);
+            responseString = responseJson.getString("text");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //Store in shared preferences
+        SharedPreferences preferences = mainActivity.getSharedPreferences("myPrefs", MODE_PRIVATE);
+        preferences.edit().putString("token", responseString).commit();
+    }
 
 
 }
