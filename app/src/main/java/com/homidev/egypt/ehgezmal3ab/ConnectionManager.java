@@ -158,6 +158,8 @@ public class ConnectionManager {
                     //On UI thread only
                     Handler handler = new Handler(Looper.getMainLooper());
 
+                    if(isSuccessful) storeUserToken(response);
+
                     handler.post(new Runnable() {
                         public void run() {
 
@@ -166,8 +168,7 @@ public class ConnectionManager {
                             if(isSuccessful) {
 
                                 mainActivity.loggedIn();
-                                mainActivity.closeLoginAndRegister();
-                                storeUserToken(response);
+
                             }
                         }
                     });

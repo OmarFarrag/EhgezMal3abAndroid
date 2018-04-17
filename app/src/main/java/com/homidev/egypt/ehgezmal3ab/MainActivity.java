@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
@@ -46,11 +47,11 @@ public class MainActivity extends AppCompatActivity {
         connectionManager = ConnectionManager.getConnectionManager();
 
         //Check if there is internet connection
-       /*if (!connectionManager.isConnectedToInternet())
+       if (!connectionManager.isConnectedToInternet())
         {
             setContentView(R.layout.no_internet_connection);
             return;
-        }*/
+        }
 
 
         // Set the content of the activity to use the activity_main.xml layout file
@@ -65,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
         setWindowSlideUpOnKeyboard();
 
         connectionManager.setMainActivity(this);
+
+        String token = PreferenceManager.getDefaultSharedPreferences(this).getString("token","");
+        if(token !=null) loggedIn();
 
     }
 
@@ -232,6 +236,8 @@ public class MainActivity extends AppCompatActivity {
         discardLoginAndRegisterButtons();
 
         showMainBNV();
+
+        closeLoginAndRegister();
     }
 
 
