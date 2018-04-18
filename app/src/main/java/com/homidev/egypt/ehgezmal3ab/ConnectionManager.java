@@ -452,14 +452,82 @@ public class ConnectionManager {
         JSONObject responseJson;
         try {
             responseJson = new JSONObject(responseString);
-            responseString = responseJson.getString("text");
+            responseString = responseJson.getString("token");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         //Store in shared preferences
-        SharedPreferences preferences = mainActivity.getSharedPreferences("myPrefs", MODE_PRIVATE);
+        SharedPreferences preferences = mainActivity.getSharedPreferences("myprefs",MODE_PRIVATE);
         preferences.edit().putString("token", responseString).commit();
+    }
+
+    public List<Reservation> getPlayerReservations()
+    {
+        final List<Reservation> reservationsList = new ArrayList<>();
+
+        final Request getPlayerReservationsRequest = createGetPlayerReservationsRequest();
+
+        final Response[] response = new Response[1];
+        Thread getPitchesThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //execute the request and store it in response[0]
+                    response[0] = connectionClient.newCall(getPlayerReservationsRequest ).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    //parsing the JSONArray returned
+                    JSONArray reservationsResponse = null;
+                    try {
+                        reservationsResponse  = new JSONArray(response[0].body().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //parse each JSONObject in the JSONArray and add it to the venueList
+                    for(int i = 0; i < reservationsResponse .length(); i++) {
+                        JSONObject reservationObject = reservationsResponse.getJSONObject(i);
+                        reservationsList.add(new Reservation(
+                                reservationObject.getString("username"),
+                                reservationObject.getString("startsOn"),
+                                reservationObject.getString("endsOn"),
+                                reservationObject.getString("venueID"),
+                                reservationObject.getString("pitchName"),
+                                reservationObject.getString("status")
+
+
+                        ));
+                    }
+                }catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        getPitchesThread.start();
+
+        try {
+            //await main thread to join this thread to be able to update interface with data retrieve
+            getPitchesThread.join();
+        }
+        catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return (ArrayList<Reservation>) reservationsList;
+    }
+
+    protected Request createGetPlayerReservationsRequest()
+    {
+        return new Request.Builder()
+                .url("http://192.168.1.105:56718/api/reservations")
+                .get()
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization","Bearer "+ mainActivity.getSharedPreferences("myprefs",MODE_PRIVATE).getString("token",""))
+                .build();
     }
 
 
