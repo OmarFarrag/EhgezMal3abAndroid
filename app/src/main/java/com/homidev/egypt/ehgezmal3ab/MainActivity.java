@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
         String token = getSharedPreferences("myprefs",MODE_PRIVATE).getString("token","");
         if(token !="") loggedIn();
-
     }
 
     /*

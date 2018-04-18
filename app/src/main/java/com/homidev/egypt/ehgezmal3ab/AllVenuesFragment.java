@@ -11,6 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 /**
  * Created by User on 14/04/2018.
  */
@@ -77,6 +86,7 @@ public class AllVenuesFragment extends android.support.v4.app.Fragment {
     {
         allVenuesToolbar = f_toolbar;
     }
+
 
 
 }

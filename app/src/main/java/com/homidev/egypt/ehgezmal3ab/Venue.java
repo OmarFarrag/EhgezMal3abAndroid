@@ -5,14 +5,23 @@ package com.homidev.egypt.ehgezmal3ab;
  * model class for Venue
  */
 
+import com.google.gson.annotations.*;
+
 public class Venue {
+    @SerializedName("venueName")
     String venueTitle;
+    @SerializedName("phoneNumber")
     String phoneNumber;
+    @SerializedName("area")
     String area;
+    @SerializedName("street")
     String street;
     int venueImageRes;
+    @SerializedName("longitude")
     float longitude;
+    @SerializedName("lattitude")
     float latitude;
+    @SerializedName("venueID")
     String venueID;
 
     public Venue(String venueTitle, String phoneNumber,

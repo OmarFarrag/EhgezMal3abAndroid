@@ -10,8 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by engineer on 27/03/18.
@@ -29,7 +39,9 @@ public class VenueItemAdapter extends RecyclerView.Adapter<VenueItemAdapter.Venu
     public VenueItemAdapter(Context context, IRecyclerViewClickListener listener) {
         this.context = context;
         connectionManager = ConnectionManager.getConnectionManager();
-        venueList = connectionManager.getAllVenues();
+        //venueList = connectionManager.getAllVenues();
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        ehgezMal3abAPI.getAllVenues().enqueue(getAllVenuesCallback);
         this.listener = listener;
     }
 
@@ -65,6 +77,9 @@ public class VenueItemAdapter extends RecyclerView.Adapter<VenueItemAdapter.Venu
 
     @Override
     public int getItemCount() {
+        if(venueList == null){
+            return 0;
+        }
         return venueList.size();
     }
 
@@ -94,4 +109,33 @@ public class VenueItemAdapter extends RecyclerView.Adapter<VenueItemAdapter.Venu
             listener.onClick(v, getAdapterPosition());
         }
     }
+
+    public EhgezMal3abAPI createEhgezMal3abService(){
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(EhgezMal3abAPI.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        return retrofit.create(EhgezMal3abAPI.class);
+
+    }
+
+    Callback<List<Venue>> getAllVenuesCallback = new Callback<List<Venue>>() {
+        @Override
+        public void onResponse(Call<List<Venue>> call, Response<List<Venue>> response) {
+            if(response.isSuccessful()){
+                venueList = response.body();
+            }
+        }
+
+        @Override
+        public void onFailure(Call<List<Venue>> call, Throwable t) {
+
+        }
+    };
+
 }

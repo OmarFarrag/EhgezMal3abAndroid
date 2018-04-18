@@ -29,7 +29,9 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
     public ReservationItemAdapter(Context context, IRecyclerViewClickListener listener) {
         this.context = context;
         connectionManager = ConnectionManager.getConnectionManager();
-        reservationList= connectionManager.getPlayerReservations();
+        //reservationList= connectionManager.getPlayerReservations();
+        connectionManager.getReservations(this);
+        reservationList = new ArrayList<>();
         this.listener = listener;
     }
 
@@ -58,12 +60,20 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
         return (ArrayList<Reservation>) reservationList;
     }
 
+    public void setReservationList(ArrayList<Reservation> reservations){
+        reservationList = reservations;
+        this.notifyDataSetChanged();
+    }
+
     public static Reservation getItem(int position) {
         return reservationList.get(position);
     }
 
     @Override
     public int getItemCount() {
+        if(reservationList == null){
+           return 0;
+        }
         return reservationList.size();
     }
 

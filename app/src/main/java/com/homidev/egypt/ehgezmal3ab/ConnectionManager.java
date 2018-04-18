@@ -7,6 +7,9 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -24,6 +27,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -141,15 +146,14 @@ public class ConnectionManager {
             }
 
             @Override
-            public void onResponse(Call call, final Response response) throws IOException {
+            public void onResponse(Call call, final Response response) {
 
                     int code = response.code();
 
                     //temps is used to hack the final-assignment-innerClass problem
                     boolean temp;
 
-                    if(code==200) temp=true;
-                    else temp=false;
+                temp = code == 200;
 
                     final boolean isSuccessful = temp;
 
@@ -166,7 +170,6 @@ public class ConnectionManager {
                             loginFragment.showLoginResponseMessage(isSuccessful);
 
                             if(isSuccessful) {
-
                                 mainActivity.loggedIn();
 
                             }
@@ -238,8 +241,6 @@ public class ConnectionManager {
                 try {
                     //execute the request and store it in response[0]
                     response[0] = connectionClient.newCall(getVenuesRequest).execute();
-
-
                 try {
                     //parsing the JSONArray returned
                     JSONArray venuesResponse = null;
@@ -340,7 +341,30 @@ public class ConnectionManager {
         return (ArrayList<Pitch>) pitchList;
     }
 
+    public void getReservations(final ReservationItemAdapter adapter) {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("myprefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            return;
+        }
+        final ArrayList<Reservation>[] reservationsList = new ArrayList[1];
+        ehgezMal3abAPI.getMyReservations("Bearer " + token).enqueue(new retrofit2.Callback<ArrayList<Reservation>>() {
+            @Override
+            public void onResponse(retrofit2.Call<ArrayList<Reservation>> call, retrofit2.Response<ArrayList<Reservation>> response) {
+                if (response.isSuccessful()) {
+                    reservationsList[0] = response.body();
+                    adapter.setReservationList(reservationsList[0]);
+                } else if (response.code() == 401) {
+                    reservationsList[0] = null;
+                }
+            }
 
+            @Override
+            public void onFailure(retrofit2.Call<ArrayList<Reservation>> call, Throwable t) {
+                throw new RuntimeException(t);
+            }
+        });
+    }
 
     /*
     Create a request body for a player from a JSON player object
@@ -382,7 +406,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://192.168.1.105:56718/api/token")
+                .url("http://10.0.2.2:56719/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -517,7 +541,7 @@ public class ConnectionManager {
             e.printStackTrace();
         }
 
-        return (ArrayList<Reservation>) reservationsList;
+        return reservationsList;
     }
 
     protected Request createGetPlayerReservationsRequest()
@@ -530,5 +554,18 @@ public class ConnectionManager {
                 .build();
     }
 
+    public EhgezMal3abAPI createEhgezMal3abService(){
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(EhgezMal3abAPI.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        return retrofit.create(EhgezMal3abAPI.class);
+
+    }
 
 }
