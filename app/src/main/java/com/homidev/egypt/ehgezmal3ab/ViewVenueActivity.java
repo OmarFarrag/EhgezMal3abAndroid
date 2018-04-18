@@ -69,8 +69,7 @@ public class ViewVenueActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void launchPitchActivity(int position) {
         Intent intent = new Intent(this, PitchActivity.class);
-        String pitchName = PitchItemAdapter.getItem(position).getPitchName();
-        intent.putExtra("pitchName", pitchName);
+        intent.putExtra("pitchName", PitchItemAdapter.getItem(position));
         startActivity(intent);
     }
 }

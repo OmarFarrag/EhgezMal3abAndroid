@@ -3,7 +3,9 @@ package com.homidev.egypt.ehgezmal3ab;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Pitch {
+import java.io.Serializable;
+
+public class Pitch implements Serializable{
 
     @SerializedName("venueID")
     @Expose

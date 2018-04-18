@@ -16,16 +16,17 @@ public class PitchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.all_pitches_layout);
+        setContentView(R.layout.activity_pitch);
 
-        TextView pitchNameTextView = findViewById(R.id.activityPitchNameTextView);
+        TextView pitchNameTextView = findViewById(R.id.pitchActivityPitchName);
 
         Bundle extras = getIntent().getExtras();
-        String pitchName = "";
+        Pitch pitch = null;
         if(extras != null) {
-            pitchName = extras.getString("pitchName");
+            pitch = (Pitch) extras.get("pitchName");
         }
-
-        pitchNameTextView.setText(pitchName);
+        if(pitch != null) {
+            pitchNameTextView.setText(pitch.getPitchName());
+        }
     }
 }

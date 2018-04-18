@@ -41,6 +41,9 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
         if(holder instanceof PitchItemViewHolder) {
             Pitch pitch = pitchList.get(position);
             holder.pitchTitle.setText(pitch.getPitchName());
+            holder.pitchCapacity.setText(pitch.getCapacity().toString());
+            holder.pitchPrice.setText(pitch.getPrice().toString());
+            holder.pitchType.setText(pitch.getType());
         }
     }
 
