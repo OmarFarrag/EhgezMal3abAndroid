@@ -128,10 +128,6 @@ public class MainActivity extends AppCompatActivity {
                 loginAndRegisterLayout.startAnimation(slideUpAnimation);
 
                 logoLayout.setVisibility(View.VISIBLE);
-
-
-
-
             }
         });
     }

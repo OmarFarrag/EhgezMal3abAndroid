@@ -27,6 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="wafaaa2"
+                android:fontFamily="@font/century_gothic"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
                 android:textColor="@color/white" />
 
@@ -36,6 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="01121444875"
+                android:fontFamily="@font/century_gothic"
                 android:textAppearance="@style/Base.CardView"
                 android:textSize="12sp"
                 android:textColor="@color/white" />
@@ -44,6 +46,7 @@
                 android:id="@+id/venueStreet"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/century_gothic"
                 android:text="mahdy"
                 android:textColor="@color/white" />
 
@@ -51,6 +54,7 @@
                 android:id="@+id/venueArea"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/century_gothic"
                 android:text="Nasr City"
                 android:textColor="@color/white" />
 

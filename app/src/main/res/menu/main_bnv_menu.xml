@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/allVenuesBNVItem"
-        android:icon="@drawable/close_image"
+        android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/venues"/>
     <item
         android:id="@+id/reservationsBNVItem"

@@ -16,6 +16,7 @@
         <EditText
             android:id="@+id/usernameText"
             android:theme="@style/InputStyle"
+            android:fontFamily="@font/century_gothic"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_marginRight="30dp"
@@ -28,6 +29,7 @@
         <EditText
             android:id="@+id/passwordText"
             android:theme="@style/InputStyle"
+            android:fontFamily="@font/century_gothic"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_marginRight="30dp"
@@ -40,6 +42,7 @@
 
         <Button
             android:id="@+id/loginBtn"
+            android:fontFamily="@font/century_gothic"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="@string/signIn"

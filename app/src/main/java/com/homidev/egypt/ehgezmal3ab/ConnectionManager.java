@@ -341,6 +341,7 @@ public class ConnectionManager {
         return (ArrayList<Pitch>) pitchList;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void getReservations(final ReservationItemAdapter adapter) {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("myprefs", MODE_PRIVATE).getString("token", "");
