@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,10 +22,10 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
     private Context context;
     private IRecyclerViewClickListener listener;
 
-    public PitchItemAdapter(Context context, int venueID, IRecyclerViewClickListener listener) {
+    public PitchItemAdapter(Context context, String venueID, IRecyclerViewClickListener listener) {
         this.context = context;
         this.connectionManager = ConnectionManager.getConnectionManager();
-        pitchList = connectionManager.getPitches(venueID);
+        connectionManager.getVenuePitches(venueID,this);
         this.listener = listener;
     }
 
@@ -39,7 +40,7 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
     public void onBindViewHolder(PitchItemViewHolder holder, int position) {
         if(holder instanceof PitchItemViewHolder) {
             Pitch pitch = pitchList.get(position);
-            holder.pitchTitle.setText(pitch.getPitchTitle());
+            holder.pitchTitle.setText(pitch.getPitchName());
         }
     }
 
@@ -49,6 +50,11 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
             return 0;
         }
         return pitchList.size();
+    }
+
+    public void setPitchList(ArrayList<Pitch> pitches){
+        pitchList = pitches;
+        notifyDataSetChanged();
     }
 
     public static Pitch getItem(int position) {

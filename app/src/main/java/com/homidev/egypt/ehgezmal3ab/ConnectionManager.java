@@ -287,58 +287,26 @@ public class ConnectionManager {
         return venuesList;
     }
 
-    public ArrayList<Pitch> getPitches(int venueID) {
-        final List<Pitch> pitchList = new ArrayList<>();
+    public void getVenuePitches(String id, final PitchItemAdapter adapter){
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        final ArrayList<Pitch>[] pitchList = new ArrayList[1];
+        ehgezMal3abAPI.getVenuePitches(id).enqueue(new retrofit2.Callback<ArrayList<Pitch>>(){
 
-        final Request getPitchesRequest = createGetPitchesRequest(venueID);
-
-        final Response[] response = new Response[1];
-        Thread getPitchesThread = new Thread(new Runnable() {
             @Override
-            public void run() {
-                try {
-                    //execute the request and store it in response[0]
-                    response[0] = connectionClient.newCall(getPitchesRequest).execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    //parsing the JSONArray returned
-                    JSONArray pitchesResponse = null;
-                    try {
-                        pitchesResponse = new JSONArray(response[0].body().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    //parse each JSONObject in the JSONArray and add it to the venueList
-                    for(int i = 0; i < pitchesResponse.length(); i++) {
-                        JSONObject pitchObject = pitchesResponse.getJSONObject(i);
-                        pitchList.add(new Pitch(
-                                pitchObject.getString("pitchName"),
-                                pitchObject.getString("type"),
-                                Integer.parseInt(pitchObject.getString("capacity")),
-                                Double.parseDouble(pitchObject.getString("price")),
-                                pitchObject.getString("venueID")
-                        ));
-                    }
-                }catch(JSONException e) {
-                    e.printStackTrace();
+            public void onResponse(retrofit2.Call<ArrayList<Pitch>> call, retrofit2.Response<ArrayList<Pitch>> response) {
+                if(response.code() == 200){
+                    pitchList[0] = response.body();
+                    adapter.setPitchList(pitchList[0]);
+                }else{
+                    adapter.setPitchList(new ArrayList<Pitch>());
                 }
             }
+
+            @Override
+            public void onFailure(retrofit2.Call<ArrayList<Pitch>> call, Throwable t) {
+                throw new RuntimeException(t);
+            }
         });
-
-        getPitchesThread.start();
-
-        try {
-            //await main thread to join this thread to be able to update interface with data retrieve
-            getPitchesThread.join();
-        }
-        catch(InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return (ArrayList<Pitch>) pitchList;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

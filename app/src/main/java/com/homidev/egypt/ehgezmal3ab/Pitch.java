@@ -1,72 +1,101 @@
 package com.homidev.egypt.ehgezmal3ab;
 
-/**
- * Created by engineer on 09/04/18.
- */
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class Pitch {
-    private String pitchTitle;
-    private String type;
-    private int capacity;
-    private Double price;
+
+    @SerializedName("venueID")
+    @Expose
     private String venueID;
+    @SerializedName("pitchName")
+    @Expose
+    private String pitchName;
+    @SerializedName("capacity")
+    @Expose
+    private Integer capacity;
+    @SerializedName("price")
+    @Expose
+    private Integer price;
+    @SerializedName("type")
+    @Expose
+    private String type;
+    @SerializedName("venue")
+    @Expose
+    private Object venue;
 
-    public Pitch(String pitchTitle, String venueID) {
-
-        this.pitchTitle = pitchTitle;
-        this.venueID = venueID;
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public Pitch() {
     }
 
-    public Pitch(String pitchTitle, String type, int capacity, Double price, String venueID) {
-        this.pitchTitle = pitchTitle;
-        this.type = type;
+    /**
+     *
+     * @param price
+     * @param pitchName
+     * @param capacity
+     * @param venue
+     * @param type
+     * @param venueID
+     */
+    public Pitch(String venueID, String pitchName, Integer capacity, Integer price, String type, Object venue) {
+        super();
+        this.venueID = venueID;
+        this.pitchName = pitchName;
         this.capacity = capacity;
         this.price = price;
-        this.venueID = venueID;
-    }
-
-
-    public Pitch(String pitchTitle) {
-        this.pitchTitle = pitchTitle;
-    }
-
-    public String getPitchTitle() {
-        return pitchTitle;
-    }
-
-    public void setPitchTitle(String pitchTitle) {
-        this.pitchTitle = pitchTitle;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public Double getPrice() {
-        return price;
+        this.type = type;
+        this.venue = venue;
     }
 
     public String getVenueID() {
         return venueID;
     }
 
+    public void setVenueID(String venueID) {
+        this.venueID = venueID;
+    }
+
+    public String getPitchName() {
+        return pitchName;
+    }
+
+    public void setPitchName(String pitchName) {
+        this.pitchName = pitchName;
+    }
+
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public String getType() {
+        return type;
+    }
+
     public void setType(String type) {
         this.type = type;
     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
+    public Object getVenue() {
+        return venue;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setVenue(Object venue) {
+        this.venue = venue;
     }
 
-    public void setVenueID(String venueID) {
-        this.venueID = venueID;
-    }
 }

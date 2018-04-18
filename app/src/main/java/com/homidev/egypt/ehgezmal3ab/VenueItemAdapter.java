@@ -1,6 +1,11 @@
 package com.homidev.egypt.ehgezmal3ab;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.CardView;
@@ -8,10 +13,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +65,7 @@ public class VenueItemAdapter extends RecyclerView.Adapter<VenueItemAdapter.Venu
 
     //Called by RecyclerView to display the data at the specified position.
     @Override
-    public void onBindViewHolder(VenueItemAdapter.VenueItemViewHolder holder, int position) {
+    public void onBindViewHolder(final VenueItemAdapter.VenueItemViewHolder holder, int position) {
         if(holder instanceof VenueItemViewHolder) {
             Venue venue = venueList.get(position);
             //set the attributes of the venue item to be displayed
@@ -64,6 +73,29 @@ public class VenueItemAdapter extends RecyclerView.Adapter<VenueItemAdapter.Venu
             holder.venueStreet.setText(venue.getStreet());
             holder.venueArea.setText(venue.getArea());
             holder.venuePhoneNumber.setText(venue.getPhoneNumber());
+            Picasso
+                    .with(context)
+                    .load("http://i.imgur.com/AS65Kmg.jpg")
+                    .placeholder(R.drawable.close_icon)
+                    .error(R.drawable.close_icon)
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            holder.background.setAlpha((float)0.6);
+                            holder.background.setBackground(new BitmapDrawable(bitmap));
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                        }
+                    });
+
         }
     }
 
@@ -90,6 +122,8 @@ public class VenueItemAdapter extends RecyclerView.Adapter<VenueItemAdapter.Venu
         TextView venueStreet;
         TextView venueArea;
         TextView venuePhoneNumber;
+        ImageView imageView;
+        LinearLayout background;
         private IRecyclerViewClickListener listener;
         CardView cardView;
 
@@ -100,6 +134,8 @@ public class VenueItemAdapter extends RecyclerView.Adapter<VenueItemAdapter.Venu
             venueStreet = (TextView) itemView.findViewById(R.id.venueStreet);
             venueArea = (TextView) itemView.findViewById(R.id.venueArea);
             venuePhoneNumber = (TextView) itemView.findViewById(R.id.venuePhoneNumber);
+            imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            background = (LinearLayout) itemView.findViewById(R.id.container);
             this.listener = listener;
             cardView.setOnClickListener(this);
         }

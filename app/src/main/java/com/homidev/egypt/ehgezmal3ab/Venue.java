@@ -23,6 +23,8 @@ public class Venue {
     float latitude;
     @SerializedName("venueID")
     String venueID;
+    @SerializedName("imageLink")
+    String imageLink;
 
     public Venue(String venueTitle, String phoneNumber,
                  String area, String street, int venueImageRes,
