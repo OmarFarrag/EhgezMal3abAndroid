@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
         connectionManager.setMainActivity(this);
 
-        String token = PreferenceManager.getDefaultSharedPreferences(this).getString("token","");
-        if(token !=null) loggedIn();
+        String token = getSharedPreferences("myprefs",MODE_PRIVATE).getString("token","");
+        if(token !="") loggedIn();
 
     }
 
