@@ -17,7 +17,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Toast;
 
 
 public class ReservationsFragment extends android.support.v4.app.Fragment {
@@ -71,7 +71,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
 
 
         //create an adapter, automatically fires a GET request to get all venues(for now)
-        recyclerAdapter = new ReservationItemAdapter(getContext(), listener);
+        recyclerAdapter = new ReservationItemAdapter(getContext(), listener, this);
 
         //set ReservationAdapter to adapt reservationsRecyclerView for displaying the venues(for now)
         reservationsRecyclerView.setAdapter(recyclerAdapter);
@@ -83,7 +83,12 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     }
 
 
-
-
-
+    public void showToasts(Error error, boolean cancelled){
+        if(cancelled){
+            Toast.makeText(getContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+        }
+        Toast.makeText(getContext(),error.getText(),Toast.LENGTH_LONG).show();
+    }
 }

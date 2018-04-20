@@ -9,7 +9,7 @@ import com.google.gson.annotations.*;
 
 public class Venue {
     @SerializedName("venueName")
-    String venueTitle;
+    private String venueTitle;
     @SerializedName("phoneNumber")
     String phoneNumber;
     @SerializedName("area")
@@ -24,11 +24,11 @@ public class Venue {
     @SerializedName("venueID")
     String venueID;
     @SerializedName("imageLink")
-    String imageLink;
+    private String imageLink;
 
     public Venue(String venueTitle, String phoneNumber,
                  String area, String street, int venueImageRes,
-                 float longitude, float latitude, String venueID) {
+                 float longitude, float latitude, String venueID, String imageLink) {
         this.venueTitle = venueTitle;
         this.phoneNumber = phoneNumber;
         this.area = area;
@@ -37,6 +37,7 @@ public class Venue {
         this.longitude = longitude;
         this.latitude = latitude;
         this.venueID = venueID;
+        this.setImageLink(imageLink);
     }
 
     public Venue(String venueTitle, String phoneNumber, String area, String street,
@@ -87,5 +88,13 @@ public class Venue {
 
     public String getVenueID() {
         return venueID;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 }

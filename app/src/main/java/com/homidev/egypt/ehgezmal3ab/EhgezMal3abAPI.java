@@ -1,5 +1,7 @@
 package com.homidev.egypt.ehgezmal3ab;
 
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
@@ -7,7 +9,7 @@ import retrofit2.http.*;
 
 public interface EhgezMal3abAPI {
 
-    String BASE_URL = "http://192.168.1.105:56718/api/";
+    String BASE_URL = "http://10.0.2.2:56719/api/";
 
     @GET("venues/")
     Call<List<Venue>> getAllVenues();
@@ -18,4 +20,6 @@ public interface EhgezMal3abAPI {
     @GET("pitches/{id}")
     Call<ArrayList<Pitch>> getVenuePitches(@Path("id") String id);
 
+    @PUT("reservations/cancel")
+    Call<Error> cancelReservation(@Header("Authorization") String token, @Body Reservation reservation);
 }

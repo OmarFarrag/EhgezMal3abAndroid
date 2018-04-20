@@ -29,14 +29,16 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
     private IRecyclerViewClickListener listener;
     private View.OnClickListener cancelListener;
 
+    private ReservationsFragment fragment;
 
-    public ReservationItemAdapter(Context context, IRecyclerViewClickListener listener) {
+    public ReservationItemAdapter(Context context, IRecyclerViewClickListener listener, ReservationsFragment fragment) {
         this.context = context;
         connectionManager = ConnectionManager.getConnectionManager();
         //reservationList= connectionManager.getPlayerReservations();
         connectionManager.getReservations(this);
         reservationList = new ArrayList<>();
         this.listener = listener;
+        this.fragment = fragment;
         setCancelListener();
     }
 
@@ -53,7 +55,7 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
     @Override
     public void onBindViewHolder(ReservationItemAdapter.ReservationItemViewHolder holder, int position) {
         if(holder instanceof ReservationItemViewHolder) {
-            Reservation reservation = reservationList.get(position);
+            final Reservation reservation = reservationList.get(position);
             //set the attributes of the venue item to be displayed
             String[] timeParts = reservation.getStartsOn().toString().split("T");
             holder.reservationDate.setText(timeParts[0]);
@@ -71,8 +73,12 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
                 holder.cardView.setBackgroundColor(context.getResources().getColor(R.color.pendingColor));
                 holder.cancelBtn.setVisibility(View.VISIBLE);
                 holder.cancelBtn.setClickable(true);
-                holder.cancelBtn.setOnClickListener(cancelListener);
-
+                holder.cancelBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        connectionManager.cancelReservation(reservation, fragment);
+                    }
+                });
 
             }
         }
@@ -82,7 +88,7 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
     * The listener for the action of clicking the cancel btn
     * The reservation shall be canceled
      */
-    private void setCancelListener()
+    private void setCancelListener ()
     {
         cancelListener = new View.OnClickListener() {
             @Override

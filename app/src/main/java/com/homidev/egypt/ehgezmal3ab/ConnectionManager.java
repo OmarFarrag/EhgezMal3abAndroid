@@ -9,6 +9,7 @@ import android.support.annotation.RequiresApi;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -304,7 +305,7 @@ public class ConnectionManager {
 
             @Override
             public void onFailure(retrofit2.Call<ArrayList<Pitch>> call, Throwable t) {
-                throw new RuntimeException(t);
+
             }
         });
     }
@@ -332,7 +333,36 @@ public class ConnectionManager {
 
             @Override
             public void onFailure(retrofit2.Call<ArrayList<Reservation>> call, Throwable t) {
-                throw new RuntimeException(t);
+
+            }
+        });
+    }
+
+    public void cancelReservation(final Reservation reservation, final ReservationsFragment fragment)
+    {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("myprefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            return;
+        }
+        ehgezMal3abAPI.cancelReservation("Bearer " + token, reservation).enqueue(new retrofit2.Callback<Error>() {
+            @Override
+            public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
+                boolean cancelled = false;
+                if(response.code() == 200){
+                    //reservation is cancelled.
+                    cancelled = true;
+                }else if(response.code() == 400){
+                    //reservation is not cancelled.
+                    cancelled = false;
+                }
+                Error text = response.body();
+                fragment.showToasts(text, cancelled);
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Error> call, Throwable t) {
+
             }
         });
     }

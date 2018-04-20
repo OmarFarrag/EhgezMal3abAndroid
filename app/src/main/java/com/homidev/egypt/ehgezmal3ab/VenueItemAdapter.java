@@ -75,7 +75,7 @@ public class VenueItemAdapter extends RecyclerView.Adapter<VenueItemAdapter.Venu
             holder.venuePhoneNumber.setText(venue.getPhoneNumber());
             Picasso
                     .with(context)
-                    .load("http://i.imgur.com/AS65Kmg.jpg")
+                    .load(venue.getImageLink())
                     .placeholder(R.drawable.close_icon)
                     .error(R.drawable.close_icon)
                     .into(new Target() {
