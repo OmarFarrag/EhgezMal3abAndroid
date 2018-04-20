@@ -309,6 +309,8 @@ public class ConnectionManager {
         });
     }
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void getReservations(final ReservationItemAdapter adapter) {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();

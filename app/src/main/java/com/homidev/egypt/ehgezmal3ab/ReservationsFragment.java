@@ -1,12 +1,19 @@
 package com.homidev.egypt.ehgezmal3ab;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +68,8 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
             }
         };
 
+
+
         //create an adapter, automatically fires a GET request to get all venues(for now)
         recyclerAdapter = new ReservationItemAdapter(getContext(), listener);
 
@@ -72,6 +81,9 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     {
 
     }
+
+
+
 
 
 }

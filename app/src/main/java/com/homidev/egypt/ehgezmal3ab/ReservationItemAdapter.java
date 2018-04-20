@@ -1,6 +1,7 @@
 package com.homidev.egypt.ehgezmal3ab;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.CardView;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
     private static List<Reservation> reservationList;
     private Context context;
     private IRecyclerViewClickListener listener;
+    private View.OnClickListener cancelListener;
+
 
     public ReservationItemAdapter(Context context, IRecyclerViewClickListener listener) {
         this.context = context;
@@ -33,6 +37,7 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
         connectionManager.getReservations(this);
         reservationList = new ArrayList<>();
         this.listener = listener;
+        setCancelListener();
     }
 
     //Called when RecyclerView needs a new VenueItemHolder to represent a venue item.
@@ -50,10 +55,41 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
         if(holder instanceof ReservationItemViewHolder) {
             Reservation reservation = reservationList.get(position);
             //set the attributes of the venue item to be displayed
-            holder.reservationDate.setText(reservation.getStartsOn().toString());
+            String[] timeParts = reservation.getStartsOn().toString().split("T");
+            holder.reservationDate.setText(timeParts[0]);
+            holder.reservationTime.setText(timeParts[1].split(":")[0]+":"+timeParts[1].split(":")[1]);
             holder.reservationVenue.setText(reservation.getVenueID());
             holder.reservationPitch.setText(reservation.getPitchName());
+
+            //Change the background color according to the status and allow cancel action for pending
+            if(reservation.getStatus().toLowerCase().equals("declined"))
+            {
+                holder.cardView.setBackgroundColor(context.getResources().getColor(R.color.declinedColor));
+            }
+            else if (reservation.getStatus().toLowerCase().equals("pending"))
+            {
+                holder.cardView.setBackgroundColor(context.getResources().getColor(R.color.pendingColor));
+                holder.cancelBtn.setVisibility(View.VISIBLE);
+                holder.cancelBtn.setClickable(true);
+                holder.cancelBtn.setOnClickListener(cancelListener);
+
+
+            }
         }
+    }
+
+    /*
+    * The listener for the action of clicking the cancel btn
+    * The reservation shall be canceled
+     */
+    private void setCancelListener()
+    {
+        cancelListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        };
     }
 
     public static ArrayList<Reservation> getVenuesList() {
@@ -77,12 +113,19 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
         return reservationList.size();
     }
 
+    protected void cancelReservation()
+    {
+
+    }
+
 
     //A ViewHolder describes an item view and metadata about its place within the RecyclerView
     public class ReservationItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView reservationDate;
+        TextView reservationTime;
         TextView reservationVenue;
         TextView reservationPitch;
+        ImageButton cancelBtn;
         private IRecyclerViewClickListener listener;
         CardView cardView;
 
@@ -90,8 +133,10 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
             super(itemView);
             cardView = (CardView) itemView.findViewById(R.id.reservationCardView);
             reservationDate = (TextView) itemView.findViewById(R.id.reservationDate);
+            reservationTime = (TextView) itemView.findViewById(R.id.reservationTime);
             reservationVenue = (TextView) itemView.findViewById(R.id.reservationVenue);
             reservationPitch = (TextView) itemView.findViewById(R.id.reservationPitch);
+            cancelBtn = (ImageButton)  itemView.findViewById(R.id.cancelBtn);
             this.listener = listener;
             cardView.setOnClickListener(this);
         }

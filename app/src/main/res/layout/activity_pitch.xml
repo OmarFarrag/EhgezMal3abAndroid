@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,18 +7,401 @@
     android:layout_height="match_parent"
     tools:context="com.homidev.egypt.ehgezmal3ab.PitchActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pitch Activity"
-        android:textSize="40sp"
-        android:layout_margin="60dp"/>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
-    <TextView
+
+
+
+    <TableLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="ewfrfr"
-        android:id="@+id/pitchActivityPitchName"/>
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        >
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="00:00 to 00:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="00:30 to 01:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="01:00 to 01:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="01:30 to 02:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="02:00 to 02:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="02:30 to 03:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="03:00 to 03:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="03:30 to 04:00"
+                style="@style/TimeTableStyle"
+                />
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="04:00 to 04:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="04:30 to 05:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="05:00 to 05:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="05:30 to 06:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="06:00 to 06:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="06:30 to 07:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="07:00 to 07:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="07:30 to 08:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="08:00 to 08:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="08:30 to 09:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="09:00 to 09:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="09:30 to 10:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="10:00 to 10:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="10:30 to 11:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="11:00 to 11:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="11:30 to 12:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="12:00 to 12:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="12:30 to 13:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="13:00 to 13:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="13:30 to 14:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="14:00 to 14:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="14:30 to 15:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="15:00 to 15:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="15:30 to 16:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="16:00 to 16:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="16:30 to 17:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="17:00 to 18:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="18:30 to 19:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="19:00 to 19:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="19:30 to 20:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="20:00 to 21:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="21:30 to 22:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="22:00 to 22:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="22:30 to 23:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+
+            >
+            <TextView
+                android:text="23:00 to 23:30"
+                style="@style/TimeTableStyle"
+                />
+
+            <TextView
+
+                android:text="23:30 to 24:00"
+                style="@style/TimeTableStyle"/>
+
+        </TableRow>
+
+
+
+
+    </TableLayout>
 
 </RelativeLayout>
+</ScrollView>
