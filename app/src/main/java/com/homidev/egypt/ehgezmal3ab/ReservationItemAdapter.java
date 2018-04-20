@@ -65,7 +65,7 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
             holder.reservationPitch.setText(reservation.getPitchName());
 
             //Change the background color according to the status and allow cancel action for pending
-            if(reservation.getStatus().toLowerCase().equals("declined"))
+            if(reservation.getStatus().toLowerCase().equals("cancelled"))
             {
                 holder.cardView.setBackgroundColor(context.getResources().getColor(R.color.declinedColor));
             }
