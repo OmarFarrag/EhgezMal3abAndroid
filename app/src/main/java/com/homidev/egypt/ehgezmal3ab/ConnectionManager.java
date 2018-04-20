@@ -420,7 +420,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://192.168.1.105:56718/api/users/register")
+                .url("http://10.0.2.2:56718/api/users/register")
                 .post(registerRequestBody)
                 .build();
     }
@@ -432,7 +432,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://10.0.2.2:56719/api/token")
+                .url("http://10.0.2.2:56718/api/token")
                 .post(loginRequestBody)
                 .build();
     }

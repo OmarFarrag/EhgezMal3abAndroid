@@ -10,4 +10,8 @@
         android:icon="@drawable/reservations_icon"
         android:title="@string/reservations"/>
 
+    <item
+        android:id="@+id/userProfileBNVItem"
+        android:icon="@drawable/ic_user"
+        android:title="@string/userProfile" />
 </menu>

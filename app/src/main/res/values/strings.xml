@@ -20,7 +20,6 @@
     <string name="reservations">Reservations</string>
     <string name="reservations_menu_cancel">Cancel</string>
     <string name="reservations_menu_share">Share Reservation</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="userProfile">userProfile</string>
+    <string name="user_profile_toolbar">Profile</string>
 </resources>

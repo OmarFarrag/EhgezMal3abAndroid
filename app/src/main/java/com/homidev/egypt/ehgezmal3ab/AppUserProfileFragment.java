@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 
 public class AppUserProfileFragment extends android.support.v4.app.Fragment {
 
+    private EhgezMal3abAPI ehgezMal3abAPI;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,8 +25,7 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View UserProfileView = inflater.inflate(R.layout.fragment_app_user_profile, container, false);
-
+        View UserProfileView = inflater.inflate(R.layout.app_user_profile, container, false);
         return UserProfileView;
     }
 }

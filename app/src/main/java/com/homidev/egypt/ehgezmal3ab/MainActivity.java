@@ -188,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
     Initialize the window slide up when keyboard is visible
      */
 
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     protected void setWindowSlideUpOnKeyboard()
     {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -281,6 +282,11 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = new ReservationsFragment();
                         createReservationsToolbar(mainToolbar);
                         break;
+
+                    case R.id.userProfileBNVItem:
+                        selectedFragment = new AppUserProfileFragment();
+                        createProfileToolbar(mainToolbar);
+
                 }
 
                 android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -322,6 +328,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    protected void createProfileToolbar(Toolbar mainToolbar) {
+        mainToolbar.removeAllViews();
+        getLayoutInflater().inflate(R.layout.userprofile_toolbar, mainToolbar);
+    }
 
 
 
