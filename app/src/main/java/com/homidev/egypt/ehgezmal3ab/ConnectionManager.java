@@ -1,5 +1,7 @@
 package com.homidev.egypt.ehgezmal3ab;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
@@ -31,6 +33,7 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
 public class ConnectionManager {
@@ -362,6 +365,28 @@ public class ConnectionManager {
 
             @Override
             public void onFailure(retrofit2.Call<Error> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    public void getReservationShareLink(final Reservation reservation)
+    {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        ehgezMal3abAPI.getReservationShareLink(reservation).enqueue(new retrofit2.Callback<JsonObject>() {
+            @Override
+            public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+                if(response.code() == 200)
+                {
+                    ClipboardManager clipboard = (ClipboardManager) mainActivity.getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("Share reservation link", response.body().get("link").getAsString());
+                    clipboard.setPrimaryClip(clip);
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<JsonObject> call, Throwable t) {
 
             }
         });

@@ -22,4 +22,7 @@ public interface EhgezMal3abAPI {
 
     @PUT("reservations/cancel")
     Call<Error> cancelReservation(@Header("Authorization") String token, @Body Reservation reservation);
+
+    @PATCH("reservations/sharelink")
+    Call<JsonObject> getReservationShareLink(@Body Reservation reservation);
 }

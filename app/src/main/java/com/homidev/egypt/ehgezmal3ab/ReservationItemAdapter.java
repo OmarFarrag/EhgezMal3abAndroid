@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
             }
             else if (reservation.getStatus().toLowerCase().equals("pending"))
             {
-                holder.cardView.setBackgroundColor(context.getResources().getColor(R.color.pendingColor));
+                holder.layout.setBackgroundColor(context.getResources().getColor(R.color.pendingColor));
                 holder.cancelBtn.setVisibility(View.VISIBLE);
                 holder.cancelBtn.setClickable(true);
                 holder.cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +133,7 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
         TextView reservationVenue;
         TextView reservationPitch;
         ImageButton cancelBtn;
+        RelativeLayout layout;
         private IRecyclerViewClickListener listener;
         CardView cardView;
 
@@ -145,6 +147,7 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
             cancelBtn = (ImageButton)  itemView.findViewById(R.id.cancelBtn);
             this.listener = listener;
             cardView.setOnClickListener(this);
+            layout = (RelativeLayout) itemView.findViewById(R.id.reservationLayout);
         }
 
         @Override
