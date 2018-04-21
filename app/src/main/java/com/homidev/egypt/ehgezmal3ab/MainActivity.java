@@ -327,6 +327,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*
+   create appUser profile toolbar
+    */
     protected void createProfileToolbar(Toolbar mainToolbar) {
         mainToolbar.removeAllViews();
         getLayoutInflater().inflate(R.layout.userprofile_toolbar, mainToolbar);

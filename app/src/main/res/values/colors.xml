@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">@color/mainGreen</color>
     <color name="colorAccent">#FF4081</color>
     <color name="mainGreen">#006914</color>
+    <color name="mainGreenLight">#439841</color>
     <color name="white">#FFFFFF</color>
     <color name="tab_background_selected">@color/white</color>
     <color name="tab_background_unselected">@color/mainGreen</color>

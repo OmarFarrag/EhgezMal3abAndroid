@@ -9,12 +9,15 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toolbar;
 
 /**
  * Created by User on 18/04/2018.
  */
 
 public class AppUserProfileFragment extends android.support.v4.app.Fragment {
+
+    private Toolbar menuToolBar;
 
     private ConnectionManager connectionManager = ConnectionManager.getConnectionManager();
     private EhgezMal3abAPI ehgezMal3abAPI = connectionManager.createEhgezMal3abService();
@@ -45,5 +48,9 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
 
     public void saveUserInfo(View view) {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+    }
+
+    public void setToolbar(Toolbar mainToolBar) {
+        this.menuToolBar = mainToolBar;
     }
 }
