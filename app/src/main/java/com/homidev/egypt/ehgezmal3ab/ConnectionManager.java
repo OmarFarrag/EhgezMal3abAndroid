@@ -131,8 +131,8 @@ public class ConnectionManager {
 
 
     /*
-    This function sends a login request to the server, handles the response and then calls the proper
-    UI message display
+    * This function sends a login request to the server, handles the response and then calls the proper
+    * UI message display
     */
     public void loginPlayer(Player playerToLogin,final LogInFragment loginFragment)
     {
@@ -166,7 +166,14 @@ public class ConnectionManager {
                     //On UI thread only
                     Handler handler = new Handler(Looper.getMainLooper());
 
-                    if(isSuccessful) storeUserToken(response);
+                    final String[] userType = new String[1];
+
+                    if(isSuccessful)
+                    {
+                        String responseString = getLoginStringFromJsonResponse(response);
+                        userType[0] = getUserTypeFromStringResponse(responseString);
+                        storeUserToken(responseString,userType[0]);
+                    }
 
                     handler.post(new Runnable() {
                         public void run() {
@@ -174,7 +181,7 @@ public class ConnectionManager {
                             loginFragment.showLoginResponseMessage(isSuccessful);
 
                             if(isSuccessful) {
-                                mainActivity.loggedIn();
+                                mainActivity.loggedIn(userType[0]);
 
                             }
                         }
@@ -183,6 +190,40 @@ public class ConnectionManager {
 
 
             });
+    }
+
+    /*
+    * Function that gets the response string from okhttp response object
+     */
+
+    protected String getLoginStringFromJsonResponse(Response response)
+    {
+        String responseString = null;
+
+        try {
+            responseString = response.body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return responseString;
+
+    }
+
+    /*
+    * Function that gets the userType from the login response
+     */
+
+    private String getUserTypeFromStringResponse(String response)
+    {
+        //Construct the json response then extracts the message
+        JSONObject responseJson;
+        try {
+            response = new JSONObject(response).getJSONObject("user").getString("userType");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return response;
     }
 
 
@@ -318,7 +359,7 @@ public class ConnectionManager {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void getReservations(final ReservationItemAdapter adapter) {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
-        String token = mainActivity.getSharedPreferences("myprefs", MODE_PRIVATE).getString("token", "");
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
         if (token == "") {
             return;
         }
@@ -344,7 +385,7 @@ public class ConnectionManager {
     public void cancelReservation(final Reservation reservation, final ReservationsFragment fragment)
     {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
-        String token = mainActivity.getSharedPreferences("myprefs", MODE_PRIVATE).getString("token", "");
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
         if (token == "") {
             return;
         }
@@ -420,7 +461,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://10.0.2.2:56718/api/users/register")
+                .url("http://192.168.1.105:56718/api/users/register")
                 .post(registerRequestBody)
                 .build();
     }
@@ -432,7 +473,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://10.0.2.2:56718/api/token")
+                .url("http://192.168.1.105:56718/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -489,27 +530,29 @@ public class ConnectionManager {
     Gets the token from the login response and store it
      */
 
-    protected void storeUserToken(Response response)
+    protected void storeUserToken(String response, String userType)
     {
-        String responseString=null;
-        try {
-            responseString = response.body().string();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
         //Construct the json response then extracts the message
         JSONObject responseJson;
         try {
-            responseJson = new JSONObject(responseString);
-            responseString = responseJson.getString("token");
+            responseJson = new JSONObject(response);
+            response = responseJson.getString("token");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         //Store in shared preferences
-        SharedPreferences preferences = mainActivity.getSharedPreferences("myprefs",MODE_PRIVATE);
-        preferences.edit().putString("token", responseString).commit();
+        if(userType.toLowerCase().equals("appuser")) {
+            SharedPreferences preferences = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE);
+            preferences.edit().putString("token", response).commit();
+        }
+        else if (userType.toLowerCase().equals("venAdmin"))
+        {
+            SharedPreferences preferences = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE);
+            preferences.edit().putString("token", response).commit();
+        }
     }
 
     public List<Reservation> getPlayerReservations()
@@ -576,7 +619,7 @@ public class ConnectionManager {
                 .url("http://192.168.1.105:56718/api/reservations")
                 .get()
                 .addHeader("Content-Type", "application/json")
-                .addHeader("Authorization","Bearer "+ mainActivity.getSharedPreferences("myprefs",MODE_PRIVATE).getString("token",""))
+                .addHeader("Authorization","Bearer "+ mainActivity.getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("token",""))
                 .build();
     }
 

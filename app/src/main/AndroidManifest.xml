@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".ViewVenueActivity" />
         <activity android:name=".PitchActivity"></activity>
+        <activity android:name=".VenueAdminMainActivity"></activity>
     </application>
 
 </manifest>

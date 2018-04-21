@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -43,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Create connection manager
+       SharedPreferences preferences = getSharedPreferences("venAdminPrefs", MODE_PRIVATE);
+        preferences.edit().remove("token").commit();
+        preferences = getSharedPreferences("appUserPrefs", MODE_PRIVATE);
+        preferences.edit().remove("token").commit();
         connectionManager = ConnectionManager.getConnectionManager();
 
         //Check if there is internet connection
@@ -66,8 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
         connectionManager.setMainActivity(this);
 
-        String token = getSharedPreferences("myprefs",MODE_PRIVATE).getString("token","");
-        if(token !="") loggedIn();
+        String appUserToken = getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("token","");
+        if(appUserToken!="") loggedIn("appuser");
+
+        String venAdminToken = getSharedPreferences("venAdminPrefs",MODE_PRIVATE).getString("token","");
+        if(venAdminToken!="") loggedIn("venAdmin");
     }
 
     /*
@@ -226,13 +235,29 @@ public class MainActivity extends AppCompatActivity {
     /*
     A function called by the connection manager in case of successful login
      */
-    public void loggedIn()
+    public void loggedIn(String userType)
     {
+        if(userType.toLowerCase().equals("venadmin"))
+        {
+            launchAdminMainActivity();
+            finish();
+            return;
+        }
         discardLoginAndRegisterButtons();
 
         showMainBNV();
 
         closeLoginAndRegister();
+    }
+
+    /*
+    * Launches the main activity of the venue admin
+     */
+    protected void launchAdminMainActivity()
+    {
+        Intent intent = new Intent(this, VenueAdminMainActivity.class);
+       // intent.putExtra("venueID", venueID);
+        startActivity(intent);
     }
 
 
