@@ -1,6 +1,8 @@
 package com.homidev.egypt.ehgezmal3ab;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +16,8 @@ import android.view.ViewGroup;
 
 public class AppUserProfileFragment extends android.support.v4.app.Fragment {
 
-    private EhgezMal3abAPI ehgezMal3abAPI;
+    private ConnectionManager connectionManager = ConnectionManager.getConnectionManager();
+    private EhgezMal3abAPI ehgezMal3abAPI = connectionManager.createEhgezMal3abService();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,5 +30,20 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View UserProfileView = inflater.inflate(R.layout.app_user_profile, container, false);
         return UserProfileView;
+    }
+
+    private void getUser() {
+
+        Context context = getActivity();
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.PREFERENCE_FILE_KEY), Context.MODE_PRIVATE);
+
+        sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+
+    }
+
+    public void saveUserInfo(View view) {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
     }
 }

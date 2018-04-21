@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     TabLayout logRegTab;
     BottomNavigationView mainBNV;
 
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {

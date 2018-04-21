@@ -22,4 +22,5 @@
     <string name="reservations_menu_share">Share Reservation</string>
     <string name="userProfile">userProfile</string>
     <string name="user_profile_toolbar">Profile</string>
+    <string name="PREFERENCE_FILE_KEY">userName</string>
 </resources>
