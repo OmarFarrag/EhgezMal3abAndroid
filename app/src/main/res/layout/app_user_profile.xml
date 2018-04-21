@@ -23,17 +23,18 @@
                 android:fontFamily="@font/century_gothic"
                 android:textSize="25sp"
                 android:text="Hey, Muhammad Ahmad"
+                android:id="@+id/userProfileWelcome"
                 android:gravity="center" />
 
             <android.support.v7.widget.CardView
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_width="250dp"
                 android:layout_height="40dp"
                 app:cardBackgroundColor="@color/mainGreenLight"
                 android:clickable="true"
                 app:cardCornerRadius="8dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="15dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -43,18 +44,18 @@
                 android:textSize="16sp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="update information"/>
+                android:text="Update Information"/>
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_width="250dp"
                 android:layout_height="40dp"
                 app:cardBackgroundColor="@color/mainGreenLight"
                 android:clickable="true"
                 app:cardCornerRadius="8dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="15dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -64,16 +65,58 @@
                     android:textSize="16sp"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="reset password"/>
+                    android:text="Reset Password"/>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_marginTop="15dp"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                app:cardBackgroundColor="@color/mainGreenLight"
+                android:clickable="true"
+                app:cardCornerRadius="8dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/century_gothic"
+                    android:textSize="16sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Friends"/>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_marginTop="15dp"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                app:cardBackgroundColor="@color/mainGreenLight"
+                android:clickable="true"
+                app:cardCornerRadius="8dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="1dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/century_gothic"
+                    android:textSize="16sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Log out"/>
             </android.support.v7.widget.CardView>
 
         </LinearLayout>
 
 
     <LinearLayout
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:layout_width="match_parent"
-        android:layout_height="330dp"
+        android:layout_height="250dp"
         android:orientation="vertical"
         android:gravity="center_horizontal"
         android:layout_gravity="center"
@@ -83,13 +126,14 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             app:cardElevation="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp">
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:clickable="true">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:paddingLeft="20dp"
+            android:paddingLeft="10dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:clickable="true">
@@ -98,16 +142,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_cash"/>
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:fontFamily="@font/century_gothic"
-                android:text="Balance"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:paddingLeft="20dp"/>
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:fontFamily="@font/century_gothic"
+                    android:text="Balance"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingLeft="10dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:fontFamily="@font/century_gothic"
+                    android:text="200 L.E."
+                    android:textSize="13sp"
+                    android:id="@+id/userProfileBalance"
+                    android:textStyle="bold"
+                    android:paddingLeft="20dp"/>
+            </LinearLayout>
+
         </LinearLayout>
         </android.support.v7.widget.CardView>
 
@@ -115,13 +178,14 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             app:cardElevation="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp">
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:clickable="true">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="20dp"
+            android:paddingLeft="10dp"
             android:paddingTop="8dp"
             android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
@@ -133,16 +197,33 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_phone"
                 android:layout_gravity="center_vertical"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@font/century_gothic"
+                    android:text="Phone "
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingLeft="10dp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:fontFamily="@font/century_gothic"
-                android:text="Phone "
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:paddingLeft="20dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:layout_marginRight="10dp"
+                    android:fontFamily="@font/century_gothic"
+                    android:text="01121444875"
+                    android:textSize="13sp"
+                    android:id="@+id/userProfilePhone"
+                    android:textStyle="bold"
+                    android:paddingLeft="20dp"/>
+            </LinearLayout>
+
         </LinearLayout>
         </android.support.v7.widget.CardView>
 
@@ -151,13 +232,15 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             app:cardElevation="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp">
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:clickable="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:paddingLeft="20dp"
+            android:paddingLeft="10dp"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
             android:clickable="true">
@@ -166,16 +249,34 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_email"/>
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Email"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:paddingLeft="20dp"
-                android:fontFamily="@font/century_gothic"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Email"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingLeft="10dp"
+                    android:fontFamily="@font/century_gothic"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:layout_marginRight="5dp"
+                    android:fontFamily="@font/century_gothic"
+                    android:text="muhammadahmad201196@hotmail.com"
+                    android:textSize="13sp"
+                    android:id="@+id/userProfileEmail"
+                    android:textStyle="bold"
+                    android:paddingLeft="10dp"/>
+            </LinearLayout>
+
         </LinearLayout>
         </android.support.v7.widget.CardView>
 

@@ -8,6 +8,7 @@ public class Player {
     private String email;
     private String number;
     private String name;
+    private String balance;
 
     public Player(String username, String password, String email, String number, String name)
     {
@@ -35,5 +36,7 @@ public class Player {
 
     public String getName(){return name;}
 
-
+    public String getBalance() {
+        return balance;
+    }
 }

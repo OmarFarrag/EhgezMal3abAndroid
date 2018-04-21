@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toolbar;
 
 /**
@@ -53,4 +54,21 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
     public void setToolbar(Toolbar mainToolBar) {
         this.menuToolBar = mainToolBar;
     }
+
+    public void setupLayout(View view, Player player) {
+        TextView welcomeFullName = view.findViewById(R.id.userProfileWelcome);
+        TextView balance = view.findViewById(R.id.userProfileBalance);
+        TextView phoneNumber = view.findViewById(R.id.userProfilePhone);
+        TextView email = view.findViewById(R.id.userProfileEmail);
+        welcomeFullName.setText("Hey, " + player.getName());
+        balance.setText(player.getBalance());
+        email.setText(player.getEmail());
+        phoneNumber.setText(player.getNumber());
+    }
+
+    private void setListeners() {
+
+    }
 }
+
+
