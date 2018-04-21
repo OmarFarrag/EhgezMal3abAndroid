@@ -2,8 +2,10 @@ package com.homidev.egypt.ehgezmal3ab;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -433,6 +435,36 @@ public class ConnectionManager {
         });
     }
 
+    public void getPlayer() {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            return;
+        }
+        final Player[] player = new Player[1];
+
+        ehgezMal3abAPI.getPlayerInfo("Bearer " + token).enqueue(new retrofit2.Callback<Player>() {
+            @Override
+            public void onResponse(retrofit2.Call<Player> call, retrofit2.Response<Player> response) {
+                if(response.code() == 200) {
+                    player[0] = response.body();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("player", player[0]);
+                    AppUserProfileFragment userProfileFragment = new AppUserProfileFragment();
+                    userProfileFragment.setArguments(bundle);
+                }
+                else {
+                   player[0] = null;
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Player> call, Throwable t) {
+
+            }
+        });
+    }
+
     /*
     Create a request body for a player from a JSON player object
      */
@@ -448,7 +480,7 @@ public class ConnectionManager {
     //creates a GET HTTP request to retrieve all venues.
     protected Request createGetAllVenueRequest() {
         return new Request.Builder()
-                .url("http://192.168.1.105:56718/api/venues")
+                .url("http://10.0.2.2:56718/api/venues")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -461,7 +493,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://192.168.1.105:56718/api/users/register")
+                .url("http://10.0.2.2:56718/api/users/register")
                 .post(registerRequestBody)
                 .build();
     }
@@ -473,7 +505,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://192.168.1.105:56718/api/token")
+                .url("http://10.0.2.2:56718/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -512,7 +544,7 @@ public class ConnectionManager {
 
     protected Request createGetPitchesRequest(int venueID) {
         return new Request.Builder()
-                .url("http://192.168.1.105:56718/api/pitches/" + venueID)
+                .url("http://10.2.2.2:56718/api/pitches/" + venueID)
                 .get()
                 .build();
     }

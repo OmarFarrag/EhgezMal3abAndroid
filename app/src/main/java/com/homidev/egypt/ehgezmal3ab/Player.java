@@ -1,14 +1,27 @@
 package com.homidev.egypt.ehgezmal3ab;
 
 
+import com.google.gson.annotations.SerializedName;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable{
+    @SerializedName("userName")
     private String username;
+    @SerializedName("password")
     private String password;
+    @SerializedName("email")
     private String email;
+    @SerializedName("phoneNumber")
     private String number;
+    @SerializedName("name")
     private String name;
-    private String balance;
+    @SerializedName("balance")
+    private int balance;
+    @SerializedName("oldPassword")
+    private String oldPassword;
+    @SerializedName("userType")
+    private String userType;
 
     public Player(String username, String password, String email, String number, String name)
     {
@@ -17,6 +30,17 @@ public class Player {
         this.email = email;
         this.number = number;
         this.name = name;
+    }
+
+    public Player(String username, String password, String email, String number, String name, int balance, String oldPassword, String userType) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.number = number;
+        this.name = name;
+        this.balance = balance;
+        this.oldPassword = oldPassword;
+        this.userType = userType;
     }
 
     public Player(String username, String password)
@@ -36,7 +60,7 @@ public class Player {
 
     public String getName(){return name;}
 
-    public String getBalance() {
+    public int getBalance() {
         return balance;
     }
 }

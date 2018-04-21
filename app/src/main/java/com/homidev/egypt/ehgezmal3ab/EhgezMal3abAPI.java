@@ -9,7 +9,7 @@ import retrofit2.http.*;
 
 public interface EhgezMal3abAPI {
 
-    String BASE_URL = "http://192.168.1.105:56718/api/";
+    String BASE_URL = "http://10.0.2.2:56718/api/";
 
     @GET("venues/")
     Call<List<Venue>> getAllVenues();
@@ -25,4 +25,7 @@ public interface EhgezMal3abAPI {
 
     @PATCH("reservations/sharelink")
     Call<JsonObject> getReservationShareLink(@Body Reservation reservation);
+
+    @GET("users/")
+    Call<Player> getPlayerInfo(@Header("Authorization") String token);
 }
