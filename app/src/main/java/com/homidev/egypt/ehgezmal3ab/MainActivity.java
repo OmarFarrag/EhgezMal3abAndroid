@@ -325,7 +325,6 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.mainFrameLayout, new AllVenuesFragment());
         createAllVenuesActionbar(mainToolbar);
         transaction.commit();
-
     }
 
 

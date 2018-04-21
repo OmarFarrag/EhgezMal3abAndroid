@@ -452,6 +452,7 @@ public class ConnectionManager {
                     bundle.putSerializable("player", player[0]);
                     AppUserProfileFragment userProfileFragment = new AppUserProfileFragment();
                     userProfileFragment.setArguments(bundle);
+                    AppUserProfileFragment.setPlayer(player[0]);
                 }
                 else {
                    player[0] = null;
@@ -460,6 +461,32 @@ public class ConnectionManager {
 
             @Override
             public void onFailure(retrofit2.Call<Player> call, Throwable t) {
+
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void logoutUser(Player user){
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            return;
+        }
+        ehgezMal3abAPI.logoutUser("Bearer " + token, user.getUsername()).enqueue(new retrofit2.Callback<JsonObject>() {
+            @Override
+            public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+                if(response.code() == 400){
+                    JsonObject object = response.body();
+
+                }else if(response.code() == 200){
+                    //Hn3ml eh b2a??
+                    
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<JsonObject> call, Throwable t) {
 
             }
         });
@@ -505,7 +532,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://10.0.2.2:56718/api/token")
+                .url("http://10.0.2.2:56719/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -544,7 +571,7 @@ public class ConnectionManager {
 
     protected Request createGetPitchesRequest(int venueID) {
         return new Request.Builder()
-                .url("http://10.2.2.2:56718/api/pitches/" + venueID)
+                .url("http://10.0.2.2:56719/api/pitches/" + venueID)
                 .get()
                 .build();
     }
@@ -648,7 +675,7 @@ public class ConnectionManager {
     protected Request createGetPlayerReservationsRequest()
     {
         return new Request.Builder()
-                .url("http://192.168.1.105:56718/api/reservations")
+                .url("http://10.0.2.2:56719/api/reservations")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization","Bearer "+ mainActivity.getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("token",""))

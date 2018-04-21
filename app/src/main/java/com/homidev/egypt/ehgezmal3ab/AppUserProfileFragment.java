@@ -3,9 +3,11 @@ package com.homidev.egypt.ehgezmal3ab;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
-
-import java.io.Serializable;
 
 /**
  * Created by User on 18/04/2018.
@@ -28,6 +28,10 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
     private EhgezMal3abAPI ehgezMal3abAPI = connectionManager.createEhgezMal3abService();
     private static Player player;
 
+    public static void setPlayer(Player player) {
+        AppUserProfileFragment.player = player;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,11 +41,12 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        connectionManager.getPlayer();
         View userProfileView = inflater.inflate(R.layout.app_user_profile, container, false);
         setupLayout(userProfileView);
         setListeners(userProfileView);
         try {
-            player = (Player) getArguments().getSerializable("player");
+            setPlayer((Player) getArguments().getSerializable("player"));
         }catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -100,11 +105,13 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
         };
 
         View.OnClickListener logoutListener = new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("appUserPrefs", Context.MODE_PRIVATE);
                 sharedPreferences.edit().remove("token");
                 Toast.makeText(getContext(), "logged out", Toast.LENGTH_SHORT);
+                connectionManager.logoutUser(player);
             }
         };
 

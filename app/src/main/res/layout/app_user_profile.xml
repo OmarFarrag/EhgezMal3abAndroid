@@ -8,113 +8,115 @@
     tools:context="com.homidev.egypt.ehgezmal3ab.AppUserProfileFragment"
     android:background="@color/mainGreen">
 
-        <LinearLayout
-            android:layout_marginTop="20dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@color/mainGreen"
+        android:orientation="vertical"
+        android:paddingLeft="10dp">
+
+        <TextView
+            android:id="@+id/userProfileWelcome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/mainGreen"
+            android:layout_marginLeft="2dp"
+            android:fontFamily="@font/century_gothic"
+            android:gravity="left"
+            android:text="Hey, Muhammad Ahmad"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/updateInfoCV"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
             android:layout_gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:clickable="true"
+            app:cardBackgroundColor="@color/mainGreenLight"
+            app:cardCornerRadius="8dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:fontFamily="@font/century_gothic"
-                android:textSize="25sp"
-                android:text="Hey, Muhammad Ahmad"
-                android:id="@+id/userProfileWelcome"
-                android:gravity="center" />
-
-            <android.support.v7.widget.CardView
-                android:layout_marginTop="15dp"
-                android:layout_width="250dp"
-                android:layout_height="40dp"
-                app:cardBackgroundColor="@color/mainGreenLight"
-                android:clickable="true"
-                app:cardCornerRadius="8dp"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/updateInfoCV"
-                android:layout_marginBottom="15dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:fontFamily="@font/century_gothic"
-                android:textSize="16sp"
                 android:layout_gravity="center"
+                android:fontFamily="@font/century_gothic"
                 android:gravity="center"
-                android:text="Update Information"/>
-            </android.support.v7.widget.CardView>
+                android:text="Update Information"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/resetPassCV"
-                android:layout_marginTop="15dp"
-                android:layout_width="250dp"
-                android:layout_height="40dp"
-                app:cardBackgroundColor="@color/mainGreenLight"
-                android:clickable="true"
-                app:cardCornerRadius="8dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="15dp">
+        <android.support.v7.widget.CardView
+            android:id="@+id/resetPassCV"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:clickable="true"
+            app:cardBackgroundColor="@color/mainGreenLight"
+            app:cardCornerRadius="8dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/century_gothic"
-                    android:textSize="16sp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Reset Password"/>
-            </android.support.v7.widget.CardView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/century_gothic"
+                android:gravity="center"
+                android:text="Reset Password"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/friendsCV"
-                android:layout_marginTop="15dp"
-                android:layout_width="250dp"
-                android:layout_height="40dp"
-                app:cardBackgroundColor="@color/mainGreenLight"
-                android:clickable="true"
-                app:cardCornerRadius="8dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="15dp">
+        <android.support.v7.widget.CardView
+            android:id="@+id/friendsCV"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:clickable="true"
+            app:cardBackgroundColor="@color/mainGreenLight"
+            app:cardCornerRadius="8dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/century_gothic"
-                    android:textSize="16sp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Friends"/>
-            </android.support.v7.widget.CardView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/century_gothic"
+                android:gravity="center"
+                android:text="Friends"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/logoutCV"
-                android:layout_marginTop="15dp"
-                android:layout_width="250dp"
-                android:layout_height="40dp"
-                app:cardBackgroundColor="@color/mainGreenLight"
-                android:clickable="true"
-                app:cardCornerRadius="8dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="1dp">
+        <android.support.v7.widget.CardView
+            android:id="@+id/logoutCV"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="15dp"
+            android:clickable="true"
+            app:cardBackgroundColor="@color/mainGreenLight"
+            app:cardCornerRadius="8dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/century_gothic"
-                    android:textSize="16sp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Log out"/>
-            </android.support.v7.widget.CardView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/century_gothic"
+                android:gravity="center"
+                android:text="Log out"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </android.support.v7.widget.CardView>
 
-        </LinearLayout>
+    </LinearLayout>
 
 
     <LinearLayout
