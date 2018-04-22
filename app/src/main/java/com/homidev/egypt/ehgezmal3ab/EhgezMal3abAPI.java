@@ -32,4 +32,6 @@ public interface EhgezMal3abAPI {
     @GET("token/logout")
     Call<JsonObject> logoutUser(@Header("Authorization") String token, @Query("username") String username);
 
+    @GET("friends")
+    Call<ArrayList<Friend>> getAllFriends(@Header("Authorization") String token, @Query("status") String status);
 }

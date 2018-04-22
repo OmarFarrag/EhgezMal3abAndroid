@@ -492,6 +492,31 @@ public class ConnectionManager {
         });
     }
 
+    public void getMyFriends(String status)
+    {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            return;
+        }
+        ehgezMal3abAPI.getAllFriends("Bearer " + token, status).enqueue(new retrofit2.Callback<ArrayList<Friend>>() {
+            @Override
+            public void onResponse(retrofit2.Call<ArrayList<Friend>> call, retrofit2.Response<ArrayList<Friend>> response) {
+                if(response.code() == 200){
+                    ArrayList<Friend> friends = response.body();
+
+                }else if(response.code() == 204){
+                    //Means that there are no friends, and you're all alone.
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ArrayList<Friend>> call, Throwable t) {
+
+            }
+        });
+    }
+
     /*
     Create a request body for a player from a JSON player object
      */

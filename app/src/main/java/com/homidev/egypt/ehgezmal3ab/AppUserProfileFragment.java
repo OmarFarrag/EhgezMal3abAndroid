@@ -100,7 +100,7 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
         View.OnClickListener viewFriendsListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                connectionManager.getMyFriends("Pending");
             }
         };
 
