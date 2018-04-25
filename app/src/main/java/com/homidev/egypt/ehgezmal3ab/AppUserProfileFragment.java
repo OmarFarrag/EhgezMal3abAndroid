@@ -32,6 +32,11 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
         AppUserProfileFragment.player = player;
     }
 
+    public AppUserProfileFragment()
+    {
+
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,20 +46,16 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        connectionManager.getPlayer();
+
         View userProfileView = inflater.inflate(R.layout.app_user_profile, container, false);
-        setupLayout(userProfileView);
         setListeners(userProfileView);
-        try {
-            setPlayer((Player) getArguments().getSerializable("player"));
-        }catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+        connectionManager.getPlayer(userProfileView, this);
+
         return userProfileView;
     }
 
     public static void getUser() {
-        connectionManager.getPlayer();
+        return;
     }
     /*public void saveUserInfo(View view) {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("appUserPrefs", Context.MODE_PRIVATE);
@@ -75,7 +76,8 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
             TextView phoneNumber = view.findViewById(R.id.userProfilePhone);
             TextView email = view.findViewById(R.id.userProfileEmail);
             welcomeFullName.setText("Hey, " + player.getName());
-            balance.setText(player.getBalance());
+            Integer bal = player.getBalance();
+            balance.setText(bal.toString());
             email.setText(player.getEmail());
             phoneNumber.setText(player.getNumber());
         }

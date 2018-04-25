@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -441,7 +442,7 @@ public class ConnectionManager {
 
 
 
-    public void getPlayer() {
+    public void getPlayer(final View v, final AppUserProfileFragment fragment) {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
         if (token == "") {
@@ -456,15 +457,14 @@ public class ConnectionManager {
                     player[0] = response.body();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("player", player[0]);
-                    AppUserProfileFragment userProfileFragment = new AppUserProfileFragment();
-                    userProfileFragment.setArguments(bundle);
+
                     AppUserProfileFragment.setPlayer(player[0]);
+                    fragment.setupLayout(v);
                 }
                 else {
-                   player[0] = null;
+                    player[0] = null;
                 }
             }
-
             @Override
             public void onFailure(retrofit2.Call<Player> call, Throwable t) {
 
