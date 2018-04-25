@@ -108,9 +108,9 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("appUserPrefs", Context.MODE_PRIVATE);
+                /*SharedPreferences sharedPreferences = getActivity().getSharedPreferences("appUserPrefs", Context.MODE_PRIVATE);
                 sharedPreferences.edit().remove("token");
-                Toast.makeText(getContext(), "logged out", Toast.LENGTH_SHORT);
+                Toast.makeText(getContext(), "logged out", Toast.LENGTH_SHORT);*/
                 connectionManager.logoutUser(player);
             }
         };

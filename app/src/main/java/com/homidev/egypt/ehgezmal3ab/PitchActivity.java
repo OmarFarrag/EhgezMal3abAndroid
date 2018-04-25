@@ -23,6 +23,7 @@ public class PitchActivity extends AppCompatActivity {
        // TextView pitchNameTextView = findViewById(R.id.pitchActivityPitchName);
 
         Bundle extras = getIntent().getExtras();
+
 /*
         if(extras != null) {
             pitch = (Pitch) extras.get("pitchName");

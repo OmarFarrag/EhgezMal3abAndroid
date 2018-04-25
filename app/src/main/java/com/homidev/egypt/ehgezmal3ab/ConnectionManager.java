@@ -384,6 +384,8 @@ public class ConnectionManager {
         });
     }
 
+
+
     public void cancelReservation(final Reservation reservation, final ReservationsFragment fragment)
     {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
@@ -414,6 +416,8 @@ public class ConnectionManager {
     }
 
 
+
+
     public void getReservationShareLink(final Reservation reservation)
     {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
@@ -434,6 +438,8 @@ public class ConnectionManager {
             }
         });
     }
+
+
 
     public void getPlayer() {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
@@ -466,6 +472,9 @@ public class ConnectionManager {
         });
     }
 
+
+
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void logoutUser(Player user){
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
@@ -480,8 +489,10 @@ public class ConnectionManager {
                     JsonObject object = response.body();
 
                 }else if(response.code() == 200){
-                    //Hn3ml eh b2a??
-                    
+
+                    mainActivity.logOut();
+                    removeUserToken();
+
                 }
             }
 
@@ -516,6 +527,60 @@ public class ConnectionManager {
             }
         });
     }
+
+    /*
+     * Function that removes the stored token of the user in the shared preferences after logout
+     */
+
+    protected void removeUserToken()
+    {
+        SharedPreferences preferences;
+
+        String appUserToken = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
+        String venAdminToken = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
+
+        if( appUserToken != "")
+        {
+            preferences = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE);
+            preferences.edit().remove("token").commit();
+        }
+        else if (venAdminToken != "")
+        {
+            preferences = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE);
+            preferences.edit().remove("token").commit();
+        }
+    }
+
+    /*
+    * Function that gets time slots in a period of time for a specific pitch
+    */
+    public void getPitchTimeTable(Pitch pitch, String startsOn)
+    {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            return;
+        }
+
+        ehgezMal3abAPI.getPitchReservations("Bearer " + token , pitch.getVenueID(), pitch.getPitchName(), startsOn).enqueue(new retrofit2.Callback<JsonObject>() {
+            @Override
+            public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+                if(response.code() == 400){
+                    JsonObject object = response.body();
+
+                }else if(response.code() == 200){
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
 
     /*
     Create a request body for a player from a JSON player object

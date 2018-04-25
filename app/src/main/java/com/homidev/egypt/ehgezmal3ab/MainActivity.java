@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Create connection manager
-       SharedPreferences preferences = getSharedPreferences("venAdminPrefs", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("venAdminPrefs", MODE_PRIVATE);
         preferences.edit().remove("token").commit();
         preferences = getSharedPreferences("appUserPrefs", MODE_PRIVATE);
         preferences.edit().remove("token").commit();
@@ -269,6 +269,11 @@ public class MainActivity extends AppCompatActivity {
         mainBNV.setVisibility(View.VISIBLE);
     }
 
+    /*
+     * Hides the main bottom navigation bar
+     */
+    private void hideMainBNV() {mainBNV.setVisibility(View.GONE);}
+
 
     /*
     Discard login/register buttons after login
@@ -277,6 +282,17 @@ public class MainActivity extends AppCompatActivity {
     {
         LinearLayout loginAndRegisterBottom = (LinearLayout) findViewById(R.id.loginAndRegisterBottom);
         loginAndRegisterBottom.setVisibility(View.INVISIBLE);
+    }
+
+
+    /*
+     * Show login and register buttons
+     * This function is called when the user logs out
+     */
+    protected void showLoginAndRegisterButtons()
+    {
+        LinearLayout loginAndRegisterBottom = (LinearLayout) findViewById(R.id.loginAndRegisterBottom);
+        loginAndRegisterBottom.setVisibility(View.VISIBLE);
     }
 
     /*
@@ -329,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /*
-    create all venues action bar
+    create all venues toolbar
      */
 
     private void createAllVenuesActionbar(Toolbar mainToolbar)
@@ -357,6 +373,37 @@ public class MainActivity extends AppCompatActivity {
     protected void createProfileToolbar(Toolbar mainToolbar) {
         mainToolbar.removeAllViews();
         getLayoutInflater().inflate(R.layout.userprofile_toolbar, mainToolbar);
+    }
+
+    /*
+     * Function that redirects the user to the initial UI when logged out
+     */
+    public void logOut()
+    {
+        //return to the allVenues fragment
+        redirectToDefaultFragment();
+
+        //hide bottom navigation view
+        hideMainBNV();
+
+        //show login and register buttons
+        showLoginAndRegisterButtons();
+
+    }
+
+
+    /*
+     * A function that redirects the user to the default fragment when he logs out
+     */
+    protected void redirectToDefaultFragment()
+    {
+        Toolbar mainToolbar = (Toolbar) findViewById(R.id.mainToolbar);
+        android.support.v4.app.Fragment selectedFragment = new AllVenuesFragment();
+        ((AllVenuesFragment)selectedFragment).setToolbar(mainToolbar);
+        createAllVenuesActionbar(mainToolbar);
+        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainFrameLayout,selectedFragment);
+        transaction.commit();
     }
 
 

@@ -34,4 +34,7 @@ public interface EhgezMal3abAPI {
 
     @GET("friends")
     Call<ArrayList<Friend>> getAllFriends(@Header("Authorization") String token, @Query("status") String status);
+    @GET ("pitchSchedule/{VenueID}/{pitch}/{start}")
+    Call<JsonObject> getPitchReservations (@Header("Authorization") String token, @Path("VenueID") String venueID,
+                                            @Path("pitch") String pitchName, @Path("start") String startDate);
 }
