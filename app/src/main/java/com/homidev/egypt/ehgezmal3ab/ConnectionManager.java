@@ -503,6 +503,41 @@ public class ConnectionManager {
         });
     }
 
+    /*
+     * Gets the time slots of the schedule of a specific pitch for a specific day
+     * gets a respones of an array of time slots
+     */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void getPitchSchedule(String venueID, String pitchName, String startsOn, final PitchActivity pitchActivity) {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            return;
+        }
+
+        final TimeSlot[] timeSlots = new TimeSlot[1];
+        ehgezMal3abAPI.getPitchSchedule("Bearer " + token, venueID, pitchName, startsOn ).enqueue(new retrofit2.Callback<ArrayList<TimeSlot>>() {
+            @Override
+            public void onResponse(retrofit2.Call<ArrayList<TimeSlot>> call, retrofit2.Response<ArrayList<TimeSlot>> response) {
+                if(response.code() == 400){
+
+
+                }else if(response.code() == 200){
+
+                    pitchActivity.ShowSchedule(response.body());
+
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ArrayList<TimeSlot>> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+
     public void getMyFriends(String status)
     {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
@@ -551,35 +586,6 @@ public class ConnectionManager {
         }
     }
 
-    /*
-    * Function that gets time slots in a period of time for a specific pitch
-    */
-    public void getPitchTimeTable(Pitch pitch, String startsOn)
-    {
-        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
-        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
-        if (token == "") {
-            return;
-        }
-
-        ehgezMal3abAPI.getPitchReservations("Bearer " + token , pitch.getVenueID(), pitch.getPitchName(), startsOn).enqueue(new retrofit2.Callback<JsonObject>() {
-            @Override
-            public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
-                if(response.code() == 400){
-                    JsonObject object = response.body();
-
-                }else if(response.code() == 200){
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<JsonObject> call, Throwable t) {
-
-            }
-        });
-    }
 
 
     /*
@@ -597,7 +603,7 @@ public class ConnectionManager {
     //creates a GET HTTP request to retrieve all venues.
     protected Request createGetAllVenueRequest() {
         return new Request.Builder()
-                .url("http://10.0.2.2:56718/api/venues")
+                .url("http://192.168.1.2:56718/api/venues")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -610,7 +616,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://10.0.2.2:56718/api/users/register")
+                .url("http://192.168.1.2:56718/api/users/register")
                 .post(registerRequestBody)
                 .build();
     }
@@ -622,7 +628,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://10.0.2.2:56719/api/token")
+                .url("http://192.168.1.2:56718/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -661,7 +667,7 @@ public class ConnectionManager {
 
     protected Request createGetPitchesRequest(int venueID) {
         return new Request.Builder()
-                .url("http://10.0.2.2:56719/api/pitches/" + venueID)
+                .url("http://192.168.1.2:56712/api/pitches/" + venueID)
                 .get()
                 .build();
     }
@@ -765,7 +771,7 @@ public class ConnectionManager {
     protected Request createGetPlayerReservationsRequest()
     {
         return new Request.Builder()
-                .url("http://10.0.2.2:56719/api/reservations")
+                .url("http://192.168.1.2:56718/api/reservations")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization","Bearer "+ mainActivity.getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("token",""))
