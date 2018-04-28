@@ -31,6 +31,16 @@ public class Reservation {
     public Reservation() {
     }
 
+    public Reservation(String username, String startsOn, String endsOn, String venueID, String pitchName) {
+        super();
+        this.username = username;
+        this.startsOn = startsOn;
+        this.endsOn = endsOn;
+        this.venueID = venueID;
+        this.pitchName = pitchName;
+        this.status="";
+    }
+
     /**
      *
      * @param username

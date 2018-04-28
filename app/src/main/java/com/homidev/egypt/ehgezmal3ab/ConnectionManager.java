@@ -44,7 +44,7 @@ public class ConnectionManager {
     private static ConnectionManager instance = null;
     private OkHttpClient connectionClient;
     private MainActivity mainActivity;
-    private String IP="192.168.1.2";
+    private String IP="192.168.1.3";
 
     //private constructor to implement a singleton pattern, initiates the connection client
     private ConnectionManager()
@@ -138,7 +138,7 @@ public class ConnectionManager {
     * This function sends a login request to the server, handles the response and then calls the proper
     * UI message display
     */
-    public void loginPlayer(Player playerToLogin,final LogInFragment loginFragment)
+    public void loginPlayer(final Player playerToLogin, final LogInFragment loginFragment)
     {
         JSONObject playerTologinJson = createJsonToLoginPlayer(playerToLogin);
 
@@ -176,7 +176,7 @@ public class ConnectionManager {
                     {
                         String responseString = getLoginStringFromJsonResponse(response);
                         userType[0] = getUserTypeFromStringResponse(responseString);
-                        storeUserToken(responseString,userType[0]);
+                        storeUserToken(responseString,userType[0],playerToLogin.getUsername());
                     }
 
                     handler.post(new Runnable() {
@@ -518,6 +518,7 @@ public class ConnectionManager {
 
         final TimeSlot[] timeSlots = new TimeSlot[1];
         ehgezMal3abAPI.getPitchSchedule("Bearer " + token, venueID, pitchName, startsOn ).enqueue(new retrofit2.Callback<ArrayList<TimeSlot>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(retrofit2.Call<ArrayList<TimeSlot>> call, retrofit2.Response<ArrayList<TimeSlot>> response) {
                 if(response.code() == 400){
@@ -532,6 +533,36 @@ public class ConnectionManager {
 
             @Override
             public void onFailure(retrofit2.Call<ArrayList<TimeSlot>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    /*
+     * This function is called by the pitch activity, it sends a reserve request to the server,
+     * gets the json response
+     */
+    public void reserve(Reservation reservation, final PitchActivity pitchActivity)
+    {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            return;
+        }
+        ehgezMal3abAPI.reserve("Bearer " + token, reservation).enqueue(new retrofit2.Callback<JsonObject>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+                if(response.code() == 500){
+                    pitchActivity.successfulReservation();
+
+                }else if(response.code() == 400){
+                    pitchActivity.unsuccessfulReservation();
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<JsonObject> call, Throwable t) {
 
             }
         });
@@ -579,11 +610,13 @@ public class ConnectionManager {
         {
             preferences = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE);
             preferences.edit().remove("token").commit();
+            preferences.edit().remove("username").commit();
         }
         else if (venAdminToken != "")
         {
             preferences = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE);
             preferences.edit().remove("token").commit();
+            preferences.edit().remove("username").commit();
         }
     }
 
@@ -686,7 +719,7 @@ public class ConnectionManager {
     Gets the token from the login response and store it
      */
 
-    protected void storeUserToken(String response, String userType)
+    protected void storeUserToken(String response, String userType, String username)
     {
 
 
@@ -703,11 +736,13 @@ public class ConnectionManager {
         if(userType.toLowerCase().equals("appuser")) {
             SharedPreferences preferences = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE);
             preferences.edit().putString("token", response).commit();
+            preferences.edit().putString("username", username).commit();
         }
         else if (userType.toLowerCase().equals("venAdmin"))
         {
             SharedPreferences preferences = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE);
             preferences.edit().putString("token", response).commit();
+            preferences.edit().putString("username", username).commit();
         }
     }
 

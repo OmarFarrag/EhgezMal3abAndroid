@@ -25,4 +25,7 @@
     <string name="PREFERENCE_FILE_KEY">userName</string>
     <string name="invalidSlotSTring">Invalid slot</string>
     <string name="reserve">RESERVE</string>
+    <string name="reserveErrorMessage">Invalid choice</string>
+    <string name="successfulReservation">Your reservation has been placed successfully</string>
+    <string name="unsuccessfulReservation">Something went wrong</string>
 </resources>

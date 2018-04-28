@@ -243,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
+
         discardLoginAndRegisterButtons();
 
         showMainBNV();

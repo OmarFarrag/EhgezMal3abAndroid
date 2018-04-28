@@ -9,7 +9,7 @@ import retrofit2.http.*;
 
 public interface EhgezMal3abAPI {
 
-    String BASE_URL = "http://192.168.1.2:56718/api/";
+    String BASE_URL = "http://192.168.1.3:56718/api/";
 
     @GET("venues/")
     Call<List<Venue>> getAllVenues();
@@ -38,4 +38,7 @@ public interface EhgezMal3abAPI {
     @GET ("Reservations/pitchSchedule/{VenueID}/{pitch}/{start}")
     Call<ArrayList<TimeSlot>> getPitchSchedule (@Header("Authorization") String token, @Path("VenueID") String venueID,
                                             @Path("pitch") String pitchName, @Path("start") String startDate);
+
+    @POST("Reservations")
+    Call<JsonObject> reserve(@Header("Authorization") String token, @Body Reservation reservation);
 }

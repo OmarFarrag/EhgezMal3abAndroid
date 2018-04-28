@@ -61,6 +61,8 @@ public class PitchActivity extends AppCompatActivity {
 
         setDatePickerListener();
 
+        setReserveBtnListener();
+
         connectionManager = ConnectionManager.getConnectionManager();
 
         if(extras != null) {
@@ -84,6 +86,47 @@ public class PitchActivity extends AppCompatActivity {
             pitchNameTextView.setText(pitch.getPitchName());
         }*/
     }
+
+    protected void setReserveBtnListener()
+    {
+        final FloatingActionButton reserveBtn = (FloatingActionButton) findViewById(R.id.reserveBtn);
+        reserveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(reservationEndsOn==null)
+                {
+                    showToasMessage(getResources().getString(R.string.reserveErrorMessage));
+                    return;
+                }
+                else
+                {
+                    String username =  getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("username","");
+                    Reservation myReservation = new Reservation(username,reservationStartsOn,reservationEndsOn,pitch.getVenueID(),pitch.getPitchName());
+
+                    connectionManager.reserve(myReservation, instance);
+                }
+            }
+        });
+
+
+    }
+
+    /*
+     * This function is called when the connection manager finishes a reservation request
+     */
+    public void successfulReservation()
+    {
+        showToasMessage(getResources().getString(R.string.successfulReservation));
+    }
+
+    /*
+    * This function is called when the connection manager finishes a reservation request
+    */
+    public void unsuccessfulReservation()
+    {
+        showToasMessage(getResources().getString(R.string.unsuccessfulReservation));
+    }
+
 
     protected void setDatePickerListener()
     {
