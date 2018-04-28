@@ -21,6 +21,9 @@ public class ViewVenueActivity extends AppCompatActivity {
     private ConnectionManager connectionManager;
     private RecyclerView pitchesRecyclerView;
     private RecyclerView.Adapter pitchItemAdapter;
+    private String  venueID;
+    private String  venueName;
+
 
     public ViewVenueActivity() {
         this.connectionManager = ConnectionManager.getConnectionManager();
@@ -38,9 +41,10 @@ public class ViewVenueActivity extends AppCompatActivity {
         pitchesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Bundle extras = getIntent().getExtras();
-        String venueID = "";
+        venueID = "";
         if (extras != null) {
             venueID = (extras.getString("venueID"));
+            venueName = extras.getString("venueName");
         }
 
         IRecyclerViewClickListener listener = new IRecyclerViewClickListener() {
@@ -70,6 +74,7 @@ public class ViewVenueActivity extends AppCompatActivity {
     private void launchPitchActivity(int position) {
         Intent intent = new Intent(this, PitchActivity.class);
         intent.putExtra("pitchName", PitchItemAdapter.getItem(position));
+        intent.putExtra("venueName", venueName);
         startActivity(intent);
     }
 }

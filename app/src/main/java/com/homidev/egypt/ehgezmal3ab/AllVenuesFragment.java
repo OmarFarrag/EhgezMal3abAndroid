@@ -70,7 +70,9 @@ public class AllVenuesFragment extends android.support.v4.app.Fragment {
             public void onClick(View view, int position) {
                 Intent intent = new Intent(getActivity(), ViewVenueActivity.class);
                 String venueID = VenueItemAdapter.getItem(position).getVenueID();
+                String venueName = VenueItemAdapter.getItem(position).getVenueTitle();
                 intent.putExtra("venueID", venueID);
+                intent.putExtra("venueName",venueName);
                 startActivity(intent);
             }
         };

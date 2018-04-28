@@ -1,4 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/mainGreen"
+        android:elevation="@dimen/cardview_compat_inset_shadow"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/venueName"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:fontFamily="@font/century_gothic"
+            android:text="Hii there"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pitchName"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:fontFamily="@font/century_gothic"
+            android:layout_below="@id/venueName"
+            android:text="saas"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
+        <TextView
+            android:id="@+id/selectedDateTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:fontFamily="@font/century_gothic"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:text="date"
+            android:layout_below="@id/pitchName"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -11,12 +58,20 @@
 
 
 
-
-
-
-
-
-
-
 </LinearLayout>
 </ScrollView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/datePickerBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="end|bottom"
+            app:useCompatPadding="true"
+            android:layout_margin="16dp"
+            android:src="@drawable/date_icon"
+            android:backgroundTint="@color/white"
+            />
+    </RelativeLayout>
+</LinearLayout>

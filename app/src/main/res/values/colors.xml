@@ -10,4 +10,5 @@
     <color name="tab_background_unselected">@color/mainGreen</color>
     <color name="declinedColor">#fa8072</color>
     <color name="pendingColor">#cf9400</color>
+    <color name="selectedcolor">#ff9fdf</color>
 </resources>
