@@ -1,6 +1,7 @@
 package com.homidev.egypt.ehgezmal3ab;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,7 +23,10 @@ public class ViewVenueFragment extends  android.support.v4.app.Fragment{
     private ConnectionManager connectionManager;
     private RecyclerView pitchesRecyclerView;
     private RecyclerView.Adapter pitchItemAdapter;
-
+    private String  venueID;
+    private String  venueName;
+    private ProgressDialog progressBar;
+    private View venuPitchesView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,8 +36,12 @@ public class ViewVenueFragment extends  android.support.v4.app.Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                          Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        View venuPitchesView = inflater.inflate(R.layout.all_pitches_layout,container,false);
+
+        this.connectionManager = ConnectionManager.getConnectionManager();
+
+        venuPitchesView = inflater.inflate(R.layout.all_pitches_layout,container,false);
 
         pitchesRecyclerView = venuPitchesView.findViewById(R.id.allPitchesRecyclerView);
 
@@ -41,11 +49,46 @@ public class ViewVenueFragment extends  android.support.v4.app.Fragment{
 
         pitchesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        Bundle extras = getActivity().getIntent().getExtras();
-        String venueID = "";
-        if (extras != null) {
-            venueID = (extras.getString("venueID"));
-        }
+        showLoading();
+
+        connectionManager.getVenueByAdminID(this);
+
+
+
+
+
+
+
+
+        return venuPitchesView;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void launchPitchActivity(int position) {
+        Intent intent = new Intent(getContext(), PitchActivity.class);
+        intent.putExtra("pitchName", PitchItemAdapter.getItem(position));
+        intent.putExtra("venueName", venueName);
+        startActivity(intent);
+    }
+
+    protected void showLoading()
+    {
+        progressBar = new ProgressDialog(getContext());
+        progressBar.setTitle("Loading");
+        progressBar.setMessage("Wait while loading...");
+        progressBar.setCancelable(false); // disable dismiss by tapping outside of the dialog
+        progressBar.show();
+    }
+
+    protected void dismissLoading()
+    {
+        progressBar.dismiss();
+    }
+
+    public void setVenueID(String f_venueID, String f_venueName)
+    {
+        venueID = f_venueID;
+        venueName = f_venueName;
 
         IRecyclerViewClickListener listener = new IRecyclerViewClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -56,9 +99,9 @@ public class ViewVenueFragment extends  android.support.v4.app.Fragment{
         };
 
         pitchItemAdapter = new PitchItemAdapter(getContext(), venueID, listener);
+        pitchesRecyclerView.setAdapter(pitchItemAdapter);
 
         final ImageView imageView = venuPitchesView.findViewById(R.id.mainVenueImage);
-
         Picasso
                 .with(getContext())
                 .load("http://i.imgur.com/AS65Kmg.jpg")
@@ -66,15 +109,7 @@ public class ViewVenueFragment extends  android.support.v4.app.Fragment{
                 .error(R.drawable.close_icon)
                 .into(imageView);
 
-        pitchesRecyclerView.setAdapter(pitchItemAdapter);
-
-        return venuPitchesView;
+        dismissLoading();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void launchPitchActivity(int position) {
-        Intent intent = new Intent(getContext(), PitchActivity.class);
-        intent.putExtra("pitchName", PitchItemAdapter.getItem(position));
-        startActivity(intent);
-    }
 }

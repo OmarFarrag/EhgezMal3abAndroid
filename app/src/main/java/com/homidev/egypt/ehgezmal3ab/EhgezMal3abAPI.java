@@ -41,4 +41,7 @@ public interface EhgezMal3abAPI {
 
     @POST("Reservations")
     Call<JsonObject> reserve(@Header("Authorization") String token, @Body Reservation reservation);
+
+    @GET("venues/venueByID/{username}")
+    Call<ArrayList<Venue>> getVenueByAdminID(@Header("Authorization") String token , @Path("username") String username);
 }

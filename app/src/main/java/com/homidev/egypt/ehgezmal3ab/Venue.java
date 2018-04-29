@@ -24,7 +24,7 @@ public class Venue {
     @SerializedName("venueID")
     String venueID;
     @SerializedName("imageLink")
-    private String imageLink;
+    String imageLink;
 
     public Venue(String venueTitle, String phoneNumber,
                  String area, String street, int venueImageRes,

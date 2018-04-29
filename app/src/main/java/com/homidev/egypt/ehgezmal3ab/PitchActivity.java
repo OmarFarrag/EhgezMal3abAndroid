@@ -61,7 +61,16 @@ public class PitchActivity extends AppCompatActivity {
 
         setDatePickerListener();
 
-        setReserveBtnListener();
+        //If the user is appUser, set listeners for him
+        if( !getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "").equals(""))
+        {
+            setReserveBtnListener();
+        }
+        else
+        {
+            //Todo: listeners for admin add his own reservations
+        }
+
 
         connectionManager = ConnectionManager.getConnectionManager();
 
@@ -326,6 +335,9 @@ public class PitchActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             connectionManager.getPitchSchedule(pitch.getVenueID(),pitch.getPitchName(),selectedDate,this);
         }
+
+        reservationStartsOn=null;
+        reservationEndsOn=null;
     }
 
 

@@ -365,7 +365,7 @@ public class ConnectionManager {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
         if (token == "") {
-            return;
+            token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
         }
         final ArrayList<Reservation>[] reservationsList = new ArrayList[1];
         ehgezMal3abAPI.getMyReservations("Bearer " + token).enqueue(new retrofit2.Callback<ArrayList<Reservation>>() {
@@ -381,7 +381,7 @@ public class ConnectionManager {
 
             @Override
             public void onFailure(retrofit2.Call<ArrayList<Reservation>> call, Throwable t) {
-
+                return;
             }
         });
     }
@@ -513,7 +513,7 @@ public class ConnectionManager {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
         if (token == "") {
-            return;
+            token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");;
         }
 
         final TimeSlot[] timeSlots = new TimeSlot[1];
@@ -738,7 +738,7 @@ public class ConnectionManager {
             preferences.edit().putString("token", response).commit();
             preferences.edit().putString("username", username).commit();
         }
-        else if (userType.toLowerCase().equals("venAdmin"))
+        else if (userType.toLowerCase().equals("venadmin"))
         {
             SharedPreferences preferences = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE);
             preferences.edit().putString("token", response).commit();
@@ -802,6 +802,35 @@ public class ConnectionManager {
         }
 
         return reservationsList;
+    }
+
+    /*
+     * This function is called by the venue fragment of the admin to get his venue ID
+     */
+    public void getVenueByAdminID(final ViewVenueFragment callerFragment)
+    {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
+        String username = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("username", "");
+        if (token == "") {
+            return;
+        }
+        ehgezMal3abAPI.getVenueByAdminID("Bearer " + token, username).enqueue(new retrofit2.Callback<ArrayList<Venue>>() {
+            @Override
+            public void onResponse(retrofit2.Call<ArrayList<Venue>> call, retrofit2.Response<ArrayList<Venue>> response) {
+                if(response.code() == 200){
+                    callerFragment.setVenueID(response.body().get(0).getVenueID(),response.body().get(0).getVenueTitle() );
+
+                }else if(response.code() == 204){
+                    //TODO: handle error
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ArrayList<Venue>> call, Throwable t) {
+            return;
+            }
+        });
     }
 
     protected Request createGetPlayerReservationsRequest()
