@@ -95,7 +95,7 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
         View.OnClickListener resetPassListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                showChangePasswordFragment();
             }
         };
 
@@ -125,6 +125,13 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
         resetPass.setOnClickListener(resetPassListener);
         viewFriends.setOnClickListener(viewFriendsListener);
         logout.setOnClickListener(logoutListener);
+    }
+
+    protected void showChangePasswordFragment()
+    {
+        android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainFrameLayout,new ChangePasswordFragment());
+        transaction.commit();
     }
 }
 

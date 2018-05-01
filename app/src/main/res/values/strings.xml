@@ -28,4 +28,16 @@
     <string name="reserveErrorMessage">Invalid choice</string>
     <string name="successfulReservation">Your reservation has been placed successfully</string>
     <string name="unsuccessfulReservation">Something went wrong</string>
+    <string name="reservations_menu_accept">Accept</string>
+    <string name="reservations_menu_decline">Decline</string>
+    <string name="reservationAccepted">Reservation accepted</string>
+    <string name="error">Something went wrong</string>
+    <string name="reservationDeclined">Reservation declined</string>
+    <string name="totalPrice">Total Accepted Price</string>
+    <string name="oldPassowrd">Old password</string>
+    <string name="newPassowrd">New password</string>
+    <string name="confirmPassword">Confirm password</string>
+    <string name="changePassword">Change Password</string>
+    <string name="passwordsDontMatch">Passwords don\'t match</string>
+    <string name="wrongPassword">Wrong password</string>
 </resources>

@@ -549,15 +549,111 @@ public class ConnectionManager {
         if (token == "") {
             return;
         }
-        ehgezMal3abAPI.reserve("Bearer " + token, reservation).enqueue(new retrofit2.Callback<JsonObject>() {
+        ehgezMal3abAPI.reserve("Bearer " + token, reservation).enqueue(new retrofit2.Callback<Error>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
-                if(response.code() == 500){
+            public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
+                if(response.code() == 200){
                     pitchActivity.successfulReservation();
 
                 }else if(response.code() == 400){
-                    pitchActivity.unsuccessfulReservation();
+                   // pitchActivity.unsuccessfulReservation();
+                    try {
+                        pitchActivity.showToasMessage(response.errorBody().string().split("\"")[3]);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Error> call, Throwable t) {
+
+            }
+        });
+    }
+
+    /*
+     * This function is called when the admin accepts a reservation request for one of his pitches
+     */
+    public void acceptReservation(final ReservationsFragment reservationsFragment, Reservation reservation)
+    {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("venAdminPrefs",MODE_PRIVATE).getString("token","");
+
+        if (token == "") {
+            return;
+        }
+        ehgezMal3abAPI.acceptReservation("Bearer " +token,reservation).enqueue(new retrofit2.Callback<JsonObject>()
+        {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+                if(response.code() == 200){
+                    reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.reservationAccepted));
+
+                }else {
+                    reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.error));
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    /*
+     * This function is called to send a change password request to the server
+     */
+    public void changePassword(ChangePasswordRequest requestBody, final ChangePasswordFragment callerFragment)
+    {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");;
+        }
+
+        ehgezMal3abAPI.changePassword("Bearer "+token, requestBody).enqueue(new retrofit2.Callback<Error>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
+                if (response.code() == 200) {
+                    callerFragment.showToasMessage(response.body().getText());
+                    callerFragment.returnToParent();
+                } else {
+                    callerFragment.showToasMessage(mainActivity.getString(R.string.wrongPassword));
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Error> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    /*
+     * This function is called when the admin accepts a reservation request for one of his pitches
+     */
+    public void declineReservation(final ReservationsFragment reservationsFragment, Reservation reservation)
+    {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("venAdminPrefs",MODE_PRIVATE).getString("token","");
+
+        if (token == "") {
+            return;
+        }
+        ehgezMal3abAPI.declineReservation("Bearer " +token,reservation).enqueue(new retrofit2.Callback<JsonObject>()
+        {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+                if(response.code() == 200){
+                    reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.reservationDeclined));
+
+                }else {
+                    reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.error));
                 }
             }
 
@@ -598,7 +694,6 @@ public class ConnectionManager {
     /*
      * Function that removes the stored token of the user in the shared preferences after logout
      */
-
     protected void removeUserToken()
     {
         SharedPreferences preferences;

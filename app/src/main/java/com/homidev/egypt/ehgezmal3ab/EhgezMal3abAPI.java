@@ -40,8 +40,17 @@ public interface EhgezMal3abAPI {
                                             @Path("pitch") String pitchName, @Path("start") String startDate);
 
     @POST("Reservations")
-    Call<JsonObject> reserve(@Header("Authorization") String token, @Body Reservation reservation);
+    Call<Error> reserve(@Header("Authorization") String token, @Body Reservation reservation);
 
     @GET("venues/venueByID/{username}")
     Call<ArrayList<Venue>> getVenueByAdminID(@Header("Authorization") String token , @Path("username") String username);
+
+    @PUT("reservations/accept")
+    Call<JsonObject> acceptReservation(@Header("Authorization") String token , @Body Reservation reservation);
+
+    @PUT("reservations/decline")
+    Call<JsonObject> declineReservation(@Header("Authorization") String token , @Body Reservation reservation);
+
+    @PATCH("users/password/reset")
+    Call<Error> changePassword(@Header("Authorization") String token, @Body ChangePasswordRequest requestBody);
 }

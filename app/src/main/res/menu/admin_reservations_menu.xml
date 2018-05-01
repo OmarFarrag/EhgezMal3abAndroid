@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/admin_reservations_menu_decline"
+        android:title="@string/reservations_menu_decline"/>
+
+    <item android:id="@+id/admin_reservations_menu_accept"
+        android:title="@string/reservations_menu_accept"></item>
+</menu>
