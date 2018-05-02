@@ -25,6 +25,7 @@ import java.util.prefs.Preferences;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -584,20 +585,21 @@ public class ConnectionManager {
         if (token == "") {
             return;
         }
-        ehgezMal3abAPI.acceptReservation("Bearer " +token,reservation).enqueue(new retrofit2.Callback<JsonObject>()
+        ehgezMal3abAPI.acceptReservation("Bearer " +token,reservation).enqueue(new retrofit2.Callback<String>()
         {
             @RequiresApi(api = Build.VERSION_CODES.N)
-            public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+            @Override
+            public void onResponse(retrofit2.Call<String> call, retrofit2.Response<String> response) {
                 if(response.code() == 200){
-                    reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.reservationAccepted));
+                    reservationsFragment.showToasMessage(response.body().toString());
 
                 }else {
-                    reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.error));
+                    reservationsFragment.showToasMessage(response.body().toString());
                 }
             }
 
             @Override
-            public void onFailure(retrofit2.Call<JsonObject> call, Throwable t) {
+            public void onFailure(retrofit2.Call<String> call, Throwable t) {
 
             }
         });

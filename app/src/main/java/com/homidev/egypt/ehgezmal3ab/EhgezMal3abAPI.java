@@ -2,6 +2,8 @@ package com.homidev.egypt.ehgezmal3ab;
 
 import com.google.gson.JsonObject;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
@@ -46,7 +48,7 @@ public interface EhgezMal3abAPI {
     Call<ArrayList<Venue>> getVenueByAdminID(@Header("Authorization") String token , @Path("username") String username);
 
     @PUT("reservations/accept")
-    Call<JsonObject> acceptReservation(@Header("Authorization") String token , @Body Reservation reservation);
+    Call<String> acceptReservation(@Header("Authorization") String token , @Body Reservation reservation);
 
     @PUT("reservations/decline")
     Call<JsonObject> declineReservation(@Header("Authorization") String token , @Body Reservation reservation);
