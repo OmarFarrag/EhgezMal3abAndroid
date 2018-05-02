@@ -55,4 +55,7 @@ public interface EhgezMal3abAPI {
 
     @PATCH("users/password/reset")
     Call<Error> changePassword(@Header("Authorization") String token, @Body ChangePasswordRequest requestBody);
+
+   /* @POST("api/Reviews")
+    Call<>*/
 }

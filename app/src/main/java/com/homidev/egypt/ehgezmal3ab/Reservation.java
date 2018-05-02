@@ -24,6 +24,10 @@ public class Reservation {
     @Expose
     private String status;
 
+    @SerializedName("price")
+    @Expose
+    private int price;
+
     /**
      * No args constructor for use in serialization
      *
@@ -107,5 +111,7 @@ public class Reservation {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public int getPrice(){return price;}
 
 }

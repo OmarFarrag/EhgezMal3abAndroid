@@ -1,13 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/totalReservationsPriceLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="5"
+        android:background="@color/mainGreenLight"
+        android:paddingVertical="8dp"
 
+
+        >
+    <TextView
+        android:id="@+id/totalReservationsPriceLbl"
+        android:layout_width="0dp"
+        android:layout_weight="4"
+        android:layout_height="wrap_content"
+        android:text="@string/totalReservationsPrice"
+        android:fontFamily="@font/century_gothic"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_marginHorizontal="16dp"
+
+        />
+        <TextView
+            android:id="@+id/totalReservationsPriceTxt"
+            android:fontFamily="@font/century_gothic"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="50"
+            android:textAlignment="gravity"
+            android:layout_gravity="right"
+            android:textSize="20sp"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@id/totalReservationsPriceLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/reservationsRecyclerView"/>
 
 
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

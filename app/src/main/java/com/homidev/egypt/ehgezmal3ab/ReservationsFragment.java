@@ -12,7 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -23,6 +26,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     private RecyclerView.Adapter recyclerAdapter;
     private Toolbar reservationsToolbar;
     private android.support.v4.app.Fragment instance;
+    private TextView totalReservationsPriceTxt;
 
     ConnectionManager connectionManager = ConnectionManager.getConnectionManager();
 
@@ -54,6 +58,8 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     {
         //initialize recycler view
         reservationsRecyclerView = reservationsView.findViewById(R.id.reservationsRecyclerView);
+
+        totalReservationsPriceTxt = (TextView)  reservationsView.findViewById(R.id.totalReservationsPriceTxt);
 
         //set fixed size for recycler view
         reservationsRecyclerView.setHasFixedSize(true);
@@ -172,5 +178,13 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         messageToast=  Toast.makeText(getContext(),message,Toast.LENGTH_SHORT);
 
         messageToast.show();
+    }
+
+
+    //Function to set the value displayed for total price of reservations
+    //Called by the ReservationsAdapter on changing the list of reservations
+    public void setTotalReservationsPrice(int acceptedReservationsTotalPrice)
+    {
+        totalReservationsPriceTxt.setText(String.valueOf(acceptedReservationsTotalPrice));
     }
 }

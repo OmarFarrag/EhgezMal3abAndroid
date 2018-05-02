@@ -29,6 +29,7 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
     private Context context;
     private IRecyclerViewClickListener listener;
     private View.OnClickListener cancelListener;
+    private int acceptedReservationsTotalPrice;
 
     private ReservationsFragment fragment;
 
@@ -106,6 +107,25 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
     public void setReservationList(ArrayList<Reservation> reservations){
         reservationList = reservations;
         this.notifyDataSetChanged();
+
+        displayTotalReservationsPrice();
+    }
+
+    /*
+     * This function is called when the list of reservations change, so the total price changes , so UI is updated
+     */
+    protected void displayTotalReservationsPrice()
+    {
+        acceptedReservationsTotalPrice = 0;
+        for(int i =0; i<reservationList.size(); i++)
+        {
+            if(reservationList.get(i).getStatus().toLowerCase().equals("accepted"))
+            {
+                acceptedReservationsTotalPrice += reservationList.get(i).getPrice();
+            }
+        }
+
+        fragment.setTotalReservationsPrice(acceptedReservationsTotalPrice);
     }
 
     public static Reservation getItem(int position) {
