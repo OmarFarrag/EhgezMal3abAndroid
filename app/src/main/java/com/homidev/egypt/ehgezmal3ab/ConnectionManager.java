@@ -514,7 +514,7 @@ public class ConnectionManager {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
         if (token == "") {
-            token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");;
+            token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
         }
 
         final TimeSlot[] timeSlots = new TimeSlot[1];
@@ -534,6 +534,41 @@ public class ConnectionManager {
 
             @Override
             public void onFailure(retrofit2.Call<ArrayList<TimeSlot>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    /*
+     * Function called by update info fragment when a player wants to update his info
+     * sends the request to the server then notifies the fragment with the response
+     */
+    public void     updatePlayerInfo(Player player, final UpdateInfoFragment updateInfoFragment)
+    {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            return;
+        }
+
+
+        ehgezMal3abAPI.updatePlayer("Bearer " + token,  player).enqueue(new retrofit2.Callback<Player>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onResponse(retrofit2.Call<Player> call, retrofit2.Response<Player> response) {
+                if(response.code() == 200){
+
+                    updateInfoFragment.updatedSuccessfully();
+
+                }else{
+
+                    updateInfoFragment.updateError();
+
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Player> call, Throwable t) {
 
             }
         });

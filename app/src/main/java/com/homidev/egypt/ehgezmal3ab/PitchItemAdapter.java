@@ -82,6 +82,8 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
             this.listener = listener;
             cardView = itemView.findViewById(R.id.pitchCardView);
             cardView.setOnClickListener(this);
+
+
         }
 
         @Override

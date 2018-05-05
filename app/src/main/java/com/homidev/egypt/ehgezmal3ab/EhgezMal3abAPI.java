@@ -58,4 +58,7 @@ public interface EhgezMal3abAPI {
 
    /* @POST("api/Reviews")
     Call<>*/
+
+   @PUT("users/update")
+    Call<Player> updatePlayer(@Header("Authorization") String token, @Body Player player);
 }

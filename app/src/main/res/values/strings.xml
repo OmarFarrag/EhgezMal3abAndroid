@@ -41,4 +41,7 @@
     <string name="passwordsDontMatch">Passwords don\'t match</string>
     <string name="wrongPassword">Wrong password</string>
     <string name="totalReservationsPrice">Total rservations price</string>
+    <string name="updateInfo">Update</string>
+    <string name="noChangesDetected">No changes detected</string>
+    <string name="updatedSuccessfully">Updated successfully</string>
 </resources>

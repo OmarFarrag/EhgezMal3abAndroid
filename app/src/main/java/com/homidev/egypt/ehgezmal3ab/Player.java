@@ -23,6 +23,8 @@ public class Player implements Serializable{
     @SerializedName("userType")
     private String userType;
 
+    public Player(){}
+
     public Player(String username, String password, String email, String number, String name)
     {
         this.username = username;
@@ -63,4 +65,12 @@ public class Player implements Serializable{
     public int getBalance() {
         return balance;
     }
+
+    public void setUsername(String f_username) {username=f_username;}
+
+    public void setNumber(String f_number) {number=f_number;}
+
+    public void setName(String f_name) { name = f_name;}
+
+
 }

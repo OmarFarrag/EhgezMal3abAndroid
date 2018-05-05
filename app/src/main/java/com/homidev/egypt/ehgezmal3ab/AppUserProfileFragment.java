@@ -88,7 +88,7 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
         View.OnClickListener updateInfoListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                showUpdateInfoFragment();
             }
         };
 
@@ -131,6 +131,24 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
     {
         android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainFrameLayout,new ChangePasswordFragment());
+        transaction.commit();
+    }
+
+
+    //Shows the updateInfoFragment when the user clicks on the update info button
+    protected void showUpdateInfoFragment()
+    {
+        //store the info to be passed
+        Bundle bundle = new Bundle();
+        bundle.putString("phoneNumber",player.getNumber());
+        bundle.putString("name",player.getName());
+
+        //Create the new fragment and pass the info
+        UpdateInfoFragment updateInfoFragment = new UpdateInfoFragment();
+        updateInfoFragment.setArguments(bundle);
+
+        android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainFrameLayout,updateInfoFragment);
         transaction.commit();
     }
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/updateNameTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:gravity="center"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginVertical="8dp"
+        />
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/updateNumberTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:gravity="center"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginVertical="8dp"
+       />
+
+
+
+    <Button
+        android:id="@+id/updateInfoBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/updateInfo"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginVertical="8dp"
+        android:background="@color/mainGreen"
+        android:textColor="@color/white"/>
+
+
+</LinearLayout>

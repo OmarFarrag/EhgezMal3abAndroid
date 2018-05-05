@@ -53,6 +53,8 @@ public class ViewVenueActivity extends AppCompatActivity {
             public void onClick(View view, int position) {
                 launchPitchActivity(position);
             }
+
+
         };
 
         pitchItemAdapter = new PitchItemAdapter(this, venueID, listener);
