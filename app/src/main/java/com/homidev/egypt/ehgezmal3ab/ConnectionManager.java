@@ -1,14 +1,11 @@
 package com.homidev.egypt.ehgezmal3ab;
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.view.View;
 
@@ -20,12 +17,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.Preferences;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -45,7 +40,7 @@ public class ConnectionManager {
     private static ConnectionManager instance = null;
     private OkHttpClient connectionClient;
     private MainActivity mainActivity;
-    private String IP="192.168.1.3";
+    private String IP="10.0.2.2";
 
     //private constructor to implement a singleton pattern, initiates the connection client
     private ConnectionManager()
@@ -656,10 +651,10 @@ public class ConnectionManager {
             @RequiresApi(api = Build.VERSION_CODES.N)
             public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
                 if (response.code() == 200) {
-                    callerFragment.showToasMessage(response.body().getText());
+                    callerFragment.showToastMessage(response.body().getText());
                     callerFragment.returnToParent();
                 } else {
-                    callerFragment.showToasMessage(mainActivity.getString(R.string.wrongPassword));
+                    callerFragment.showToastMessage(mainActivity.getString(R.string.wrongPassword));
                 }
             }
 

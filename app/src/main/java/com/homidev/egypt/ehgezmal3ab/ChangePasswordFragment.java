@@ -1,6 +1,5 @@
 package com.homidev.egypt.ehgezmal3ab;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -55,7 +54,7 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment {
                 String confirmNewPasswordString = confirmNewPassword.getText().toString();
                 if(!newPasswordString.equals(confirmNewPasswordString))
                 {
-                    showToasMessage(getResources().getString(R.string.passwordsDontMatch));
+                    showToastMessage(getResources().getString(R.string.passwordsDontMatch));
                 }
                 else
                 {
@@ -69,7 +68,7 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment {
         });
     }
 
-    public void showToasMessage(String message)
+    public void showToastMessage(String message)
     {
         Toast messageToast = null;
         messageToast=  Toast.makeText(getContext(),message,Toast.LENGTH_SHORT);
