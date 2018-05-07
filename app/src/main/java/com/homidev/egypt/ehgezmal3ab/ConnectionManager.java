@@ -40,7 +40,7 @@ public class ConnectionManager {
     private static ConnectionManager instance = null;
     private OkHttpClient connectionClient;
     private MainActivity mainActivity;
-    private String IP="10.0.2.2";
+    private String IP="192.168.1.3";
 
     //private constructor to implement a singleton pattern, initiates the connection client
     private ConnectionManager()
@@ -443,7 +443,7 @@ public class ConnectionManager {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
         if (token == "") {
-            return;
+             token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
         }
         final Player[] player = new Player[1];
 
@@ -578,7 +578,7 @@ public class ConnectionManager {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
         if (token == "") {
-            return;
+            token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
         }
         ehgezMal3abAPI.reserve("Bearer " + token, reservation).enqueue(new retrofit2.Callback<Error>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -589,6 +589,41 @@ public class ConnectionManager {
 
                 }else if(response.code() == 400){
                    // pitchActivity.unsuccessfulReservation();
+                    try {
+                        pitchActivity.showToasMessage(response.errorBody().string().split("\"")[3]);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Error> call, Throwable t) {
+
+            }
+        });
+    }
+
+    /*
+     * This function is called by the pitch activity, it places a request by the admin,
+     * gets the json response
+     */
+    public void reserveByAdmin(Reservation reservation, final PitchActivity pitchActivity)
+    {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            return;
+        }
+        ehgezMal3abAPI.reserveByAdmin("Bearer " + token, reservation).enqueue(new retrofit2.Callback<Error>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
+                if(response.code() == 200){
+                    pitchActivity.successfulReservation();
+
+                }else if(response.code() == 400){
+                    // pitchActivity.unsuccessfulReservation();
                     try {
                         pitchActivity.showToasMessage(response.errorBody().string().split("\"")[3]);
                     } catch (IOException e) {
@@ -959,6 +994,9 @@ public class ConnectionManager {
             }
         });
     }
+
+
+
 
     protected Request createGetPlayerReservationsRequest()
     {

@@ -61,15 +61,9 @@ public class PitchActivity extends AppCompatActivity {
 
         setDatePickerListener();
 
-        //If the user is appUser, set listeners for him
-        if( !getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "").equals(""))
-        {
-            setReserveBtnListener();
-        }
-        else
-        {
-            //Todo: listeners for admin add his own reservations
-        }
+
+        setReserveBtnListener();
+
 
 
         connectionManager = ConnectionManager.getConnectionManager();
@@ -109,10 +103,24 @@ public class PitchActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    String username =  getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("username","");
-                    Reservation myReservation = new Reservation(username,reservationStartsOn,reservationEndsOn,pitch.getVenueID(),pitch.getPitchName());
 
-                    connectionManager.reserve(myReservation, instance);
+                    String username =  getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("username","");
+                    //The user is player
+                    if(!username.equals(""))
+                    {
+                        Reservation myReservation = new Reservation(username,reservationStartsOn,reservationEndsOn,pitch.getVenueID(),pitch.getPitchName());
+                        connectionManager.reserve(myReservation, instance);
+                    }
+                    else {
+                        username = getSharedPreferences("venAdminPrefs",MODE_PRIVATE).getString("username","");
+                        Reservation myReservation = new Reservation(username,reservationStartsOn,reservationEndsOn,pitch.getVenueID(),pitch.getPitchName());
+                        connectionManager.reserveByAdmin(myReservation, instance);
+
+                    }
+
+
+
+
                 }
             }
         });
