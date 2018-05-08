@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 
 public class RegisterFragment extends Fragment {
+    private RegisterFragment instance;
     protected ConnectionManager connectionManager;
     public RegisterFragment(){
          connectionManager= ConnectionManager.getConnectionManager();
@@ -28,6 +29,8 @@ public class RegisterFragment extends Fragment {
         View registerView = inflater.inflate(R.layout.register_layout, container, false);
 
         setListeners(registerView);
+
+        instance = this;
 
         return registerView;
 
@@ -58,7 +61,7 @@ public class RegisterFragment extends Fragment {
         becomeVenueAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                callGeneralAdmin();
+                connectionManager.getGeneralAdminPhone(instance);
             }
         });
     }
@@ -203,9 +206,9 @@ public class RegisterFragment extends Fragment {
     }
 
 
-    protected void callGeneralAdmin() {
+    public void callGeneralAdmin(String number) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse("tel:0123456789"));
+        intent.setData(Uri.parse("tel:"+number));
         startActivity(intent);
     }
 
