@@ -79,6 +79,15 @@
         android:textColor="@color/white"
 
         />
+
+    <TextView
+        android:id="@+id/becomeVenAdminBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/mainGreenLight"
+        android:text = "@string/registerAsVenueAdmin"
+        android:clickable="true"
+        />
 </LinearLayout>
 
 </ScrollView>

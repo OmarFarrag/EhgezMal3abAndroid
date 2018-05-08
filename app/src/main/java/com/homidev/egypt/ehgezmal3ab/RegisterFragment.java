@@ -1,6 +1,8 @@
 package com.homidev.egypt.ehgezmal3ab;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -31,16 +33,15 @@ public class RegisterFragment extends Fragment {
 
     }
 
-    private void setListeners(final View registerView)
-    {
+    private void setListeners(final View registerView) {
         Button registerButton = (Button) registerView.findViewById(R.id.registerBtn);
-        registerButton.setOnClickListener( new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
                 boolean validInfo = verifyUserInput(registerView);
-                if(!validInfo){return;}
+                if (!validInfo) {
+                    return;
+                }
 
                 Player playerToRegister = readRegisterInfo(registerView);
 
@@ -51,7 +52,17 @@ public class RegisterFragment extends Fragment {
             }
 
         });
+
+
+        TextView becomeVenueAdmin = (TextView) registerView.findViewById(R.id.becomeVenAdminBtn);
+        becomeVenueAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callGeneralAdmin();
+            }
+        });
     }
+
 
     private boolean verifyUserInput(View registerView)
     {
@@ -189,6 +200,13 @@ public class RegisterFragment extends Fragment {
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, message, duration);
         toast.show();
+    }
+
+
+    protected void callGeneralAdmin() {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:0123456789"));
+        startActivity(intent);
     }
 
 }

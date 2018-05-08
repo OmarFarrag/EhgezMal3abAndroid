@@ -44,4 +44,5 @@
     <string name="updateInfo">Update</string>
     <string name="noChangesDetected">No changes detected</string>
     <string name="updatedSuccessfully">Updated successfully</string>
+    <string name="registerAsVenueAdmin">Become venue admin ?</string>
 </resources>
