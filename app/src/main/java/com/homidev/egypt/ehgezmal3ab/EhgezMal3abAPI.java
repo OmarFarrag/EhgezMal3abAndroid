@@ -11,7 +11,7 @@ import retrofit2.http.*;
 
 public interface EhgezMal3abAPI {
 
-    String BASE_URL = "http://192.168.1.3:56718/api/";
+    String BASE_URL = "http://192.168.1.18:56718/api/";
 
     @GET("venues/")
     Call<List<Venue>> getAllVenues();
@@ -63,5 +63,8 @@ public interface EhgezMal3abAPI {
     Call<>*/
 
    @PUT("users/update")
-    Call<Player> updatePlayer(@Header("Authorization") String token, @Body Player player);
+   Call<Player> updatePlayer(@Header("Authorization") String token, @Body Player player);
+
+   @GET("users/generalAdminPhone")
+   Call<Error> getGeneralAdminPhone();
 }

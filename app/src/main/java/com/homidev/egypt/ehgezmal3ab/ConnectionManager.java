@@ -40,7 +40,7 @@ public class ConnectionManager {
     private static ConnectionManager instance = null;
     private OkHttpClient connectionClient;
     private MainActivity mainActivity;
-    private String IP="192.168.1.3";
+    private String IP="192.168.1.18";
 
     //private constructor to implement a singleton pattern, initiates the connection client
     private ConnectionManager()
@@ -911,6 +911,36 @@ public class ConnectionManager {
             preferences.edit().putString("token", response).commit();
             preferences.edit().putString("username", username).commit();
         }
+    }
+
+
+    /*
+     * This function is called when a user wants to contact the general admin
+     * to be a venue admin
+     * This function requests the general admin number from the server
+     */
+    public void getGeneralAdminPhone(final RegisterFragment registerFragment)
+    {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+
+        ehgezMal3abAPI.getGeneralAdminPhone().enqueue(new retrofit2.Callback<Error>()
+        {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
+                if(response.code() == 200){
+                    registerFragment.callGeneralAdmin(response.body().getText());
+
+                }else {
+                    registerFragment.showRegisterResponseMessage(response.body().getText());
+                }
+
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Error> call, Throwable t) {
+
+            }
+        });
     }
 
     public List<Reservation> getPlayerReservations()
