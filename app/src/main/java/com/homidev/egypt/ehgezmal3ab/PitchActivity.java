@@ -142,7 +142,7 @@ public class PitchActivity extends AppCompatActivity {
     private void playerReserve(String promoCode, String username)
     {
 
-        Reservation myReservation = new Reservation(username,reservationStartsOn,reservationEndsOn,pitch.getVenueID(),pitch.getPitchName(),promoCode);
+        Reservation myReservation = new     Reservation(username,reservationStartsOn,reservationEndsOn,pitch.getVenueID(),pitch.getPitchName(),promoCode);
         connectionManager.reserve(myReservation, instance);
     }
 

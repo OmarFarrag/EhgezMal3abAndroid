@@ -60,8 +60,8 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
             final Reservation reservation = reservationList.get(position);
             //set the attributes of the venue item to be displayed
             String[] timeParts = reservation.getStartsOn().toString().split("T");
-            holder.reservationDate.setText(timeParts[0]);
-            holder.reservationTime.setText(timeParts[1].split(":")[0]+":"+timeParts[1].split(":")[1]);
+            holder.reservationDate.setText(timeParts[1].split(":")[0]+":"+timeParts[1].split(":")[1]+" "+timeParts[0]);
+            holder.reservationPrice.setText(String.valueOf(reservation.getPrice())+" L.E");
             holder.reservationVenue.setText(reservation.getVenueID());
             holder.reservationPitch.setText(reservation.getPitchName());
 
@@ -163,7 +163,7 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
     //A ViewHolder describes an item view and metadata about its place within the RecyclerView
     public class ReservationItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView reservationDate;
-        TextView reservationTime;
+        TextView reservationPrice;
         TextView reservationVenue;
         TextView reservationPitch;
         ImageButton cancelBtn;
@@ -175,7 +175,7 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
             super(itemView);
             cardView = (CardView) itemView.findViewById(R.id.reservationCardView);
             reservationDate = (TextView) itemView.findViewById(R.id.reservationDate);
-            reservationTime = (TextView) itemView.findViewById(R.id.reservationTime);
+            reservationPrice = (TextView) itemView.findViewById(R.id.reservationPrice);
             reservationVenue = (TextView) itemView.findViewById(R.id.reservationVenue);
             reservationPitch = (TextView) itemView.findViewById(R.id.reservationPitch);
             cancelBtn = (ImageButton)  itemView.findViewById(R.id.cancelBtn);

@@ -965,7 +965,7 @@ public class ConnectionManager {
             }
         });
     }
-
+/*
     public List<Reservation> getPlayerReservations()
     {
         final List<Reservation> reservationsList = new ArrayList<>();
@@ -1023,6 +1023,8 @@ public class ConnectionManager {
 
         return reservationsList;
     }
+
+    */
 
     /*
      * This function is called by the venue fragment of the admin to get his venue ID
