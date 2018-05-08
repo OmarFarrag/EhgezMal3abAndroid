@@ -68,7 +68,9 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
             //Change the background color according to the status and allow cancel action for pending
             if(reservation.getStatus().toLowerCase().equals("cancelled")|| reservation.getStatus().toLowerCase().equals("rejected"))
             {
-                holder.cardView.setBackgroundColor(context.getResources().getColor(R.color.declinedColor));
+                holder.layout.setBackgroundColor(context.getResources().getColor(R.color.declinedColor));
+                holder.cancelBtn.setVisibility(View.GONE);
+                holder.cancelBtn.setClickable(false);
             }
             else if (reservation.getStatus().toLowerCase().equals("pending"))
             {
@@ -82,6 +84,12 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
                     }
                 });
 
+            }
+            else
+            {
+                holder.layout.setBackgroundColor(context.getResources().getColor(R.color.mainGreen));
+                holder.cancelBtn.setVisibility(View.GONE);
+                holder.cancelBtn.setClickable(false);
             }
         }
     }
@@ -109,6 +117,12 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
         this.notifyDataSetChanged();
 
         displayTotalReservationsPrice();
+    }
+
+    public void refreshData()
+    {
+        connectionManager.getReservations(this);
+
     }
 
     /*

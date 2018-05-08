@@ -404,6 +404,7 @@ public class ConnectionManager {
                 }
                 Error text = response.body();
                 fragment.showToasts(text, cancelled);
+                fragment.notifyDataChange();
             }
 
             @Override
@@ -658,9 +659,11 @@ public class ConnectionManager {
                 if(response.code() == 200){
                     reservationsFragment.showToasMessage(response.body().toString());
 
+
                 }else {
                     reservationsFragment.showToasMessage(response.body().toString());
                 }
+                reservationsFragment.notifyDataChange();
             }
 
             @Override
@@ -719,9 +722,11 @@ public class ConnectionManager {
                 if(response.code() == 200){
                     reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.reservationDeclined));
 
+
                 }else {
                     reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.error));
                 }
+                reservationsFragment.notifyDataChange();
             }
 
             @Override

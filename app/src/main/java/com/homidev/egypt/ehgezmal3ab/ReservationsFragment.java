@@ -68,6 +68,8 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         reservationsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         final ReservationsFragment fragment = this;
         IRecyclerViewClickListener listener = null;
+
+        //If the user is a player
         if(!getContext().getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "").equals(""))
         {
             listener = getAppUserListener();
@@ -91,6 +93,12 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
 
     }
 
+
+
+    /*
+     Creates the listener in case of player user
+     Allows him to cancel or share a reservation
+     */
     protected IRecyclerViewClickListener getAppUserListener()
     {
         final ReservationsFragment fragment = this;
@@ -125,6 +133,10 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         return listener;
     }
 
+    /*
+     Creates the listener in case of venue Admin
+     Allows him to accept or decline a reservation request
+     */
     protected IRecyclerViewClickListener getVenAdminListener()
     {
         final ReservationsFragment fragment = this;
@@ -172,12 +184,20 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         Toast.makeText(getContext(),error.getText(),Toast.LENGTH_LONG).show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void notifyDataChange()
+    {
+        ((ReservationItemAdapter)recyclerAdapter).refreshData();
+    }
+
     public void showToasMessage(String message)
     {
         Toast messageToast = null;
         messageToast=  Toast.makeText(getContext(),message,Toast.LENGTH_SHORT);
 
         messageToast.show();
+
+        notify();
     }
 
 
