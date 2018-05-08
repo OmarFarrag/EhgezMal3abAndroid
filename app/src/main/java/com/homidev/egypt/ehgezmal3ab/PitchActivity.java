@@ -1,20 +1,22 @@
 package com.homidev.egypt.ehgezmal3ab;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -37,8 +39,10 @@ public class PitchActivity extends AppCompatActivity {
     protected int selectedMonth = Calendar.getInstance().get(Calendar.MONTH)+1;
     protected int selectedDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     private PitchActivity instance;
+    private String promoCode;
     private RatingBar ratingBar;
     private Button submitButton;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -46,22 +50,25 @@ public class PitchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule_design);
 
-        connectionManager = ConnectionManager.getConnectionManager();
-
-       // TextView pitchNameTextView = findViewById(R.id.pitchActivityPitchName);
+        // TextView pitchNameTextView = findViewById(R.id.pitchActivityPitchName);
 
         instance=this;
 
         Bundle extras = getIntent().getExtras();
 
-       ratingBar = findViewById(R.id.userRatePitchRB);
-       submitButton = findViewById(R.id.submitPitchReviewBtn);
+        ratingBar = findViewById(R.id.userRatePitchRB);
+        submitButton = findViewById(R.id.submitPitchReviewBtn);
+
+        setSubmitReviewButtonListener();
 
         setDatePickerListener();
 
+
         setReserveBtnListener();
 
-        setSubmitReviewButtonListener();
+
+
+        connectionManager = ConnectionManager.getConnectionManager();
 
         if(extras != null) {
             pitch = (Pitch) extras.get("pitchName");
@@ -85,6 +92,23 @@ public class PitchActivity extends AppCompatActivity {
         }*/
     }
 
+    protected void setSubmitReviewButtonListener() {
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username =  getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("username","");
+                String venueID = pitch.getVenueID();
+                String pitchName = pitch.getPitchName();
+                PlayerSubmitReview playerSubmitReview = new PlayerSubmitReview(username,
+                        venueID, pitchName, ratingBar.getRating());
+                connectionManager.setNewPitchRating(playerSubmitReview);
+                Toast.makeText(instance, "Pitch reviewed successfully: " + ratingBar ,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     protected void setReserveBtnListener()
     {
         final FloatingActionButton reserveBtn = (FloatingActionButton) findViewById(R.id.reserveBtn);
@@ -103,8 +127,9 @@ public class PitchActivity extends AppCompatActivity {
                     //The user is player
                     if(!username.equals(""))
                     {
-                        Reservation myReservation = new Reservation(username,reservationStartsOn,reservationEndsOn,pitch.getVenueID(),pitch.getPitchName());
-                        connectionManager.reserve(myReservation, instance);
+                        promoCode=null;
+                        showPromoCodeDialog(username);
+
                     }
                     else {
                         username = getSharedPreferences("venAdminPrefs",MODE_PRIVATE).getString("username","");
@@ -121,6 +146,16 @@ public class PitchActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    /*
+     * Calls the reserve function from the connection manager
+     */
+    private void playerReserve(String promoCode, String username)
+    {
+
+        Reservation myReservation = new     Reservation(username,reservationStartsOn,reservationEndsOn,pitch.getVenueID(),pitch.getPitchName(),promoCode);
+        connectionManager.reserve(myReservation, instance);
     }
 
     /*
@@ -155,23 +190,6 @@ public class PitchActivity extends AppCompatActivity {
         });
     }
 
-    protected void setSubmitReviewButtonListener() {
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username =  getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("username","");
-                String venueID = pitch.getVenueID();
-                String pitchName = pitch.getPitchName();
-                PlayerSubmitReview playerSubmitReview = new PlayerSubmitReview(username,
-                        venueID, pitchName, ratingBar.getRating());
-                connectionManager.setNewPitchRating(playerSubmitReview);
-                Toast.makeText(instance, "Pitch reviewed successfully: " + ratingBar ,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     protected void showLoading()
     {
         progressBar = new ProgressDialog(this);
@@ -200,16 +218,16 @@ public class PitchActivity extends AppCompatActivity {
         {
             final Button slot = new Button(this);
 
-                slot.setTextAppearance(this, R.style.TimeTableStyle);
-                slot.setText(((timeSlots.get(i).getStartsOn().split("T"))[1]));
+            slot.setTextAppearance(this, R.style.TimeTableStyle);
+            slot.setText(((timeSlots.get(i).getStartsOn().split("T"))[1]));
 
-                if(timeSlots.get(i).isEmpty()) {
-                    slot.setBackgroundColor(getResources().getColor(R.color.mainGreenLight));
-                }
-                else
-                {
-                    slot.setBackgroundColor(getResources().getColor(R.color.declinedColor));
-                }
+            if(timeSlots.get(i).isEmpty()) {
+                slot.setBackgroundColor(getResources().getColor(R.color.mainGreenLight));
+            }
+            else
+            {
+                slot.setBackgroundColor(getResources().getColor(R.color.declinedColor));
+            }
 
             final TimeSlot currentTimeSlot = timeSlots.get(i);
             final TimeSlot nextTimeSlot;
@@ -304,9 +322,9 @@ public class PitchActivity extends AppCompatActivity {
             });
 
 
-           // LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            // LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                scheduleLayout.addView(slot);
+            scheduleLayout.addView(slot);
 
 
         }
@@ -360,6 +378,47 @@ public class PitchActivity extends AppCompatActivity {
         reservationEndsOn=null;
     }
 
+    /*
+     * Displays a dialog box for the user to enter promo code
+     */
+    protected void showPromoCodeDialog(final String username)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Promo code");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT );
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                promoCode = input.getText().toString();
+                playerReserve(promoCode,username);
+            }
+        });
+        builder.setNegativeButton("Skip", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                promoCode = input.getText().toString();
+                playerReserve(promoCode,username);
+                dialog.cancel();
+            }
+        });
+
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+
+                dialog.cancel();
+
+            }});
+
+        builder.show();
+    }
 
     /*
      * Returns the full selected date
@@ -397,7 +456,6 @@ public class PitchActivity extends AppCompatActivity {
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.O)
         public void onDateSet(DatePicker view, int year, int month, int day) {
 
             callerActivity.setSelectedDate(year,month+1,day);
@@ -408,5 +466,3 @@ public class PitchActivity extends AppCompatActivity {
 
 
 }
-
-
