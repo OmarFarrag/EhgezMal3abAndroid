@@ -29,6 +29,10 @@ public class Venue {
     //average rating of all of the venue pitches.
     float venueRating;
 
+    public Venue() {
+
+    }
+
     public Venue(String venueTitle, String phoneNumber,
                  String area, String street, int venueImageRes,
                  float longitude, float latitude, String venueID, String imageLink) {
@@ -115,5 +119,45 @@ public class Venue {
 
     public void setImageLink(String imageLink) {
         this.imageLink = imageLink;
+    }
+
+    public void setVenueTitle(String venueTitle) {
+        this.venueTitle = venueTitle;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public void setVenueImageRes(int venueImageRes) {
+        this.venueImageRes = venueImageRes;
+    }
+
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(float latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setVenueID(String venueID) {
+        this.venueID = venueID;
+    }
+
+    public float getVenueRating() {
+        return venueRating;
+    }
+
+    public void setVenueRating(float venueRating) {
+        this.venueRating = venueRating;
     }
 }

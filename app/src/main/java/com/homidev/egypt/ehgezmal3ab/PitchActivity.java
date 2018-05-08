@@ -103,7 +103,7 @@ public class PitchActivity extends AppCompatActivity {
                 PlayerSubmitReview playerSubmitReview = new PlayerSubmitReview(username,
                         venueID, pitchName, ratingBar.getRating());
                 connectionManager.setNewPitchRating(playerSubmitReview);
-                Toast.makeText(instance, "Pitch reviewed successfully: " + ratingBar ,
+                Toast.makeText(instance, "Pitch reviewed successfully: " + ratingBar.getRating() ,
                         Toast.LENGTH_SHORT).show();
             }
         });

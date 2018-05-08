@@ -51,15 +51,12 @@ public class ConnectionManager {
     }
 
     //The public interface for getting the connection manager
-    public static ConnectionManager getConnectionManager()
-    {
-        if ( instance==null)
-        {
+    public static ConnectionManager getConnectionManager() {
+        if ( instance == null) {
             instance = new ConnectionManager();
         }
         return instance;
     }
-
 
     /*
     This function sends a register request to the server, handles the response and return the proper
@@ -67,7 +64,6 @@ public class ConnectionManager {
      */
     public String registerPlayer(Player player)
     {
-
         JSONObject playerJson = createJsonToRegisterPlayer(player);
 
         RequestBody registerPlayerRequestBody = createPlayerRequestBody(playerJson);
@@ -384,6 +380,26 @@ public class ConnectionManager {
         });
     }
 
+    public void updateVenueInformation(Venue venue, final UpdateVenueFragment updateVenueFragment) {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token;
+        token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
+
+        ehgezMal3abAPI.updateVenueInfo("Bearer " + token, venue).enqueue(new retrofit2.Callback<Venue>() {
+            @Override
+            public void onResponse(retrofit2.Call call, retrofit2.Response response) {
+                if(response.code() == 200) {
+                    updateVenueFragment.updatedSuccessfully();
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call call, Throwable t) {
+                updateVenueFragment.updateError();
+            }
+        });
+    }
+
 
 
     public void cancelReservation(final Reservation reservation, final ReservationsFragment fragment)
@@ -419,7 +435,6 @@ public class ConnectionManager {
 
 
 
-
     public void getReservationShareLink(final Reservation reservation)
     {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
@@ -439,8 +454,6 @@ public class ConnectionManager {
             }
         });
     }
-
-
 
     public void getPlayer(final View v, final AppUserProfileFragment fragment) {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
@@ -471,9 +484,6 @@ public class ConnectionManager {
             }
         });
     }
-
-
-
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void logoutUser(Player user){
@@ -541,7 +551,7 @@ public class ConnectionManager {
      * Function called by update info fragment when a player wants to update his info
      * sends the request to the server then notifies the fragment with the response
      */
-    public void     updatePlayerInfo(Player player, final UpdateInfoFragment updateInfoFragment)
+    public void updatePlayerInfo(Player player, final UpdateInfoFragment updateInfoFragment)
     {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
