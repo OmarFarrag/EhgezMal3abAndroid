@@ -43,7 +43,7 @@ public class UpdateVenueFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState)
     {
 
-        View updateInfoView = inflater.inflate(R.layout.update_info_layout,container,false);
+        View updateInfoView = inflater.inflate(R.layout.update_venue_fragment,container,false);
 
         venueNameTxt = updateInfoView.findViewById(R.id.updateVenueNameTxt);
         venuePhoneTxt = updateInfoView.findViewById(R.id.updateVenuePhoneTxt);
