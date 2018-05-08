@@ -1,12 +1,14 @@
 package com.homidev.egypt.ehgezmal3ab;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.RequiresApi;
+import android.widget.Toast;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -40,7 +42,7 @@ public class ConnectionManager {
     private static ConnectionManager instance = null;
     private OkHttpClient connectionClient;
     private MainActivity mainActivity;
-    private String IP="192.168.1.3";
+    private String IP = "10.0.2.2";
 
     //private constructor to implement a singleton pattern, initiates the connection client
     private ConnectionManager()
@@ -88,7 +90,7 @@ public class ConnectionManager {
                     e.printStackTrace();
                 }
 
-                if(response[0].code()==201){
+                if (response[0].code() == 201) {
                     responseString[0] = "You have registered successfully";
                     return;
                 }
@@ -269,7 +271,7 @@ public class ConnectionManager {
 
     //fires HTTP GET request to get all venues, returns it in an ArrayList<Venue>
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    protected List<Venue> getAllVenues () {
+    protected List<Venue> getAllVenues() {
 
         //assigned as final to access inner class (Thread)
         //the list that will be returned.
@@ -395,10 +397,10 @@ public class ConnectionManager {
             @Override
             public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
                 boolean cancelled = false;
-                if(response.code() == 200){
+                if (response.code() == 200) {
                     //reservation is cancelled.
                     cancelled = true;
-                }else if(response.code() == 400){
+                } else if (response.code() == 400) {
                     //reservation is not cancelled.
                     cancelled = false;
                 }
@@ -423,8 +425,7 @@ public class ConnectionManager {
         ehgezMal3abAPI.getReservationShareLink(reservation).enqueue(new retrofit2.Callback<JsonObject>() {
             @Override
             public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
-                if(response.code() == 200)
-                {
+                if (response.code() == 200) {
                     ClipboardManager clipboard = (ClipboardManager) mainActivity.getSystemService(CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText("Share reservation link", response.body().get("link").getAsString());
                     clipboard.setPrimaryClip(clip);
@@ -451,7 +452,7 @@ public class ConnectionManager {
         ehgezMal3abAPI.getPlayerInfo("Bearer " + token).enqueue(new retrofit2.Callback<Player>() {
             @Override
             public void onResponse(retrofit2.Call<Player> call, retrofit2.Response<Player> response) {
-                if(response.code() == 200) {
+                if (response.code() == 200) {
                     player[0] = response.body();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("player", player[0]);
@@ -483,10 +484,10 @@ public class ConnectionManager {
         ehgezMal3abAPI.logoutUser("Bearer " + token, user.getUsername()).enqueue(new retrofit2.Callback<JsonObject>() {
             @Override
             public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
-                if(response.code() == 400){
+                if (response.code() == 400) {
                     JsonObject object = response.body();
 
-                }else if(response.code() == 200){
+                } else if (response.code() == 200) {
 
                     mainActivity.logOut();
                     removeUserToken();
@@ -514,14 +515,14 @@ public class ConnectionManager {
         }
 
         final TimeSlot[] timeSlots = new TimeSlot[1];
-        ehgezMal3abAPI.getPitchSchedule("Bearer " + token, venueID, pitchName, startsOn ).enqueue(new retrofit2.Callback<ArrayList<TimeSlot>>() {
+        ehgezMal3abAPI.getPitchSchedule("Bearer " + token, venueID, pitchName, startsOn).enqueue(new retrofit2.Callback<ArrayList<TimeSlot>>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(retrofit2.Call<ArrayList<TimeSlot>> call, retrofit2.Response<ArrayList<TimeSlot>> response) {
-                if(response.code() == 400){
+                if (response.code() == 400) {
 
 
-                }else if(response.code() == 200){
+                } else if (response.code() == 200) {
 
                     pitchActivity.ShowSchedule(response.body());
 
@@ -548,15 +549,15 @@ public class ConnectionManager {
         }
 
 
-        ehgezMal3abAPI.updatePlayer("Bearer " + token,  player).enqueue(new retrofit2.Callback<Player>() {
+        ehgezMal3abAPI.updatePlayer("Bearer " + token, player).enqueue(new retrofit2.Callback<Player>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(retrofit2.Call<Player> call, retrofit2.Response<Player> response) {
-                if(response.code() == 200){
+                if (response.code() == 200) {
 
                     updateInfoFragment.updatedSuccessfully();
 
-                }else{
+                } else {
 
                     updateInfoFragment.updateError();
 
@@ -574,8 +575,7 @@ public class ConnectionManager {
      * This function is called by the pitch activity, it sends a reserve request to the server,
      * gets the json response
      */
-    public void reserve(Reservation reservation, final PitchActivity pitchActivity)
-    {
+    public void reserve(Reservation reservation, final PitchActivity pitchActivity) {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
         if (token == "") {
@@ -585,7 +585,7 @@ public class ConnectionManager {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
-                if(response.code() == 200){
+                if (response.code() == 200) {
                     pitchActivity.successfulReservation();
 
                 }else if(response.code() == 400){
@@ -643,22 +643,19 @@ public class ConnectionManager {
     /*
      * This function is called when the admin accepts a reservation request for one of his pitches
      */
-    public void acceptReservation(final ReservationsFragment reservationsFragment, Reservation reservation)
-    {
+    public void acceptReservation(final ReservationsFragment reservationsFragment, Reservation reservation) {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
-        String token = mainActivity.getSharedPreferences("venAdminPrefs",MODE_PRIVATE).getString("token","");
+        String token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
 
         if (token == "") {
             return;
         }
-        ehgezMal3abAPI.acceptReservation("Bearer " +token,reservation).enqueue(new retrofit2.Callback<String>()
-        {
+        ehgezMal3abAPI.acceptReservation("Bearer " + token, reservation).enqueue(new retrofit2.Callback<String>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(retrofit2.Call<String> call, retrofit2.Response<String> response) {
-                if(response.code() == 200){
+                if (response.code() == 200) {
                     reservationsFragment.showToasMessage(response.body().toString());
-
 
                 }else {
                     reservationsFragment.showToasMessage(response.body().toString());
@@ -685,7 +682,7 @@ public class ConnectionManager {
             token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");;
         }
 
-        ehgezMal3abAPI.changePassword("Bearer "+token, requestBody).enqueue(new retrofit2.Callback<Error>() {
+        ehgezMal3abAPI.changePassword("Bearer " + token, requestBody).enqueue(new retrofit2.Callback<Error>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
                 if (response.code() == 200) {
@@ -707,21 +704,18 @@ public class ConnectionManager {
     /*
      * This function is called when the admin accepts a reservation request for one of his pitches
      */
-    public void declineReservation(final ReservationsFragment reservationsFragment, Reservation reservation)
-    {
+    public void declineReservation(final ReservationsFragment reservationsFragment, Reservation reservation) {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
-        String token = mainActivity.getSharedPreferences("venAdminPrefs",MODE_PRIVATE).getString("token","");
+        String token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
 
         if (token == "") {
             return;
         }
-        ehgezMal3abAPI.declineReservation("Bearer " +token,reservation).enqueue(new retrofit2.Callback<JsonObject>()
-        {
+        ehgezMal3abAPI.declineReservation("Bearer " + token, reservation).enqueue(new retrofit2.Callback<JsonObject>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
-                if(response.code() == 200){
+                if (response.code() == 200) {
                     reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.reservationDeclined));
-
 
                 }else {
                     reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.error));
@@ -737,9 +731,7 @@ public class ConnectionManager {
     }
 
 
-
-    public void getMyFriends(String status)
-    {
+    public void getMyFriends (String status,final FriendItemAdapter adapter){
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
         if (token == "") {
@@ -748,11 +740,12 @@ public class ConnectionManager {
         ehgezMal3abAPI.getAllFriends("Bearer " + token, status).enqueue(new retrofit2.Callback<ArrayList<Friend>>() {
             @Override
             public void onResponse(retrofit2.Call<ArrayList<Friend>> call, retrofit2.Response<ArrayList<Friend>> response) {
-                if(response.code() == 200){
+                if (response.code() == 200) {
                     ArrayList<Friend> friends = response.body();
-
-                }else if(response.code() == 204){
+                    adapter.setFriendsList(friends);
+                } else if (response.code() == 204) {
                     //Means that there are no friends, and you're all alone.
+                    adapter.setFriendsList(null);
                 }
             }
 
@@ -788,6 +781,32 @@ public class ConnectionManager {
     }
 
 
+        public void addFriend (String friendUsername,final Context fragment){
+            EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+            String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
+            if (token == "") {
+                return;
+            }
+            ehgezMal3abAPI.addFriend("Bearer " + token, friendUsername).enqueue(new retrofit2.Callback<JsonObject>() {
+                @Override
+                public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+                    if (response.code() == 200) {
+                        Toast.makeText(fragment, "Succesfully sent your request", Toast.LENGTH_LONG).show();
+                    } else if (response.code() == 400) {
+                        try {
+                            JSONObject object = new JSONObject(response.errorBody().string());
+                            Toast.makeText(fragment, object.get("text").toString(), Toast.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(retrofit2.Call<JsonObject> call, Throwable t) {
+
+                }
+            });
+        }
 
     /*
     Create a request body for a player from a JSON player object
@@ -804,7 +823,7 @@ public class ConnectionManager {
     //creates a GET HTTP request to retrieve all venues.
     protected Request createGetAllVenueRequest() {
         return new Request.Builder()
-                .url("http://"+IP+":56718/api/venues")
+                .url("http://"+IP+":56719/api/venues")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -817,7 +836,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://"+IP+":56718/api/users/register")
+                .url("http://"+IP+":56719/api/users/register")
                 .post(registerRequestBody)
                 .build();
     }
@@ -829,7 +848,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://"+IP+":56718/api/token")
+                .url("http://"+IP+":56719/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -868,7 +887,7 @@ public class ConnectionManager {
 
     protected Request createGetPitchesRequest(int venueID) {
         return new Request.Builder()
-                .url("http://"+IP+":56718/api/pitches/" + venueID)
+                .url("http://"+IP+":56719/api/pitches/" + venueID)
                 .get()
                 .build();
     }
@@ -1006,7 +1025,7 @@ public class ConnectionManager {
     protected Request createGetPlayerReservationsRequest()
     {
         return new Request.Builder()
-                .url("http://"+IP+":56718/api/reservations")
+                .url("http://"+IP+":56719/api/reservations")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization","Bearer "+ mainActivity.getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("token",""))

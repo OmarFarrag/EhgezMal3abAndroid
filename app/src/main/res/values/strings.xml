@@ -21,6 +21,7 @@
     <string name="reservations_menu_cancel">Cancel</string>
     <string name="reservations_menu_share">Share Reservation</string>
     <string name="userProfile">Profile</string>
+    <string name="friends">Friends</string>
     <string name="user_profile_toolbar">Profile</string>
     <string name="PREFERENCE_FILE_KEY">userName</string>
     <string name="invalidSlotSTring">Invalid slot</string>

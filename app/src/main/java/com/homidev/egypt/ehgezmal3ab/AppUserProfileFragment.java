@@ -12,6 +12,7 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -83,7 +84,7 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
         }
     }
 
-    private void setListeners(View view) {
+    private void setListeners(final View view) {
 
         View.OnClickListener updateInfoListener = new View.OnClickListener() {
             @Override
@@ -100,9 +101,11 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
         };
 
         View.OnClickListener viewFriendsListener = new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                connectionManager.getMyFriends("Pending");
+                //display the view friends fragment.
+                showFriendsFragment(view);
             }
         };
 
@@ -150,6 +153,14 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
         android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainFrameLayout,updateInfoFragment);
         transaction.commit();
+    }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void showFriendsFragment(View itemView){
+        android.support.v4.app.Fragment friendsFragment = new ViewFriends();
+        android.support.v4.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainFrameLayout, friendsFragment);
+        transaction.commit();
+        ImageButton slideDownButton = (ImageButton) itemView.findViewById(R.id.friends_slideDown_button);
     }
 }
 

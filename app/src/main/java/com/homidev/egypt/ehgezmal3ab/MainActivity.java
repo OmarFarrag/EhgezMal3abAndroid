@@ -231,7 +231,6 @@ public class MainActivity extends AppCompatActivity {
 
         loginAndRegisterLayout.startAnimation(animation);
     }
-
     /*
     A function called by the connection manager in case of successful login
      */
@@ -243,7 +242,6 @@ public class MainActivity extends AppCompatActivity {
             finish();
             return;
         }
-
         discardLoginAndRegisterButtons();
 
         showMainBNV();
@@ -345,6 +343,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    public void closeFriendsFragment()
+    {
+        final Context root = getBaseContext();
+
+        final RelativeLayout friendLayout =  (RelativeLayout) findViewById(R.id.friendsLayout);
+
+        Animation animation = AnimationUtils.loadAnimation(root, R.anim.slide_down);
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                friendLayout.setVisibility(View.INVISIBLE);
+            }
+        });
+        final Toolbar mainToolbar = (Toolbar) findViewById(R.id.mainToolbar);
+        createProfileToolbar(mainToolbar);
+        friendLayout.startAnimation(animation);
+    }
     /*
     create all venues toolbar
      */
@@ -408,5 +431,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    protected void createFriendsToolbar(Toolbar mainToolbar)
+    {
+        mainToolbar.removeAllViews();
+        getLayoutInflater().inflate(R.layout.friends_toolbar, mainToolbar);
+    }
 
 }

@@ -3,7 +3,7 @@ package com.homidev.egypt.ehgezmal3ab;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Reservation {
+public class    Reservation {
 
     @SerializedName("username")
     @Expose
