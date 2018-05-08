@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#006914">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/friends"
+        android:fontFamily="@font/century_gothic"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+        android:textColor="@color/white"
+        android:id="@+id/reservations_Toolbar_text"/>
+
+    <ImageButton
+        android:id="@+id/friends_slideDown_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@null"
+        android:tint="#FFFFFF"
+        app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp" />
+
+
+</RelativeLayout>

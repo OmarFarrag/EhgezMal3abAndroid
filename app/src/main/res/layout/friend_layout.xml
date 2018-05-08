@@ -1,74 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/friend_item_design"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardCornerRadius="5dp"
-        card_view:cardElevation="10dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        card_view:cardBackgroundColor="@color/mainGreen"
-        android:id="@+id/pitchCardView">
+        android:layout_height="75dp"
+        android:visibility="visible"
+        android:id="@+id/ViewFriendsLayout">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="5dp">
+        <TextView
+            android:id="@+id/friendFullNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="4dp"
+            android:text="@string/friends"
+            android:textColor="@color/mainGreen"
+            android:textSize="30dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/friendName"
-                    android:text="HOMI"
-                    android:layout_gravity="center_vertical"
-                    android:fontFamily="@font/century_gothic"
-                    android:textSize="20sp"
-                    android:textColor="@color/white"/>
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="200dp"
-                    card_view:cardBackgroundColor="@color/mainGreenLight"
-                    >
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/century_gothic"
-                        android:textSize="16sp"
-                        android:text="unfriend"
-                        android:textColor="@color/white"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center"/>
-                </android.support.v7.widget.CardView>
-            </LinearLayout>
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
+            android:paddingRight="5dp"
+            android:text="Button"
+            android:layout_marginRight="12dp"
+            android:layout_alignParentRight="true" />
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="muhammadahmad201196@hotmail.com"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:textColor="@color/white"
-                android:fontFamily="@font/century_gothic"
-                android:textSize="14sp"
-                android:id="@+id/friendEmail"/>
-
-
-
-
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-</LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
