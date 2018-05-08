@@ -42,7 +42,7 @@ public class ConnectionManager {
     private static ConnectionManager instance = null;
     private OkHttpClient connectionClient;
     private MainActivity mainActivity;
-    private String IP="10.0.2.2";
+    private String IP="192.168.1.18";
 
     //private constructor to implement a singleton pattern, initiates the connection client
     private ConnectionManager()
