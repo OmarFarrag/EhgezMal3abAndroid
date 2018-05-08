@@ -10,8 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 
 public class FriendItemAdapter extends RecyclerView.Adapter<FriendItemAdapter.FriendViewHolder>{
 

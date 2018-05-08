@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -12,11 +13,16 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -46,6 +52,7 @@ public class PitchActivity extends AppCompatActivity {
     protected int selectedMonth = Calendar.getInstance().get(Calendar.MONTH)+1;
     protected int selectedDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     private PitchActivity instance;
+    private String promoCode;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -108,8 +115,9 @@ public class PitchActivity extends AppCompatActivity {
                     //The user is player
                     if(!username.equals(""))
                     {
-                        Reservation myReservation = new Reservation(username,reservationStartsOn,reservationEndsOn,pitch.getVenueID(),pitch.getPitchName());
-                        connectionManager.reserve(myReservation, instance);
+                        promoCode=null;
+                        showPromoCodeDialog(username);
+
                     }
                     else {
                         username = getSharedPreferences("venAdminPrefs",MODE_PRIVATE).getString("username","");
@@ -126,6 +134,16 @@ public class PitchActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    /*
+     * Calls the reserve function from the connection manager
+     */
+    private void playerReserve(String promoCode, String username)
+    {
+
+        Reservation myReservation = new Reservation(username,reservationStartsOn,reservationEndsOn,pitch.getVenueID(),pitch.getPitchName(),promoCode);
+        connectionManager.reserve(myReservation, instance);
     }
 
     /*
@@ -348,6 +366,47 @@ public class PitchActivity extends AppCompatActivity {
         reservationEndsOn=null;
     }
 
+    /*
+     * Displays a dialog box for the user to enter promo code
+     */
+    protected void showPromoCodeDialog(final String username)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Promo code");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT );
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                promoCode = input.getText().toString();
+                playerReserve(promoCode,username);
+            }
+        });
+        builder.setNegativeButton("Skip", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                promoCode = input.getText().toString();
+                playerReserve(promoCode,username);
+                dialog.cancel();
+            }
+        });
+
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+
+                dialog.cancel();
+
+            }});
+
+        builder.show();
+    }
 
     /*
      * Returns the full selected date
