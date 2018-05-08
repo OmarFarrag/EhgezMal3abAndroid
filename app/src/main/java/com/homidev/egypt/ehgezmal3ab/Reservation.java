@@ -28,10 +28,6 @@ public class    Reservation {
     @Expose
     private int price;
 
-    @SerializedName("promoCode")
-    @Expose
-    private String promoCode;
-
     /**
      * No args constructor for use in serialization
      *
@@ -52,20 +48,20 @@ public class    Reservation {
     /**
      *
      * @param username
-     * @param promoCode
+     * @param status
      * @param pitchName
      * @param endsOn
      * @param startsOn
      * @param venueID
      */
-    public Reservation(String username, String startsOn, String endsOn, String venueID, String pitchName, String promoCode) {
+    public Reservation(String username, String startsOn, String endsOn, String venueID, String pitchName, String status) {
         super();
         this.username = username;
         this.startsOn = startsOn;
         this.endsOn = endsOn;
         this.venueID = venueID;
         this.pitchName = pitchName;
-        this.promoCode = promoCode;
+        this.status = status;
     }
 
     public String getUsername() {
