@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
             holder.pitchCapacity.setText(pitch.getCapacity().toString() + "x" + pitch.getCapacity().toString());
             holder.pitchPrice.setText(pitch.getPrice().toString());
             holder.pitchType.setText(pitch.getType());
+            holder.pitchRate.setRating(pitch.getRating());
         }
     }
 
@@ -72,6 +74,7 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
         private TextView pitchPrice;
         private IRecyclerViewClickListener listener;
         CardView cardView;
+        private RatingBar pitchRate;
 
         public PitchItemViewHolder(View itemView, IRecyclerViewClickListener listener) {
             super(itemView);
@@ -81,8 +84,8 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
             pitchType = itemView.findViewById(R.id.pitchType);
             this.listener = listener;
             cardView = itemView.findViewById(R.id.pitchCardView);
+            pitchRate = itemView.findViewById(R.id.pitchRating);
             cardView.setOnClickListener(this);
-
 
         }
 

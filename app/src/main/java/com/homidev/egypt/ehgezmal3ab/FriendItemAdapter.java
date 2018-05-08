@@ -11,7 +11,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-
 public class FriendItemAdapter extends RecyclerView.Adapter<FriendItemAdapter.FriendViewHolder>{
 
     private ConnectionManager connectionManager;

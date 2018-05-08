@@ -1,6 +1,5 @@
 package com.homidev.egypt.ehgezmal3ab;
 
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -16,8 +15,6 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.zip.Inflater;
-
 public class ViewVenueFragment extends  android.support.v4.app.Fragment{
 
     private ConnectionManager connectionManager;
@@ -26,7 +23,7 @@ public class ViewVenueFragment extends  android.support.v4.app.Fragment{
     private String  venueID;
     private String  venueName;
     private ProgressDialog progressBar;
-    private View venuPitchesView;
+    private View venuePitchesView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,9 +38,9 @@ public class ViewVenueFragment extends  android.support.v4.app.Fragment{
 
         this.connectionManager = ConnectionManager.getConnectionManager();
 
-        venuPitchesView = inflater.inflate(R.layout.all_pitches_layout,container,false);
+        venuePitchesView = inflater.inflate(R.layout.all_pitches_layout,container,false);
 
-        pitchesRecyclerView = venuPitchesView.findViewById(R.id.allPitchesRecyclerView);
+        pitchesRecyclerView = venuePitchesView.findViewById(R.id.allPitchesRecyclerView);
 
         pitchesRecyclerView.setHasFixedSize(true);
 
@@ -60,7 +57,7 @@ public class ViewVenueFragment extends  android.support.v4.app.Fragment{
 
 
 
-        return venuPitchesView;
+        return venuePitchesView;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -101,7 +98,7 @@ public class ViewVenueFragment extends  android.support.v4.app.Fragment{
         pitchItemAdapter = new PitchItemAdapter(getContext(), venueID, listener);
         pitchesRecyclerView.setAdapter(pitchItemAdapter);
 
-        final ImageView imageView = venuPitchesView.findViewById(R.id.mainVenueImage);
+        final ImageView imageView = venuePitchesView.findViewById(R.id.mainVenueImage);
         Picasso
                 .with(getContext())
                 .load("http://i.imgur.com/AS65Kmg.jpg")

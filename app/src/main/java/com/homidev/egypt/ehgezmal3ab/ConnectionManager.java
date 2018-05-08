@@ -42,7 +42,7 @@ public class ConnectionManager {
     private static ConnectionManager instance = null;
     private OkHttpClient connectionClient;
     private MainActivity mainActivity;
-    private String IP="192.168.1.18";
+    private String IP="10.0.2.2";
 
     //private constructor to implement a singleton pattern, initiates the connection client
     private ConnectionManager()
@@ -394,6 +394,7 @@ public class ConnectionManager {
             return;
         }
         ehgezMal3abAPI.cancelReservation("Bearer " + token, reservation).enqueue(new retrofit2.Callback<Error>() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
                 boolean cancelled = false;
@@ -592,7 +593,7 @@ public class ConnectionManager {
                 }else if(response.code() == 400){
                    // pitchActivity.unsuccessfulReservation();
                     try {
-                        pitchActivity.showToasMessage(response.errorBody().string().split("\"")[3]);
+                        pitchActivity.showToastMessage(response.errorBody().string().split("\"")[3]);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -627,7 +628,7 @@ public class ConnectionManager {
                 }else if(response.code() == 400){
                     // pitchActivity.unsuccessfulReservation();
                     try {
-                        pitchActivity.showToasMessage(response.errorBody().string().split("\"")[3]);
+                        pitchActivity.showToastMessage(response.errorBody().string().split("\"")[3]);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -795,7 +796,7 @@ public class ConnectionManager {
                 @Override
                 public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
                     if (response.code() == 200) {
-                        Toast.makeText(fragment, "Succesfully sent your request", Toast.LENGTH_LONG).show();
+                        Toast.makeText(fragment, "Successfully sent your request", Toast.LENGTH_LONG).show();
                     } else if (response.code() == 400) {
                         try {
                             JSONObject object = new JSONObject(response.errorBody().string());
@@ -1080,6 +1081,25 @@ public class ConnectionManager {
 
         return retrofit.create(EhgezMal3abAPI.class);
 
+    }
+
+    public void setNewPitchRating(PlayerSubmitReview playerSubmitReview) {
+        EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE)
+                .getString("token", "");
+        ehgezMal3abAPI.submitReview("Bearer " + token, playerSubmitReview).enqueue(new retrofit2.Callback<Double>() {
+            @Override
+            public void onResponse(retrofit2.Call<Double> call, retrofit2.Response<Double> response) {
+                if(response.code() == 200) {
+
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Double> call, Throwable t) {
+
+            }
+        });
     }
 
 }

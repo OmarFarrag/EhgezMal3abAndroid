@@ -5,37 +5,22 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.content.Context;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class PitchActivity extends AppCompatActivity {
@@ -52,7 +37,8 @@ public class PitchActivity extends AppCompatActivity {
     protected int selectedMonth = Calendar.getInstance().get(Calendar.MONTH)+1;
     protected int selectedDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     private PitchActivity instance;
-    private String promoCode;
+    private RatingBar ratingBar;
+    private Button submitButton;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -60,20 +46,22 @@ public class PitchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule_design);
 
+        connectionManager = ConnectionManager.getConnectionManager();
+
        // TextView pitchNameTextView = findViewById(R.id.pitchActivityPitchName);
 
         instance=this;
 
         Bundle extras = getIntent().getExtras();
 
-        setDatePickerListener();
+       ratingBar = findViewById(R.id.userRatePitchRB);
+       submitButton = findViewById(R.id.submitPitchReviewBtn);
 
+        setDatePickerListener();
 
         setReserveBtnListener();
 
-
-
-        connectionManager = ConnectionManager.getConnectionManager();
+        setSubmitReviewButtonListener();
 
         if(extras != null) {
             pitch = (Pitch) extras.get("pitchName");
@@ -105,7 +93,7 @@ public class PitchActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(reservationEndsOn==null)
                 {
-                    showToasMessage(getResources().getString(R.string.reserveErrorMessage));
+                    showToastMessage(getResources().getString(R.string.reserveErrorMessage));
                     return;
                 }
                 else
@@ -115,9 +103,8 @@ public class PitchActivity extends AppCompatActivity {
                     //The user is player
                     if(!username.equals(""))
                     {
-                        promoCode=null;
-                        showPromoCodeDialog(username);
-
+                        Reservation myReservation = new Reservation(username,reservationStartsOn,reservationEndsOn,pitch.getVenueID(),pitch.getPitchName());
+                        connectionManager.reserve(myReservation, instance);
                     }
                     else {
                         username = getSharedPreferences("venAdminPrefs",MODE_PRIVATE).getString("username","");
@@ -137,21 +124,11 @@ public class PitchActivity extends AppCompatActivity {
     }
 
     /*
-     * Calls the reserve function from the connection manager
-     */
-    private void playerReserve(String promoCode, String username)
-    {
-
-        Reservation myReservation = new     Reservation(username,reservationStartsOn,reservationEndsOn,pitch.getVenueID(),pitch.getPitchName(),promoCode);
-        connectionManager.reserve(myReservation, instance);
-    }
-
-    /*
      * This function is called when the connection manager finishes a reservation request
      */
     public void successfulReservation()
     {
-        showToasMessage(getResources().getString(R.string.successfulReservation));
+        showToastMessage(getResources().getString(R.string.successfulReservation));
     }
 
     /*
@@ -159,7 +136,7 @@ public class PitchActivity extends AppCompatActivity {
     */
     public void unsuccessfulReservation()
     {
-        showToasMessage(getResources().getString(R.string.unsuccessfulReservation));
+        showToastMessage(getResources().getString(R.string.unsuccessfulReservation));
     }
 
 
@@ -174,6 +151,23 @@ public class PitchActivity extends AppCompatActivity {
                 DatePickerFragment datePickerFragment = new DatePickerFragment();
                 datePickerFragment.setCallerActivity(instance);
                 ((DialogFragment)datePickerFragment).show(getFragmentManager(),"Change Date");
+            }
+        });
+    }
+
+    protected void setSubmitReviewButtonListener() {
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username =  getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("username","");
+                String venueID = pitch.getVenueID();
+                String pitchName = pitch.getPitchName();
+                PlayerSubmitReview playerSubmitReview = new PlayerSubmitReview(username,
+                        venueID, pitchName, ratingBar.getRating());
+                connectionManager.setNewPitchRating(playerSubmitReview);
+                Toast.makeText(instance, "Pitch reviewed successfully: " + ratingBar ,
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -263,7 +257,7 @@ public class PitchActivity extends AppCompatActivity {
 
                         } else {
                             //This slot is not valid to choose
-                            showToasMessage(getResources().getString(R.string.invalidSlotSTring));
+                            showToastMessage(getResources().getString(R.string.invalidSlotSTring));
 
                         }
                     }
@@ -299,7 +293,7 @@ public class PitchActivity extends AppCompatActivity {
                         }
                         else
                         {
-                            showToasMessage(getResources().getString(R.string.invalidSlotSTring));
+                            showToastMessage(getResources().getString(R.string.invalidSlotSTring));
                         }
 
                     }
@@ -321,7 +315,7 @@ public class PitchActivity extends AppCompatActivity {
 
     }
 
-    protected void showToasMessage(String message)
+    protected void showToastMessage(String message)
     {
         Toast messageToast = null;
         messageToast=  Toast.makeText(this,message,Toast.LENGTH_SHORT);
@@ -366,47 +360,6 @@ public class PitchActivity extends AppCompatActivity {
         reservationEndsOn=null;
     }
 
-    /*
-     * Displays a dialog box for the user to enter promo code
-     */
-    protected void showPromoCodeDialog(final String username)
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Promo code");
-
-        // Set up the input
-        final EditText input = new EditText(this);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT );
-        builder.setView(input);
-
-        // Set up the buttons
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                promoCode = input.getText().toString();
-                playerReserve(promoCode,username);
-            }
-        });
-        builder.setNegativeButton("Skip", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                promoCode = input.getText().toString();
-                playerReserve(promoCode,username);
-                dialog.cancel();
-            }
-        });
-
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int id) {
-
-                dialog.cancel();
-
-            }});
-
-        builder.show();
-    }
 
     /*
      * Returns the full selected date
@@ -444,6 +397,7 @@ public class PitchActivity extends AppCompatActivity {
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.O)
         public void onDateSet(DatePicker view, int year, int month, int day) {
 
             callerActivity.setSelectedDate(year,month+1,day);

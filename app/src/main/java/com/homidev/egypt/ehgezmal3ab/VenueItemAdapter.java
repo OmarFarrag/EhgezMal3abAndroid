@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -126,6 +127,7 @@ public class VenueItemAdapter extends RecyclerView.Adapter<VenueItemAdapter.Venu
         LinearLayout background;
         private IRecyclerViewClickListener listener;
         CardView cardView;
+        RatingBar venueRate;
 
         public VenueItemViewHolder(View itemView, IRecyclerViewClickListener listener) {
             super(itemView);

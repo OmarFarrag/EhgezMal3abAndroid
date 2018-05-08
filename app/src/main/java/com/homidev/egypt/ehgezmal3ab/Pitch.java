@@ -25,6 +25,9 @@ public class Pitch implements Serializable{
     @SerializedName("venue")
     @Expose
     private Object venue;
+    @SerializedName("rating")
+    @Expose
+    private float rating;
 
     /**
      * No args constructor for use in serialization
@@ -42,7 +45,8 @@ public class Pitch implements Serializable{
      * @param type
      * @param venueID
      */
-    public Pitch(String venueID, String pitchName, Integer capacity, Integer price, String type, Object venue) {
+    public Pitch(String venueID, String pitchName, Integer capacity,
+                 Integer price, String type, Object venue) {
         super();
         this.venueID = venueID;
         this.pitchName = pitchName;
@@ -50,6 +54,18 @@ public class Pitch implements Serializable{
         this.price = price;
         this.type = type;
         this.venue = venue;
+    }
+
+    public Pitch(String venueID, String pitchName, Integer capacity,
+                 Integer price, String type, Object venue,
+                 float rating) {
+        this.venueID = venueID;
+        this.pitchName = pitchName;
+        this.capacity = capacity;
+        this.price = price;
+        this.type = type;
+        this.venue = venue;
+        this.rating = rating;
     }
 
     public String getVenueID() {
@@ -86,6 +102,14 @@ public class Pitch implements Serializable{
 
     public String getType() {
         return type;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 
     public void setType(String type) {

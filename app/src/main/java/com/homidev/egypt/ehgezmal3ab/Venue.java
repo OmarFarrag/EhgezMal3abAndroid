@@ -26,6 +26,9 @@ public class Venue {
     @SerializedName("imageLink")
     String imageLink;
 
+    //average rating of all of the venue pitches.
+    float venueRating;
+
     public Venue(String venueTitle, String phoneNumber,
                  String area, String street, int venueImageRes,
                  float longitude, float latitude, String venueID, String imageLink) {
@@ -38,6 +41,22 @@ public class Venue {
         this.latitude = latitude;
         this.venueID = venueID;
         this.setImageLink(imageLink);
+    }
+
+    public Venue(String venueTitle, String phoneNumber,
+                 String area, String street, int venueImageRes,
+                 float longitude, float latitude, String venueID,
+                 String imageLink, float venueRating) {
+        this.venueTitle = venueTitle;
+        this.phoneNumber = phoneNumber;
+        this.area = area;
+        this.street = street;
+        this.venueImageRes = venueImageRes;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.venueID = venueID;
+        this.imageLink = imageLink;
+        this.venueRating = venueRating;
     }
 
     public Venue(String venueTitle, String phoneNumber, String area, String street,
