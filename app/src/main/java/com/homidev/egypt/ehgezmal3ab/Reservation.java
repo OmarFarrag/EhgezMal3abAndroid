@@ -23,11 +23,9 @@ public class    Reservation {
     @SerializedName("status")
     @Expose
     private String status;
-
     @SerializedName("price")
     @Expose
     private int price;
-
     @SerializedName("promoCode")
     @Expose
     private String promoCode;

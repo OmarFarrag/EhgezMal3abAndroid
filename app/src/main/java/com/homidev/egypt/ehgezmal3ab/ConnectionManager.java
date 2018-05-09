@@ -42,6 +42,7 @@ public class ConnectionManager {
     private static ConnectionManager instance = null;
     private OkHttpClient connectionClient;
     private MainActivity mainActivity;
+    private Venue adminVenue;
     private String IP="192.168.1.18";
 
     //private constructor to implement a singleton pattern, initiates the connection client
@@ -385,19 +386,30 @@ public class ConnectionManager {
         String token;
         token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
 
-        ehgezMal3abAPI.updateVenueInfo("Bearer " + token, venue).enqueue(new retrofit2.Callback<Venue>() {
+        final Venue tempVen = adminVenue;
+        tempVen.setPhoneNumber(venue.getPhoneNumber());
+        tempVen.setVenueTitle(venue.getVenueTitle());
+
+        ehgezMal3abAPI.updateVenueInfo("Bearer " + token, adminVenue.getVenueID(),tempVen).enqueue(new retrofit2.Callback<Error>() {
             @Override
-            public void onResponse(retrofit2.Call call, retrofit2.Response response) {
+            public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
                 if(response.code() == 200) {
                     updateVenueFragment.updatedSuccessfully();
+                    adminVenue = tempVen;
+
                 }
             }
 
             @Override
-            public void onFailure(retrofit2.Call call, Throwable t) {
+            public void onFailure(retrofit2.Call<Error> call, Throwable t) {
                 updateVenueFragment.updateError();
             }
         });
+    }
+
+    public Venue getAdminVenue()
+    {
+        return adminVenue;
     }
 
 
@@ -1053,7 +1065,7 @@ public class ConnectionManager {
             public void onResponse(retrofit2.Call<ArrayList<Venue>> call, retrofit2.Response<ArrayList<Venue>> response) {
                 if(response.code() == 200){
                     callerFragment.setVenueID(response.body().get(0).getVenueID(),response.body().get(0).getVenueTitle() );
-
+                    storeVenue(response.body().get(0));
                 }else if(response.code() == 204){
                     //TODO: handle error
                 }
@@ -1065,6 +1077,14 @@ public class ConnectionManager {
             }
         });
     }
+
+    //Stores the venueID of the current admin
+    private void storeVenue(Venue venue)
+    {
+        this.adminVenue = venue;
+    }
+
+
 
 
 

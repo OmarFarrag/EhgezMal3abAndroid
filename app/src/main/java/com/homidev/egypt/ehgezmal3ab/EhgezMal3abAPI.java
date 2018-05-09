@@ -74,6 +74,6 @@ public interface EhgezMal3abAPI {
    @POST("/api/reviews")
     Call<Double> submitReview(@Header("Authorization") String token, @Body PlayerSubmitReview playerSubmitReview);
 
-   @POST("venues/update")
-    Call<Venue> updateVenueInfo(@Header("Authorization") String token, @Body Venue venue);
+   @PUT("venues/{id}")
+    Call<Error> updateVenueInfo(@Header("Authorization") String token, @Path("id") String venueID, @Body Venue venue);
 }

@@ -89,7 +89,12 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
         View.OnClickListener updateInfoListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showUpdateInfoFragment();
+                if(!getContext().getSharedPreferences("appUserPrefs",Context.MODE_PRIVATE).getString("username","").equals("")) {
+                    showUpdateInfoFragment();
+                }
+                else{
+                    showUpdateVenueFragment();
+                }
             }
         };
 
@@ -104,8 +109,10 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                //display the view friends fragment.
-                showFriendsFragment(view);
+                if(!getContext().getSharedPreferences("appUserPrefs",Context.MODE_PRIVATE).getString("username","").equals("")) {
+                    //display the view friends fragment.
+                    showFriendsFragment(view);
+                }
             }
         };
 
@@ -133,7 +140,12 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
     protected void showChangePasswordFragment()
     {
         android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainFrameLayout,new ChangePasswordFragment());
+        if(!getContext().getSharedPreferences("appUserPrefs",Context.MODE_PRIVATE).getString("username","").equals("")) {
+            transaction.replace(R.id.mainFrameLayout, new ChangePasswordFragment());
+        }
+        else {
+            transaction.replace(R.id.adminMainFrame, new ChangePasswordFragment());
+        }
         transaction.commit();
     }
 
@@ -152,6 +164,22 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
 
         android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainFrameLayout,updateInfoFragment);
+        transaction.commit();
+    }
+
+    protected void showUpdateVenueFragment()
+    {
+        //store the info to be passed
+        Bundle bundle = new Bundle();
+        bundle.putString("phoneNumber",connectionManager.getAdminVenue().getPhoneNumber());
+        bundle.putString("name",connectionManager.getAdminVenue().getVenueTitle());
+
+        //Create the new fragment and pass the info
+        UpdateVenueFragment updateVenueFragment = new UpdateVenueFragment();
+        updateVenueFragment .setArguments(bundle);
+
+        android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.adminMainFrame,updateVenueFragment );
         transaction.commit();
     }
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

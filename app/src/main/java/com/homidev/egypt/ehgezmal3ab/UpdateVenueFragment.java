@@ -78,12 +78,12 @@ public class UpdateVenueFragment extends android.support.v4.app.Fragment {
                 boolean changed = false;
 
                 if(!venuePhoneTxt.getText().toString().equals(venuePhone)) {
-                    venue.setPhoneNumber(venuePhoneTxt.getText().toString());
+
                     changed = true;
                 }
 
                 if(!venueNameTxt.getText().toString().equals(name)){
-                    venue.setVenueTitle(venueNameTxt.getText().toString());
+
                     changed = true;
                 }
 
@@ -92,8 +92,10 @@ public class UpdateVenueFragment extends android.support.v4.app.Fragment {
                     showMessage(getString(R.string.noChangesDetected));
                     return;
                 }
-
+                venue.setPhoneNumber(venuePhoneTxt.getText().toString());
+                venue.setVenueTitle(venueNameTxt.getText().toString());
                 connectionManager.updateVenueInformation(venue, instance);
+
 
             }
         });
@@ -159,6 +161,7 @@ public class UpdateVenueFragment extends android.support.v4.app.Fragment {
     public void updatedSuccessfully()
     {
         showMessage(getString(R.string.updatedSuccessfully));
+        returnToVenAdminProfile();
     }
 
     private void returnToVenAdminProfile() {

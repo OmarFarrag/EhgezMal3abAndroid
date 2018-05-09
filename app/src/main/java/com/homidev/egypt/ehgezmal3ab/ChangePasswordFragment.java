@@ -79,17 +79,18 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment {
 
     public void returnToParent()
     {
-        //Check if the user is appUser or venue admin
-        if( !getActivity().getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("username", "").equals(""))
-        {
-            returnToUserProfile();
+
+        android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        if(!getContext().getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("username","").equals("")) {
+            transaction.replace(R.id.mainFrameLayout, new AppUserProfileFragment());
         }
+        else{
+            transaction.replace(R.id.adminMainFrame, new AppUserProfileFragment());
+        }
+        transaction.commit();
+
+
     }
 
-    protected void returnToUserProfile(){
-            android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.mainFrameLayout,new AppUserProfileFragment());
-            transaction.commit();
 
-    }
 }

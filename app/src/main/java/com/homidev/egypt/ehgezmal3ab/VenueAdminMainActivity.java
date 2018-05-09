@@ -54,7 +54,9 @@ public class VenueAdminMainActivity extends AppCompatActivity {
                         selectedFragment = new ReservationsFragment();
                         break;
 
-
+                    case R.id.userProfileBNVItem:
+                        selectedFragment = new AppUserProfileFragment();
+                        break;
 
                 }
 
