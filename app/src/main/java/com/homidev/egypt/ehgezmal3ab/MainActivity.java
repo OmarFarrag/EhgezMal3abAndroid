@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         //Create connection manager
         SharedPreferences preferences = getSharedPreferences("venAdminPrefs", MODE_PRIVATE);
         preferences.edit().remove("token").commit();
+        preferences.edit().remove("token").commit();
         preferences = getSharedPreferences("appUserPrefs", MODE_PRIVATE);
         preferences.edit().remove("token").commit();
         connectionManager = ConnectionManager.getConnectionManager();
