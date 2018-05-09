@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -245,7 +246,9 @@ public class PitchActivity extends AppCompatActivity {
 
                     if(!currentTimeSlot.isEmpty())
                     {
-                        
+                        if(!getSharedPreferences("venAdminPrefs",MODE_PRIVATE).getString("token","").equals("")) {
+                            showTimeSlotDetails(currentTimeSlot.getUsername(), currentTimeSlot.getPhoneNumber());
+                        }
                         return;
                     }
 
@@ -417,6 +420,42 @@ public class PitchActivity extends AppCompatActivity {
                 dialog.cancel();
 
             }});
+
+        builder.show();
+    }
+
+    /*
+    * Displays a dialog box showing the reserving person info of a specified time slot
+    */
+    protected void showTimeSlotDetails(final String username, final String phoneNumber)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Details");
+
+        final LinearLayout layout = new LinearLayout(this);
+
+        final TextView usernameTxt = new TextView(this);
+        usernameTxt.setText(username);
+
+        final TextView phoneNumberTxt = new TextView(this);
+        phoneNumberTxt.setText(phoneNumber);
+
+        layout.addView(usernameTxt);
+        layout.addView(phoneNumberTxt);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        builder.setView(layout);
+
+        // Set up the buttons
+        builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.cancel();
+            }
+        });
+
 
         builder.show();
     }

@@ -17,6 +17,22 @@ public class TimeSlot {
     @Expose
     private boolean empty;
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    @SerializedName("phoneNumber")
+    @Expose
+    private String phoneNumber;
+
+    @SerializedName("username")
+    @Expose
+    private String username;
+
     private boolean selectd;
 
     public String getStartsOn()
