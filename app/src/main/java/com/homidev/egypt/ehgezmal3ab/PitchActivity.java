@@ -245,6 +245,7 @@ public class PitchActivity extends AppCompatActivity {
 
                     if(!currentTimeSlot.isEmpty())
                     {
+                        
                         return;
                     }
 

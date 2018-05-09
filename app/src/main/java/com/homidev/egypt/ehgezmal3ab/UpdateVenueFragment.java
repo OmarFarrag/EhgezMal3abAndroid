@@ -166,7 +166,7 @@ public class UpdateVenueFragment extends android.support.v4.app.Fragment {
 
     private void returnToVenAdminProfile() {
         android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainFrameLayout,new AppUserProfileFragment());
+        transaction.replace(R.id.adminMainFrame,new AppUserProfileFragment());
         transaction.commit();
 
     }

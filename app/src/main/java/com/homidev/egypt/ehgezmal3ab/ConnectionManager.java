@@ -2,6 +2,7 @@ package com.homidev.egypt.ehgezmal3ab;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -502,7 +503,7 @@ public class ConnectionManager {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
         if (token == "") {
-            return;
+            token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
         }
         ehgezMal3abAPI.logoutUser("Bearer " + token, user.getUsername()).enqueue(new retrofit2.Callback<JsonObject>() {
             @Override
@@ -512,7 +513,12 @@ public class ConnectionManager {
 
                 }else if(response.code() == 200){
 
-                    mainActivity.logOut();
+                    if(!mainActivity.getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("token","").equals("")) {
+                        mainActivity.logOut();
+                    }
+                    else{
+                        logoutVenAdmin();
+                    }
                     removeUserToken();
 
                 }
@@ -523,6 +529,17 @@ public class ConnectionManager {
 
             }
         });
+    }
+
+    /*
+     *
+     */
+    public void logoutVenAdmin()
+    {
+        Intent intent = new Intent(mainActivity , MainActivity.class);
+        // intent.putExtra("venueID", venueID);
+        mainActivity.startActivity(intent);
+        mainActivity.finish();
     }
 
     /*
@@ -804,6 +821,7 @@ public class ConnectionManager {
             preferences = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE);
             preferences.edit().remove("token").commit();
             preferences.edit().remove("username").commit();
+            adminVenue=null;
         }
     }
 

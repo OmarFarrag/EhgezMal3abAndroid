@@ -113,6 +113,7 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
                     //display the view friends fragment.
                     showFriendsFragment(view);
                 }
+
             }
         };
 
@@ -135,6 +136,11 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
         resetPass.setOnClickListener(resetPassListener);
         viewFriends.setOnClickListener(viewFriendsListener);
         logout.setOnClickListener(logoutListener);
+
+        if(getContext().getSharedPreferences("appUserPrefs",Context.MODE_PRIVATE).getString("username","").equals(""))
+        {
+            viewFriends.setVisibility(View.GONE);
+        }
     }
 
     protected void showChangePasswordFragment()
