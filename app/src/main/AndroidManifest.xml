@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,14 +23,25 @@
             </intent-filter>
         </activity>
         <activity android:name=".ViewVenueActivity" />
-        <activity android:name=".PitchActivity"></activity>
-        <activity android:name=".VenueAdminMainActivity"></activity>
-        <service
-            android:name="com.homidev.egypt.ehgzemal3ab.notifers.Notifier">
+        <activity android:name=".PitchActivity" />
+        <activity android:name=".VenueAdminMainActivity" />
+
+        <service android:name="com.homidev.egypt.ehgzemal3ab.notifers.Notifier">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ehgezmal3ab_green" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/mainGreen" />
+
+        <service
+            android:name="com.homidev.egypt.ehgzemal3ab.notifers.NotificationService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

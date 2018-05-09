@@ -122,7 +122,6 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
     public void refreshData()
     {
         connectionManager.getReservations(this);
-
     }
 
     /*

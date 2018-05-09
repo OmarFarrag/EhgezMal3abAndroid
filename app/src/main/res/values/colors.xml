@@ -11,4 +11,5 @@
     <color name="declinedColor">#fa8072</color>
     <color name="pendingColor">#cf9400</color>
     <color name="selectedcolor">#ff9fdf</color>
+    <color name="red">#9b0000</color>
 </resources>

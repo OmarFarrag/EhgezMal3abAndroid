@@ -47,4 +47,5 @@
     <string name="noChangesDetected">No changes detected</string>
     <string name="updatedSuccessfully">Updated successfully</string>
     <string name="registerAsVenueAdmin">Become venue admin ?</string>
+    <string name="reservations_menu_share_friend">Share with friend</string>
 </resources>

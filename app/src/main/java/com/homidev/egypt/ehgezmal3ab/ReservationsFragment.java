@@ -126,6 +126,24 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
                         }
                     });
                     menu.show();
+                }else if(reservation.getStatus().equals("Accepted")){
+                    PopupMenu menu = new PopupMenu(getContext(), (CardView) view.findViewById(R.id.reservationCardView));
+                    menu.getMenuInflater().inflate(R.menu.accepted_res_menu, menu.getMenu());
+                    menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch (menuItem.getItemId()){
+                                case R.id.reservations_menu_share_accepted:
+                                    connectionManager.getReservationShareLink(reservation);
+                                    return true;
+                                case R.id.reservations_menu_share_friends:
+
+                                    return true;
+                            }
+                            return false;
+                        }
+                    });
+                    menu.show();
                 }
             }
         };
