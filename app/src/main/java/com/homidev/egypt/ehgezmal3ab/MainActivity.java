@@ -3,6 +3,9 @@ package com.homidev.egypt.ehgezmal3ab;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.homidev.egypt.ehgzemal3ab.notifers.Notifier;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -243,6 +246,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         discardLoginAndRegisterButtons();
+        String token = FirebaseInstanceId.getInstance().getToken();
+        new Notifier(this).sendRegistrationToServer(token);
 
         showMainBNV();
 

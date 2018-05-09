@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/reservations_menu_share_accepted"
+        android:title="@string/reservations_menu_share"></item>
+
+    <item android:title="@string/reservations_menu_share_friend"
+        android:id="@+id/reservations_menu_share_friends"></item>
+
+</menu>

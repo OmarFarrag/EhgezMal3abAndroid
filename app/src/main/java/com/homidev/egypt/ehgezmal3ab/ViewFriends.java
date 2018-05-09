@@ -20,6 +20,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -85,7 +86,7 @@ public class ViewFriends extends Fragment {
         // Inflate the layout for this fragment
         final View friendsFrag = inflater.inflate(R.layout.view_friends_list, container, false);
         friendsRecycler = (RecyclerView) friendsFrag.findViewById(R.id.friendsRecycler);
-        FriendItemAdapter friendItemAdapter = new FriendItemAdapter(getContext());
+        final FriendItemAdapter friendItemAdapter = new FriendItemAdapter(getContext(), false);
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(getContext());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
@@ -97,13 +98,28 @@ public class ViewFriends extends Fragment {
         friendsRecycler.setAdapter(friendItemAdapter);
         FloatingActionButton addFriendButton = (FloatingActionButton) friendsFrag.findViewById(R.id.addFriends_FAB);
         setAddFriendsListener(addFriendButton, container, friendsFrag);
+        final RelativeLayout addFriends = (RelativeLayout) friendsFrag.findViewById(R.id.addFriendLayout);
+        final RelativeLayout requestsLayout = (RelativeLayout) friendsFrag.findViewById(R.id.viewRequests_layout);
         ImageButton imageButton = (ImageButton) friendsFrag.findViewById(R.id.hideAddFriendsButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                closeAddFriendLayout(friendsFrag);
+
+                closeAddFriendLayout(friendsFrag, addFriends);
+                connectionManager.getMyFriends("Accepted", friendItemAdapter);
             }
         });
+        ImageButton slideDownButton = (ImageButton) friendsFrag.findViewById(R.id.hideAddFriendsButton_request);
+        slideDownButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeAddFriendLayout(friendsFrag, requestsLayout);
+                connectionManager.getMyFriends("Accepted", friendItemAdapter);
+            }
+        });
+
+        FloatingActionButton requestsFloating = (FloatingActionButton) friendsFrag.findViewById(R.id.viewRequestsFAB);
+        setRequestsButton(requestsFloating, container, friendsFrag);
         setAddFriendListener(friendsFrag);
         connectionManager.getMyFriends("Accepted", friendItemAdapter);
         return friendsFrag;
@@ -120,27 +136,52 @@ public class ViewFriends extends Fragment {
                 //addFriends.bringToFront();
                 //addFriends.setVisibility(View.VISIBLE);
 
-                openAddFriendLayout(itemView);
+                openAddFriendLayout(itemView, addFriends);
             }
         });
     }
 
-    private void openAddFriendLayout(View itemView){
+    public void setRequestsButton(FloatingActionButton requestButton, final ViewGroup container, final View itemView){
+        requestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //pull up the add layout.
+
+                RelativeLayout requests = (RelativeLayout) itemView.findViewById(R.id.viewRequests_layout);
+
+                openAddFriendLayout(itemView, requests);
+                RecyclerView friendRequests = (RecyclerView) itemView.findViewById(R.id.friendRequestsList);
+                ProgressBar progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar_requests);
+                FriendItemAdapter requestsAdapter = new FriendItemAdapter(getContext(), true);
+                LinearLayoutManager layoutManager =
+                        new LinearLayoutManager(getContext());
+                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+                        friendsRecycler.getContext(),
+                        layoutManager.getOrientation()
+                );
+                friendRequests.addItemDecoration(dividerItemDecoration);
+                friendRequests.setLayoutManager(layoutManager);
+                friendRequests.setAdapter(requestsAdapter);
+                connectionManager.getMyFriendRequests(requestsAdapter, progressBar);
+            }
+        });
+    }
+
+    private void openAddFriendLayout(View itemView, final RelativeLayout friends){
         final Context root = itemView.getContext();
 
-        final RelativeLayout addFriends = (RelativeLayout) itemView.findViewById(R.id.addFriendLayout);
-        addFriends.setTop(addFriends.getHeight());
+        friends.setTop(friends.getHeight());
         Animation animation = AnimationUtils.loadAnimation(root, R.anim.slide_up);
 
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                addFriends.bringToFront();
+                friends.bringToFront();
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                addFriends.setVisibility(View.VISIBLE);
+                friends.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -148,13 +189,11 @@ public class ViewFriends extends Fragment {
 
             }
         });
-        addFriends.startAnimation(animation);
+        friends.startAnimation(animation);
     }
 
-    private void closeAddFriendLayout(View itemView){
+    private void closeAddFriendLayout(View itemView, final RelativeLayout layout){
         final Context root = itemView.getContext();
-
-        final RelativeLayout addLayout = (RelativeLayout) itemView.findViewById(R.id.addFriendLayout);
 
         Animation animate = AnimationUtils.loadAnimation(root, R.anim.slide_down);
 
@@ -166,7 +205,7 @@ public class ViewFriends extends Fragment {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                addLayout.setVisibility(View.INVISIBLE);
+                layout.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -175,7 +214,7 @@ public class ViewFriends extends Fragment {
             }
         });
 
-        addLayout.startAnimation(animate);
+        layout.startAnimation(animate);
         RelativeLayout viewFriends  = (RelativeLayout) itemView.findViewById(R.id.ViewFriendsLayout);
         viewFriends.setVisibility(View.VISIBLE);
     }
