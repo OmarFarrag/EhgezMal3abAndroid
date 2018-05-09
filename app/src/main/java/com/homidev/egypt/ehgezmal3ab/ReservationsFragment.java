@@ -1,9 +1,13 @@
 package com.homidev.egypt.ehgezmal3ab;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -11,11 +15,18 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -137,7 +148,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
                                     connectionManager.getReservationShareLink(reservation);
                                     return true;
                                 case R.id.reservations_menu_share_friends:
-
+                                    createShareWithFriendMenu();
                                     return true;
                             }
                             return false;
@@ -151,6 +162,65 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         return listener;
     }
 
+
+    public void createShareWithFriendMenu(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        connectionManager.getMyFriends(new Callback<ArrayList<Friend>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Friend>> call, Response<ArrayList<Friend>> response) {
+                if(response.code() == 200){
+                    RecyclerView recyclerView = new RecyclerView(getContext());
+                    final FriendItemAdapter friendItemAdapter = new FriendItemAdapter(getContext(), false);
+                    LinearLayoutManager layoutManager =
+                            new LinearLayoutManager(getContext());
+                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+                            getContext(),
+                            layoutManager.getOrientation()
+                    );
+                    recyclerView.addItemDecoration(dividerItemDecoration);
+                    recyclerView.setLayoutManager(layoutManager);
+                    recyclerView.setAdapter(friendItemAdapter);
+                    friendItemAdapter.setFriendsList(response.body());
+
+                    builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+                    builder.setTitle("Choose friend");
+                    final Dialog d = builder.setView(recyclerView).create();
+                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                    lp.copyFrom(d.getWindow().getAttributes());
+                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                    d.show();
+                    d.getWindow().setAttributes(lp);
+                    IRecyclerViewClickListener listener = new IRecyclerViewClickListener() {
+                        @Override
+                        public void onClick(View view, int position) {
+                            Friend friend = friendItemAdapter.getItem(position);
+
+                            d.cancel();
+                        }
+                    };
+                    friendItemAdapter.setListener(listener);
+                    recyclerView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Friend>> call, Throwable t) {
+
+            }
+        });
+    }
     /*
      Creates the listener in case of venue Admin
      Allows him to accept or decline a reservation request
@@ -163,7 +233,6 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View view, int position) {
                 final Reservation reservation = ReservationItemAdapter.getItem(position);
-
 
                 if(reservation.getStatus().equals("Pending")){
                     PopupMenu menu = new PopupMenu(getContext(), (CardView) view.findViewById(R.id.reservationCardView));
@@ -212,10 +281,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     {
         Toast messageToast = null;
         messageToast=  Toast.makeText(getContext(),message,Toast.LENGTH_SHORT);
-
         messageToast.show();
-
-        notify();
     }
 
 

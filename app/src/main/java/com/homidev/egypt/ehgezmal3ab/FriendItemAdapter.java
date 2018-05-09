@@ -17,13 +17,14 @@ public class FriendItemAdapter extends RecyclerView.Adapter<FriendItemAdapter.Fr
     private ConnectionManager connectionManager;
     private ArrayList<Friend> friendsList = new ArrayList<>();
     private Context mContext;
-
+    IRecyclerViewClickListener listener = null;
     private boolean isRequest;
 
     public FriendItemAdapter(Context context, boolean isRequest) {
         connectionManager = ConnectionManager.getConnectionManager();
         mContext = context;
         this.isRequest = isRequest;
+
     }
 
     @Override
@@ -42,6 +43,15 @@ public class FriendItemAdapter extends RecyclerView.Adapter<FriendItemAdapter.Fr
 
     }
 
+    public void setListener(IRecyclerViewClickListener listener){this.listener = listener;}
+
+    public Friend getItem(int position){
+        if(friendsList.size() == 0 || friendsList.size() > position){
+            return null;
+        }
+        return friendsList.get(position);
+    }
+
     @Override
     public void onBindViewHolder(FriendViewHolder holder, int position) {
         holder.bindFriend(friendsList.get(position), this);
@@ -54,7 +64,8 @@ public class FriendItemAdapter extends RecyclerView.Adapter<FriendItemAdapter.Fr
         return viewHolder;
     }
 
-    public static class FriendViewHolder extends RecyclerView.ViewHolder {
+
+    public class FriendViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         // each data item is just a string in this case
         TextView friendFullName;
         private Context mContext;
@@ -93,5 +104,15 @@ public class FriendItemAdapter extends RecyclerView.Adapter<FriendItemAdapter.Fr
                 });
             }
         }
+
+        @Override
+        public void onClick(View v) {
+            if(listener == null)
+                return;
+            
+            listener.onClick(v, getAdapterPosition());
+        }
+
+
     }
 }

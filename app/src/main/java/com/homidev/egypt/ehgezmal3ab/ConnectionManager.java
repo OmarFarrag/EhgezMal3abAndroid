@@ -1,4 +1,7 @@
 package com.homidev.egypt.ehgezmal3ab;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -11,6 +14,7 @@ import android.os.Looper;
 import android.preference.PreferenceGroup;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.view.View;
@@ -1165,6 +1169,16 @@ public class ConnectionManager {
 
             }
         });
+    }
+
+    public void getMyFriends(retrofit2.Callback<ArrayList<Friend>> callback)
+    {
+        EhgezMal3abAPI service = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            return;
+        }
+        service.getAllFriends("Bearer " + token, "Accepted").enqueue(callback);
     }
 
     public void acceptOrDecline(String query, Friend friend, final FriendItemAdapter recyclerView)
