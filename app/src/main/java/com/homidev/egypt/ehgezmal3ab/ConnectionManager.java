@@ -54,7 +54,7 @@ public class ConnectionManager {
     private OkHttpClient connectionClient;
     private MainActivity mainActivity;
     private Venue adminVenue;
-    private String IP="192.168.1.18";
+    private String IP="192.168.1.2";
 
     //private constructor to implement a singleton pattern, initiates the connection client
     private ConnectionManager()
@@ -707,10 +707,10 @@ public class ConnectionManager {
             @Override
             public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
                 if (response.code() == 200) {
-                    reservationsFragment.showToasMessage(response.body().toString());
+                    //reservationsFragment.showToasMessage(response.body().toString());
 
                 }else {
-                    reservationsFragment.showToasMessage(response.body().toString());
+                    //reservationsFragment.showToasMessage(response.body().toString());
                 }
                 reservationsFragment.notifyDataChange();
             }
@@ -769,11 +769,11 @@ public class ConnectionManager {
             @RequiresApi(api = Build.VERSION_CODES.N)
             public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
                 if(response.code() == 200){
-                    reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.reservationDeclined));
+                   // reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.reservationDeclined));
 
 
                 }else {
-                    reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.error));
+                   // reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.error));
                 }
                 reservationsFragment.notifyDataChange();
             }
