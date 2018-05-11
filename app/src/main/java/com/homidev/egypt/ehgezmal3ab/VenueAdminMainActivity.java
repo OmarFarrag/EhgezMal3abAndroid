@@ -25,7 +25,7 @@ public class VenueAdminMainActivity extends AppCompatActivity {
         initAdminBNV();
 
 
-
+        ConnectionManager.getConnectionManager().setVenueAdminMainActivity(this);
 
 
 

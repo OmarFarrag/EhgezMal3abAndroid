@@ -23,6 +23,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -84,6 +86,8 @@ public class PitchActivity extends AppCompatActivity {
 
         setSelectedDate(selectedYear,selectedMonth,selectedDay);
 
+        hildeSubmitRateForAdmin(ratingBar,submitButton);
+
 /*
         if(extras != null) {
             pitch = (Pitch) extras.get("pitchName");
@@ -91,6 +95,17 @@ public class PitchActivity extends AppCompatActivity {
         if(pitch != null) {
             pitchNameTextView.setText(pitch.getPitchName());
         }*/
+    }
+
+    private void hildeSubmitRateForAdmin(RatingBar ratingBar, Button submitButton)
+    {
+        if(!getSharedPreferences("venAdminPrefs",MODE_PRIVATE).getString("token","").equals(""))
+        {
+            ratingBar.setVisibility(View.GONE);
+            submitButton.setVisibility(View.GONE);
+            TextView reviewLabel = (TextView) findViewById(R.id.reviewTxt);
+            reviewLabel.setVisibility(View.GONE);
+        }
     }
 
     protected void setSubmitReviewButtonListener() {

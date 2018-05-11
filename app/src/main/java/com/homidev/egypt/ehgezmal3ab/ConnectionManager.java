@@ -54,7 +54,8 @@ public class ConnectionManager {
     private OkHttpClient connectionClient;
     private MainActivity mainActivity;
     private Venue adminVenue;
-    private String IP="10.0.2.2";
+    private VenueAdminMainActivity venueAdminMainActivity;
+    private String IP="192.168.1.5";
 
     //private constructor to implement a singleton pattern, initiates the connection client
     private ConnectionManager()
@@ -68,6 +69,10 @@ public class ConnectionManager {
             instance = new ConnectionManager();
         }
         return instance;
+    }
+
+    public void setVenueAdminMainActivity(VenueAdminMainActivity venueAdminMainActivity) {
+        this.venueAdminMainActivity = venueAdminMainActivity;
     }
 
     /*
@@ -550,7 +555,7 @@ public class ConnectionManager {
         Intent intent = new Intent(mainActivity , MainActivity.class);
         // intent.putExtra("venueID", venueID);
         mainActivity.startActivity(intent);
-        mainActivity.finish();
+        venueAdminMainActivity.finish();
     }
 
     /*
@@ -702,21 +707,21 @@ public class ConnectionManager {
         if (token == "") {
             return;
         }
-        ehgezMal3abAPI.acceptReservation("Bearer " + token, reservation).enqueue(new retrofit2.Callback<String>() {
+        ehgezMal3abAPI.acceptReservation("Bearer " + token, reservation).enqueue(new retrofit2.Callback<Error>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public void onResponse(retrofit2.Call<String> call, retrofit2.Response<String> response) {
+            public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
                 if (response.code() == 200) {
-                    reservationsFragment.showToasMessage(response.body().toString());
+                    //reservationsFragment.showToasMessage(response.body().toString());
 
                 }else {
-                    reservationsFragment.showToasMessage(response.body().toString());
+                    //reservationsFragment.showToasMessage(response.body().toString());
                 }
                 reservationsFragment.notifyDataChange();
             }
 
             @Override
-            public void onFailure(retrofit2.Call<String> call, Throwable t) {
+            public void onFailure(retrofit2.Call<Error> call, Throwable t) {
 
             }
         });
@@ -769,11 +774,11 @@ public class ConnectionManager {
             @RequiresApi(api = Build.VERSION_CODES.N)
             public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
                 if(response.code() == 200){
-                    reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.reservationDeclined));
+                   // reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.reservationDeclined));
 
 
                 }else {
-                    reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.error));
+                   // reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.error));
                 }
                 reservationsFragment.notifyDataChange();
             }
@@ -879,7 +884,7 @@ public class ConnectionManager {
     //creates a GET HTTP request to retrieve all venues.
     protected Request createGetAllVenueRequest() {
         return new Request.Builder()
-                .url("http://"+IP+":56719/api/venues")
+                .url("http://"+IP+":56718/api/venues")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -904,7 +909,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://"+IP+":56719/api/token")
+                .url("http://"+IP+":56718/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -943,7 +948,7 @@ public class ConnectionManager {
 
     protected Request createGetPitchesRequest(int venueID) {
         return new Request.Builder()
-                .url("http://"+IP+":56719/api/pitches/" + venueID)
+                .url("http://"+IP+":56718/api/pitches/" + venueID)
                 .get()
                 .build();
     }
@@ -1122,7 +1127,7 @@ public class ConnectionManager {
     protected Request createGetPlayerReservationsRequest()
     {
         return new Request.Builder()
-                .url("http://"+IP+":56719/api/reservations")
+                .url("http://"+IP+":56718/api/reservations")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization","Bearer "+ mainActivity.getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("token",""))
