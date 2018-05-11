@@ -54,7 +54,8 @@ public class ConnectionManager {
     private OkHttpClient connectionClient;
     private MainActivity mainActivity;
     private Venue adminVenue;
-    private String IP="192.168.1.2";
+    private VenueAdminMainActivity venueAdminMainActivity;
+    private String IP="192.168.1.5";
 
     //private constructor to implement a singleton pattern, initiates the connection client
     private ConnectionManager()
@@ -68,6 +69,10 @@ public class ConnectionManager {
             instance = new ConnectionManager();
         }
         return instance;
+    }
+
+    public void setVenueAdminMainActivity(VenueAdminMainActivity venueAdminMainActivity) {
+        this.venueAdminMainActivity = venueAdminMainActivity;
     }
 
     /*
@@ -550,7 +555,7 @@ public class ConnectionManager {
         Intent intent = new Intent(mainActivity , MainActivity.class);
         // intent.putExtra("venueID", venueID);
         mainActivity.startActivity(intent);
-        mainActivity.finish();
+        venueAdminMainActivity.finish();
     }
 
     /*
