@@ -30,7 +30,6 @@ import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 
-
 public class ReservationsFragment extends android.support.v4.app.Fragment {
 
     private RecyclerView reservationsRecyclerView;

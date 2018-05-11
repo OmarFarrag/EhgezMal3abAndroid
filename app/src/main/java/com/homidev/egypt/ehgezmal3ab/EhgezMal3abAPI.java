@@ -1,20 +1,17 @@
 package com.homidev.egypt.ehgezmal3ab;
 
 import com.google.gson.JsonObject;
-import com.homidev.egypt.ehgzemal3ab.notifers.DeviceToken;
 
-import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
-import retrofit2.CallAdapter;
 import retrofit2.http.*;
 
 public interface EhgezMal3abAPI {
 
-    String BASE_URL = "http://192.168.1.5:56718/api/";
+    String BASE_URL = "http://10.0.2.2:56718/api/";
 
     @GET("venues/")
     Call<List<Venue>> getAllVenues();
@@ -54,7 +51,7 @@ public interface EhgezMal3abAPI {
     Call<ArrayList<Venue>> getVenueByAdminID(@Header("Authorization") String token , @Path("username") String username);
 
     @PUT("reservations/accept")
-    Call<Error> acceptReservation(@Header("Authorization") String token , @Body Reservation reservation);
+    Call<String> acceptReservation(@Header("Authorization") String token , @Body Reservation reservation);
 
     @PUT("reservations/decline")
     Call<JsonObject> declineReservation(@Header("Authorization") String token , @Body Reservation reservation);
@@ -74,18 +71,9 @@ public interface EhgezMal3abAPI {
    @POST("friends/request")
    Call<JsonObject> addFriend(@Header("Authorization") String token, @Query("friendUsername") String friendUsername);
 
-   @POST("notifications/device")
-    Call<JSONObject> registerDevice(@Header("Authorization") String token, @Body DeviceToken deviceToken);
-
-   @GET("friends/request")
-    Call<ArrayList<Friend>> getMyFriendRequests(@Header("Authorization") String token, @Query("requestFrom") String query);
-
-   @PATCH("friends")
-    Call<Friend> acceptOrDecline(@Header("Authorization") String token,@Body Friend friend, @Query("status") String query);
-
    @POST("/api/reviews")
     Call<Double> submitReview(@Header("Authorization") String token, @Body PlayerSubmitReview playerSubmitReview);
 
-   @PUT("venues/{id}")
-    Call<Error> updateVenueInfo(@Header("Authorization") String token, @Path("id") String venueID, @Body Venue venue);
+   @POST("venues/update")
+    Call<Venue> updateVenueInfo(@Header("Authorization") String token, @Body Venue venue);
 }
