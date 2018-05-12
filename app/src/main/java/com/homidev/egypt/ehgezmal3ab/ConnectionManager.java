@@ -55,7 +55,7 @@ public class ConnectionManager {
     private MainActivity mainActivity;
     private Venue adminVenue;
     private VenueAdminMainActivity venueAdminMainActivity;
-    private String IP="192.168.1.5";
+    private String IP="10.0.2.2";
 
     //private constructor to implement a singleton pattern, initiates the connection client
     private ConnectionManager()
@@ -884,7 +884,7 @@ public class ConnectionManager {
     //creates a GET HTTP request to retrieve all venues.
     protected Request createGetAllVenueRequest() {
         return new Request.Builder()
-                .url("http://"+IP+":56718/api/venues")
+                .url("http://"+IP+":56719/api/venues")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -909,7 +909,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://"+IP+":56718/api/token")
+                .url("http://"+IP+":56719/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -948,7 +948,7 @@ public class ConnectionManager {
 
     protected Request createGetPitchesRequest(int venueID) {
         return new Request.Builder()
-                .url("http://"+IP+":56718/api/pitches/" + venueID)
+                .url("http://"+IP+":56719/api/pitches/" + venueID)
                 .get()
                 .build();
     }
@@ -1127,7 +1127,7 @@ public class ConnectionManager {
     protected Request createGetPlayerReservationsRequest()
     {
         return new Request.Builder()
-                .url("http://"+IP+":56718/api/reservations")
+                .url("http://"+IP+":56719/api/reservations")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization","Bearer "+ mainActivity.getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("token",""))
