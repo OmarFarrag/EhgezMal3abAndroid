@@ -1,6 +1,7 @@
 package com.homidev.egypt.ehgezmal3ab;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.homidev.egypt.ehgezmal3ab.R;
+import com.homidev.egypt.ehgezmal3ab.forgot.ForgotPassword;
 
 /**
  * Class that implements the login fragment
@@ -72,6 +74,16 @@ public class LogInFragment extends Fragment {
 
             }
 
+        });
+
+        TextView forgot = (TextView) loginView.findViewById(R.id.forgot);
+        forgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent newActivity = new Intent(getContext(), ForgotPassword.class);
+                startActivity(newActivity)
+                ;
+            }
         });
     }
 

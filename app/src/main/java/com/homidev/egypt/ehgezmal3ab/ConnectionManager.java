@@ -14,6 +14,7 @@ import android.os.Looper;
 import android.preference.PreferenceGroup;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.text.style.TtsSpan;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -1224,6 +1225,26 @@ public class ConnectionManager {
 
             @Override
             public void onFailure(retrofit2.Call<Double> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void sendFrogtPasswordUsername(String username)
+    {
+        EhgezMal3abAPI service = createEhgezMal3abService();
+        service.forgotPassword(username).enqueue(new retrofit2.Callback<Error>() {
+            @Override
+            public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
+                if(response.code() == 200){
+                    Toast.makeText(mainActivity.getApplicationContext(), response.body().getText(), Toast.LENGTH_LONG).show();
+                }else if(response.code() == 400){
+                    Toast.makeText(mainActivity.getApplicationContext(), "Please enter a valid username", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Error> call, Throwable t) {
 
             }
         });

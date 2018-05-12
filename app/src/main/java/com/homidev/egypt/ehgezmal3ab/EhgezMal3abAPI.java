@@ -83,9 +83,13 @@ public interface EhgezMal3abAPI {
    @PATCH("friends")
     Call<Friend> acceptOrDecline(@Header("Authorization") String token,@Body Friend friend, @Query("status") String query);
 
-   @POST("/api/reviews")
+   @POST("reviews")
     Call<Double> submitReview(@Header("Authorization") String token, @Body PlayerSubmitReview playerSubmitReview);
 
    @PUT("venues/{id}")
     Call<Error> updateVenueInfo(@Header("Authorization") String token, @Path("id") String venueID, @Body Venue venue);
+
+
+   @GET("users/forgot/{username}")
+    Call<Error> forgotPassword(@Path("username") String username);
 }
