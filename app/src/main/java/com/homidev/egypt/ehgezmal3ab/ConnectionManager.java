@@ -1,19 +1,30 @@
 package com.homidev.egypt.ehgezmal3ab;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceGroup;
 import android.support.annotation.RequiresApi;
+import android.support.v7.widget.RecyclerView;
+import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.view.View;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.homidev.egypt.ehgzemal3ab.notifers.Notifier;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -42,6 +53,8 @@ public class ConnectionManager {
     private static ConnectionManager instance = null;
     private OkHttpClient connectionClient;
     private MainActivity mainActivity;
+    private Venue adminVenue;
+    private VenueAdminMainActivity venueAdminMainActivity;
     private String IP="10.0.2.2";
 
     //private constructor to implement a singleton pattern, initiates the connection client
@@ -56,6 +69,10 @@ public class ConnectionManager {
             instance = new ConnectionManager();
         }
         return instance;
+    }
+
+    public void setVenueAdminMainActivity(VenueAdminMainActivity venueAdminMainActivity) {
+        this.venueAdminMainActivity = venueAdminMainActivity;
     }
 
     /*
@@ -385,19 +402,30 @@ public class ConnectionManager {
         String token;
         token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
 
-        ehgezMal3abAPI.updateVenueInfo("Bearer " + token, venue).enqueue(new retrofit2.Callback<Venue>() {
+        final Venue tempVen = adminVenue;
+        tempVen.setPhoneNumber(venue.getPhoneNumber());
+        tempVen.setVenueTitle(venue.getVenueTitle());
+
+        ehgezMal3abAPI.updateVenueInfo("Bearer " + token, adminVenue.getVenueID(),tempVen).enqueue(new retrofit2.Callback<Error>() {
             @Override
-            public void onResponse(retrofit2.Call call, retrofit2.Response response) {
+            public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
                 if(response.code() == 200) {
                     updateVenueFragment.updatedSuccessfully();
+                    adminVenue = tempVen;
+
                 }
             }
 
             @Override
-            public void onFailure(retrofit2.Call call, Throwable t) {
+            public void onFailure(retrofit2.Call<Error> call, Throwable t) {
                 updateVenueFragment.updateError();
             }
         });
+    }
+
+    public Venue getAdminVenue()
+    {
+        return adminVenue;
     }
 
 
@@ -445,6 +473,7 @@ public class ConnectionManager {
                     ClipboardManager clipboard = (ClipboardManager) mainActivity.getSystemService(CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText("Share reservation link", response.body().get("link").getAsString());
                     clipboard.setPrimaryClip(clip);
+                    Toast.makeText(mainActivity.getApplicationContext(), "Share link has been copied to clipboard", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -490,7 +519,7 @@ public class ConnectionManager {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
         if (token == "") {
-            return;
+            token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
         }
         ehgezMal3abAPI.logoutUser("Bearer " + token, user.getUsername()).enqueue(new retrofit2.Callback<JsonObject>() {
             @Override
@@ -500,7 +529,12 @@ public class ConnectionManager {
 
                 }else if(response.code() == 200){
 
-                    mainActivity.logOut();
+                    if(!mainActivity.getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("token","").equals("")) {
+                        mainActivity.logOut();
+                    }
+                    else{
+                        logoutVenAdmin();
+                    }
                     removeUserToken();
 
                 }
@@ -511,6 +545,17 @@ public class ConnectionManager {
 
             }
         });
+    }
+
+    /*
+     *
+     */
+    public void logoutVenAdmin()
+    {
+        Intent intent = new Intent(mainActivity , MainActivity.class);
+        // intent.putExtra("venueID", venueID);
+        mainActivity.startActivity(intent);
+        venueAdminMainActivity.finish();
     }
 
     /*
@@ -662,21 +707,21 @@ public class ConnectionManager {
         if (token == "") {
             return;
         }
-        ehgezMal3abAPI.acceptReservation("Bearer " + token, reservation).enqueue(new retrofit2.Callback<String>() {
+        ehgezMal3abAPI.acceptReservation("Bearer " + token, reservation).enqueue(new retrofit2.Callback<Error>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public void onResponse(retrofit2.Call<String> call, retrofit2.Response<String> response) {
+            public void onResponse(retrofit2.Call<Error> call, retrofit2.Response<Error> response) {
                 if (response.code() == 200) {
-                    reservationsFragment.showToasMessage(response.body().toString());
+                    //reservationsFragment.showToasMessage(response.body().toString());
 
                 }else {
-                    reservationsFragment.showToasMessage(response.body().toString());
+                    //reservationsFragment.showToasMessage(response.body().toString());
                 }
                 reservationsFragment.notifyDataChange();
             }
 
             @Override
-            public void onFailure(retrofit2.Call<String> call, Throwable t) {
+            public void onFailure(retrofit2.Call<Error> call, Throwable t) {
 
             }
         });
@@ -729,11 +774,11 @@ public class ConnectionManager {
             @RequiresApi(api = Build.VERSION_CODES.N)
             public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
                 if(response.code() == 200){
-                    reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.reservationDeclined));
+                   // reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.reservationDeclined));
 
 
                 }else {
-                    reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.error));
+                   // reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.error));
                 }
                 reservationsFragment.notifyDataChange();
             }
@@ -792,6 +837,7 @@ public class ConnectionManager {
             preferences = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE);
             preferences.edit().remove("token").commit();
             preferences.edit().remove("username").commit();
+            adminVenue=null;
         }
     }
 
@@ -806,7 +852,7 @@ public class ConnectionManager {
                 @Override
                 public void onResponse(retrofit2.Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
                     if (response.code() == 200) {
-                        Toast.makeText(fragment, "Successfully sent your request", Toast.LENGTH_LONG).show();
+                        Toast.makeText(fragment, "Succesfully sent your request", Toast.LENGTH_LONG).show();
                     } else if (response.code() == 400) {
                         try {
                             JSONObject object = new JSONObject(response.errorBody().string());
@@ -838,7 +884,7 @@ public class ConnectionManager {
     //creates a GET HTTP request to retrieve all venues.
     protected Request createGetAllVenueRequest() {
         return new Request.Builder()
-                .url("http://"+IP+":56718/api/venues")
+                .url("http://"+IP+":56719/api/venues")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -851,7 +897,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://"+IP+":56718/api/users/register")
+                .url("http://"+IP+":56719/api/users/register")
                 .post(registerRequestBody)
                 .build();
     }
@@ -863,7 +909,7 @@ public class ConnectionManager {
     {
         //constructing the request
         return  new Request .Builder()
-                .url("http://"+IP+":56718/api/token")
+                .url("http://"+IP+":56719/api/token")
                 .post(loginRequestBody)
                 .build();
     }
@@ -902,7 +948,7 @@ public class ConnectionManager {
 
     protected Request createGetPitchesRequest(int venueID) {
         return new Request.Builder()
-                .url("http://"+IP+":56718/api/pitches/" + venueID)
+                .url("http://"+IP+":56719/api/pitches/" + venueID)
                 .get()
                 .build();
     }
@@ -945,6 +991,7 @@ public class ConnectionManager {
             preferences.edit().putString("token", response).commit();
             preferences.edit().putString("username", username).commit();
         }
+
     }
 
 
@@ -1053,7 +1100,7 @@ public class ConnectionManager {
             public void onResponse(retrofit2.Call<ArrayList<Venue>> call, retrofit2.Response<ArrayList<Venue>> response) {
                 if(response.code() == 200){
                     callerFragment.setVenueID(response.body().get(0).getVenueID(),response.body().get(0).getVenueTitle() );
-
+                    storeVenue(response.body().get(0));
                 }else if(response.code() == 204){
                     //TODO: handle error
                 }
@@ -1066,13 +1113,21 @@ public class ConnectionManager {
         });
     }
 
+    //Stores the venueID of the current admin
+    private void storeVenue(Venue venue)
+    {
+        this.adminVenue = venue;
+    }
+
+
+
 
 
 
     protected Request createGetPlayerReservationsRequest()
     {
         return new Request.Builder()
-                .url("http://"+IP+":56718/api/reservations")
+                .url("http://"+IP+":56719/api/reservations")
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization","Bearer "+ mainActivity.getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("token",""))
@@ -1093,6 +1148,68 @@ public class ConnectionManager {
 
     }
 
+    public void getMyFriendRequests(final FriendItemAdapter requests, final ProgressBar progressBar){
+        EhgezMal3abAPI service = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            return;
+        }
+        service.getMyFriendRequests("Bearer " + token, "friend").enqueue(new retrofit2.Callback<ArrayList<Friend>>() {
+            @Override
+            public void onResponse(retrofit2.Call<ArrayList<Friend>> call, retrofit2.Response<ArrayList<Friend>> response) {
+                if(response.code() == 200){
+                    requests.setFriendsList(response.body());
+                }else if(response.code() == 400){
+                    Toast.makeText(mainActivity.getApplicationContext(), "An error occured while getting your requests", Toast.LENGTH_SHORT).show();
+                }else if(response.code() == 204)
+                {
+                    requests.setFriendsList(new ArrayList<Friend>());
+                }
+                if(progressBar == null){return;}
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ArrayList<Friend>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void getMyFriends(retrofit2.Callback<ArrayList<Friend>> callback)
+    {
+        EhgezMal3abAPI service = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            return;
+        }
+        service.getAllFriends("Bearer " + token, "Accepted").enqueue(callback);
+    }
+
+    public void acceptOrDecline(String query, Friend friend, final FriendItemAdapter recyclerView)
+    {
+        EhgezMal3abAPI service = createEhgezMal3abService();
+        String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
+        if (token == "") {
+            return;
+        }
+        service.acceptOrDecline("Bearer " + token,friend, query).enqueue(new retrofit2.Callback<Friend>() {
+            @Override
+            public void onResponse(retrofit2.Call<Friend> call, retrofit2.Response<Friend> response) {
+                if(response.code() == 200){
+                    Toast.makeText(mainActivity.getApplicationContext(), "Succesfully " + response.body().getFriendshipStatus() + ".", Toast.LENGTH_LONG).show();
+                    getMyFriendRequests(recyclerView, null);
+                }else{
+                    Toast.makeText(mainActivity.getApplicationContext(), "An error occured.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Friend> call, Throwable t) {
+
+            }
+        });
+    }
     public void setNewPitchRating(PlayerSubmitReview playerSubmitReview) {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE)
