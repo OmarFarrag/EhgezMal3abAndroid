@@ -51,7 +51,7 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment {
      * When the button is clicked the following checks are to be made:
      *  1- No field is empty
      *  2- New passwords match
-     * Get the username and call the connection manager function passing the username, old password and new password
+     * Get the username and call the connection manager function passing the username, old password and new password wrapped in a change password request object
      */
     protected void setListeners(View changePasswordView)
     {
