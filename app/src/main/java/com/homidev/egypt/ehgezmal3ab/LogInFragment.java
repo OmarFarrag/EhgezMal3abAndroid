@@ -15,29 +15,29 @@ import android.widget.Toast;
 import com.homidev.egypt.ehgezmal3ab.R;
 
 /**
- * Created by Omar Farrag on 3/6/2018.
+ * Class that implements the login fragment
  */
 
 public class LogInFragment extends Fragment {
 
-
     protected ConnectionManager connectionManager;
+    //Self pointer
     LogInFragment me;
 
     public LogInFragment(){
         connectionManager= ConnectionManager.getConnectionManager();
     }
 
+
     /**
      * This function returns the view of the login fragment
+     * Calls the set listeners function
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         View loginView = inflater.inflate(R.layout.login_layout, container, false);
-
-
 
         setListeners(loginView);
 
@@ -48,7 +48,10 @@ public class LogInFragment extends Fragment {
     }
 
 
-    //Set the listeners for the interactive elements on the login fragment
+    /*
+     *Set the listeners for the login button on the login fragment
+     * Check if the info is valid, if so call connection manager's login function
+     */
     protected void setListeners(final View loginView)
     {
         Button registerButton = (Button) loginView.findViewById(R.id.loginBtn);
@@ -60,6 +63,7 @@ public class LogInFragment extends Fragment {
                 boolean validInfo = verifyUserInput(loginView);
                 if(!validInfo){return;}
 
+                //Creates the player object with login info
                 Player playerToLogin = readLoginInfo(loginView);
 
                 connectionManager.loginPlayer(playerToLogin,me);
@@ -73,16 +77,16 @@ public class LogInFragment extends Fragment {
 
 
     /*
-    Verify that the user's input is valid so as to send it to the server or display error
+     * Verify that the user's input is valid so as to send it to the server or display error
+     * Calling verify functions for every input field
+     * returning boolean if valid or not
      */
     protected boolean verifyUserInput(View loginView)
     {
         boolean isValidInput= true;
 
-        /*
-            All fields are checked to display their error messages
-         */
 
+        // All fields are checked to display their error messages
 
         isValidInput &= isValidUsername(loginView);
 
@@ -93,7 +97,9 @@ public class LogInFragment extends Fragment {
 
 
     /*
-    Check if the username is valid (not empty)
+     * Check if the username is valid (not empty)
+     * If empty, display error message
+     * returns boolean representing if valid or not
      */
     private boolean isValidUsername(View loginView)
     {
@@ -114,7 +120,9 @@ public class LogInFragment extends Fragment {
 
 
     /*
-    Check if the password is valid (not empty / more than 8 chars)
+     * Check if the password is valid (not empty / more than 8 chars)
+     * If empty or less than 8 chars, display error message
+     * returns boolean representing if valid or not
      */
     protected boolean isValidPassword(View loginView)
     {
@@ -141,7 +149,7 @@ public class LogInFragment extends Fragment {
 
 
     /*
-    get the user input from the text fields and construct the player object
+     * get the user input from the text fields and construct the player object
      */
     protected Player readLoginInfo(View loginView)
     {
@@ -156,7 +164,8 @@ public class LogInFragment extends Fragment {
 
 
     /*
-    Show the response message after attempting to login
+     * Show the response message after attempting to login
+     * Called by the connection manager after response
      */
     protected void showLoginResponseMessage(boolean loggedIn)
     {

@@ -5,6 +5,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+/*
+ * Class that represents pitch object
+ */
+
 public class Pitch implements Serializable{
 
     @SerializedName("venueID")

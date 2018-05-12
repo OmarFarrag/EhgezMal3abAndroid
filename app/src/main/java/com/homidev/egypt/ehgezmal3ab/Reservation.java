@@ -29,6 +29,8 @@ public class    Reservation {
     @SerializedName("promoCode")
     @Expose
     private String promoCode;
+    @SerializedName("venuename")
+    private String venueName;
 
     /**
      * No args constructor for use in serialization
@@ -116,4 +118,11 @@ public class    Reservation {
 
     public int getPrice(){return price;}
 
+    public String getVenueName() {
+        return venueName;
+    }
+
+    public void setVenueName(String venueName) {
+        this.venueName = venueName;
+    }
 }

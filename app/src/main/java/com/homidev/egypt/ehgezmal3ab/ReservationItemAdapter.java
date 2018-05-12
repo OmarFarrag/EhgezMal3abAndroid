@@ -13,7 +13,12 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.joda.time.DateTime;
+import org.joda.time.JodaTimePermission;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,7 +54,7 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
     public ReservationItemAdapter.ReservationItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.reservation_design_layout, parent, false);
+                .inflate(R.layout.reservations_design_row, parent, false);
         return new ReservationItemViewHolder(view, listener);
     }
 
@@ -58,38 +63,45 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
     public void onBindViewHolder(ReservationItemAdapter.ReservationItemViewHolder holder, int position) {
         if(holder instanceof ReservationItemViewHolder) {
             final Reservation reservation = reservationList.get(position);
+            DateTime startDate = new DateTime(reservation.getStartsOn());
             //set the attributes of the venue item to be displayed
             String[] timeParts = reservation.getStartsOn().toString().split("T");
-            holder.reservationDate.setText(timeParts[1].split(":")[0]+":"+timeParts[1].split(":")[1]+" "+timeParts[0]);
+            holder.reservationDate.setText(startDate.dayOfWeek().getAsText() + ", " + startDate.dayOfMonth().getAsText() + ", " + startDate.monthOfYear().getAsText() + ", " + startDate.getYear());
             holder.reservationPrice.setText(String.valueOf(reservation.getPrice())+" L.E");
-            holder.reservationVenue.setText(reservation.getVenueID());
+            holder.reservationVenue.setText(reservation.getVenueName());
             holder.reservationPitch.setText(reservation.getPitchName());
+            holder.reservationTime.setText(timeParts[1].split(":")[0]+":"+timeParts[1].split(":")[1]+" ");
 
             //Change the background color according to the status and allow cancel action for pending
             if(reservation.getStatus().toLowerCase().equals("cancelled")|| reservation.getStatus().toLowerCase().equals("rejected"))
             {
-                holder.layout.setBackgroundColor(context.getResources().getColor(R.color.declinedColor));
-                holder.cancelBtn.setVisibility(View.GONE);
-                holder.cancelBtn.setClickable(false);
+                holder.layout.setBackgroundColor(context.getResources().getColor(R.color.red));
+                if(holder.cancelBtn != null) {
+                    holder.cancelBtn.setVisibility(View.GONE);
+                    holder.cancelBtn.setClickable(false);
+                }
             }
             else if (reservation.getStatus().toLowerCase().equals("pending"))
             {
                 holder.layout.setBackgroundColor(context.getResources().getColor(R.color.pendingColor));
-                holder.cancelBtn.setVisibility(View.VISIBLE);
-                holder.cancelBtn.setClickable(true);
-                holder.cancelBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        connectionManager.cancelReservation(reservation, fragment);
-                    }
-                });
-
+                if(holder.cancelBtn != null) {
+                    holder.cancelBtn.setVisibility(View.VISIBLE);
+                    holder.cancelBtn.setClickable(true);
+                    holder.cancelBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            connectionManager.cancelReservation(reservation, fragment);
+                        }
+                    });
+                }
             }
             else
             {
                 holder.layout.setBackgroundColor(context.getResources().getColor(R.color.mainGreen));
-                holder.cancelBtn.setVisibility(View.GONE);
-                holder.cancelBtn.setClickable(false);
+                if(holder.cancelBtn != null) {
+                    holder.cancelBtn.setVisibility(View.GONE);
+                    holder.cancelBtn.setClickable(false);
+                }
             }
         }
     }
@@ -165,6 +177,7 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
         TextView reservationPrice;
         TextView reservationVenue;
         TextView reservationPitch;
+        TextView reservationTime;
         ImageButton cancelBtn;
         RelativeLayout layout;
         private IRecyclerViewClickListener listener;
@@ -177,6 +190,7 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
             reservationPrice = (TextView) itemView.findViewById(R.id.reservationPrice);
             reservationVenue = (TextView) itemView.findViewById(R.id.reservationVenue);
             reservationPitch = (TextView) itemView.findViewById(R.id.reservationPitch);
+            reservationTime = (TextView) itemView.findViewById(R.id.reservationTime);
             cancelBtn = (ImageButton)  itemView.findViewById(R.id.cancelBtn);
             this.listener = listener;
             cardView.setOnClickListener(this);

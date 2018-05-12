@@ -4,8 +4,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 /**
- * Created by Omar Farrag on 3/6/2018.
- * This adapter creates the login and register fragments an
+ * This adapter creates the login and register fragments and coordinates them in the tab layout
  */
 
 public class LoginAndRegisterAdapter extends FragmentPagerAdapter {
@@ -21,7 +20,7 @@ public class LoginAndRegisterAdapter extends FragmentPagerAdapter {
     }
 
     /**
-     * Return the {@link Fragment} that should be displayed for the given page number.
+     * Gets the fragment for the selected tab position
      */
     @Override
     public Fragment getItem(int position) {
@@ -41,6 +40,10 @@ public class LoginAndRegisterAdapter extends FragmentPagerAdapter {
         return 2;
     }
 
+
+    /**
+     * returns the title of the fragment at specific position
+     */
     @Override
     public CharSequence getPageTitle(int position) {
         if (position == 0) {

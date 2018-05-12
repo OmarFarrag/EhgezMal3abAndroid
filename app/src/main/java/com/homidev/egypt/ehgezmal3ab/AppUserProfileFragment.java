@@ -17,59 +17,77 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
-/**
- * Created by User on 18/04/2018.
- */
+
 
 public class AppUserProfileFragment extends android.support.v4.app.Fragment {
 
+    //The fragment toolbar
     private Toolbar menuToolBar;
-
+    //Connection manager to handle server requests
     private static ConnectionManager connectionManager = ConnectionManager.getConnectionManager();
     private EhgezMal3abAPI ehgezMal3abAPI = connectionManager.createEhgezMal3abService();
+    //The current player that the profile fragment will show his info
     private static Player player;
 
+
+    /*
+     *Set the player whose info will be displayed
+     * This function is called by the connection manager when gets the info from the server
+     */
     public static void setPlayer(Player player) {
         AppUserProfileFragment.player = player;
     }
 
+
+    //Empty constructor
     public AppUserProfileFragment()
     {
 
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+
+    /*
+     * This function is called to display the UI components to the user
+     * The view is inflated from the corresponding layout
+     * The function that sets the listeners is called
+     * The connection manager is called to request the player info
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View userProfileView = inflater.inflate(R.layout.app_user_profile, container, false);
+
         setListeners(userProfileView);
+
         connectionManager.getPlayer(userProfileView, this);
 
         return userProfileView;
     }
 
+
     public static void getUser() {
         return;
     }
-    /*public void saveUserInfo(View view) {
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("appUserPrefs", Context.MODE_PRIVATE);
-        String token = sharedPref.getString("token", "");
-        if(token == "") {
-            return;
-        }
-    }*/
 
+
+    //Sets the toolbar of the profile fragment
     public void setToolbar(Toolbar mainToolBar) {
         this.menuToolBar = mainToolBar;
     }
 
+
+    /*
+     * Extracts the info from the player object and displays it on th UI
+     * Called by the connection manager when the player object is brought from the server
+     */
     public void setupLayout(View view) {
         if(player != null) {
             TextView welcomeFullName = view.findViewById(R.id.userProfileWelcome);
@@ -84,11 +102,20 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
         }
     }
 
+
+    /*
+     * SUMMARY
+     * Creates click listeners for the update info, reset password, friends and logout buttons
+     * Since venue admin listeners are differnet from normal user, a check is made to call the proper function in each listener
+     * Link each button with its listener
+     * If the user is venue admin hide the friends button
+     */
     private void setListeners(final View view) {
 
         View.OnClickListener updateInfoListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Check if the user is app user or venue admin
                 if(!getContext().getSharedPreferences("appUserPrefs",Context.MODE_PRIVATE).getString("username","").equals("")) {
                     showUpdateInfoFragment();
                 }
@@ -128,21 +155,32 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
             }
         };
 
+
+        //Extract the buttons
         CardView updateInfo = view.findViewById(R.id.updateInfoCV);
         CardView resetPass = view.findViewById(R.id.resetPassCV);
         CardView viewFriends = view.findViewById(R.id.friendsCV);
         CardView logout = view.findViewById(R.id.logoutCV);
+
+        //Link the listeners
         updateInfo.setOnClickListener(updateInfoListener);
         resetPass.setOnClickListener(resetPassListener);
         viewFriends.setOnClickListener(viewFriendsListener);
         logout.setOnClickListener(logoutListener);
 
+        //Hide friends button for venue admins
         if(getContext().getSharedPreferences("appUserPrefs",Context.MODE_PRIVATE).getString("username","").equals(""))
         {
             viewFriends.setVisibility(View.GONE);
         }
     }
 
+
+    /*
+     * Shows the change password fragment
+     * If the user is admin inflate the ChangePassword fragment in the admin frame, else in the main frame
+     * Called when the user clicks on Reset password button
+     */
     protected void showChangePasswordFragment()
     {
         android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -156,7 +194,11 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
     }
 
 
-    //Shows the updateInfoFragment when the user clicks on the update info button
+    /*
+     * Shows the updateInfoFragment
+     * Called when a normal user clicks on the update info button
+     * Puts the phone number and name in a bundle to be passed to the new fragment
+     */
     protected void showUpdateInfoFragment()
     {
         //store the info to be passed
@@ -168,11 +210,17 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
         UpdateInfoFragment updateInfoFragment = new UpdateInfoFragment();
         updateInfoFragment.setArguments(bundle);
 
+        //Replace the fragment in the main layout and commit the transaction
         android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainFrameLayout,updateInfoFragment);
         transaction.commit();
     }
 
+
+    /* Shows the Update venue info fragment
+     * Called when a venue admin clicks on the update info button
+     * Puts the venue phone number and venue name in a bundle to be passed to the new fragment
+     */
     protected void showUpdateVenueFragment()
     {
         //store the info to be passed
@@ -184,10 +232,17 @@ public class AppUserProfileFragment extends android.support.v4.app.Fragment {
         UpdateVenueFragment updateVenueFragment = new UpdateVenueFragment();
         updateVenueFragment .setArguments(bundle);
 
+        //Replace the fragment in the admin main frame and commit the transaction
         android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.adminMainFrame,updateVenueFragment );
         transaction.commit();
     }
+
+
+    /*
+     * Shows friends fragment
+     * Called when a normal user clicks on friends button
+     */
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void showFriendsFragment(View itemView){
         android.support.v4.app.Fragment friendsFragment = new ViewFriends();

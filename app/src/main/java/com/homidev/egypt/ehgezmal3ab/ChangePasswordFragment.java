@@ -23,12 +23,18 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /*
+     * This function is called to display the UI components to the user
+     * Inflate the view, get the connection manager and call setListeners function to set listeners for buttons
+     * The caller is expecting the function to return the view to be displayed so at the end we return the all venues view
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View userProfileView = inflater.inflate(R.layout.change_password_layout, container, false);
+
         setListeners(userProfileView);
 
         connectionManager = ConnectionManager.getConnectionManager();
@@ -39,6 +45,14 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment {
         return userProfileView;
     }
 
+
+    /*
+     * Set the listener of the change password button
+     * When the button is clicked the following checks are to be made:
+     *  1- No field is empty
+     *  2- New passwords match
+     * Get the username and call the connection manager function passing the username, old password and new password wrapped in a change password request object
+     */
     protected void setListeners(View changePasswordView)
     {
         Button changePasswordButton = changePasswordView.findViewById(R.id.changePasswordBtn);
@@ -68,25 +82,34 @@ public class ChangePasswordFragment extends android.support.v4.app.Fragment {
         });
     }
 
+
+    /*
+     * Shows a toast message with the string parameter
+     */
     public void showToastMessage(String message)
     {
         Toast messageToast = null;
         messageToast=  Toast.makeText(getContext(),message,Toast.LENGTH_SHORT);
-
         messageToast.show();
     }
 
 
+    /*
+     * Called when the connection manager receives a successful response from the server on the cahnge password request
+     * Redirects the user to the profile fragment
+     */
     public void returnToParent()
     {
 
         android.support.v4.app.FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
         if(!getContext().getSharedPreferences("appUserPrefs",MODE_PRIVATE).getString("username","").equals("")) {
             transaction.replace(R.id.mainFrameLayout, new AppUserProfileFragment());
         }
         else{
             transaction.replace(R.id.adminMainFrame, new AppUserProfileFragment());
         }
+
         transaction.commit();
 
 

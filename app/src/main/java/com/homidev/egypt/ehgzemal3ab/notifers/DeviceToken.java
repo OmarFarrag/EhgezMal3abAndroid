@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 public class DeviceToken {
     @SerializedName("username")
     private String username;
-    @SerializedName("devicetoken")
+    @SerializedName("Token")
     private String devicetoken;
 
     // Getter Methods
