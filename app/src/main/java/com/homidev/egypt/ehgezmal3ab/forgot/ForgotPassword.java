@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.homidev.egypt.ehgezmal3ab.ConnectionManager;
@@ -27,7 +26,7 @@ public class ForgotPassword extends AppCompatActivity {
                 {
                     Toast.makeText(getApplicationContext(), "You have to insert a username", Toast.LENGTH_LONG).show();
                 }else{
-                    ConnectionManager.getConnectionManager().sendFrogtPasswordUsername(editText.getText().toString());
+                    ConnectionManager.getConnectionManager().sendForgetPasswordUsername(editText.getText().toString());
                 }
             }
         });

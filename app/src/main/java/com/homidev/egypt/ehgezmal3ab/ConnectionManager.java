@@ -1024,66 +1024,6 @@ public class ConnectionManager {
             }
         });
     }
-/*
-    public List<Reservation> getPlayerReservations()
-    {
-        final List<Reservation> reservationsList = new ArrayList<>();
-
-        final Request getPlayerReservationsRequest = createGetPlayerReservationsRequest();
-
-        final Response[] response = new Response[1];
-        Thread getPitchesThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //execute the request and store it in response[0]
-                    response[0] = connectionClient.newCall(getPlayerReservationsRequest ).execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    //parsing the JSONArray returned
-                    JSONArray reservationsResponse = null;
-                    try {
-                        reservationsResponse  = new JSONArray(response[0].body().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    //parse each JSONObject in the JSONArray and add it to the venueList
-                    for(int i = 0; i < reservationsResponse .length(); i++) {
-                        JSONObject reservationObject = reservationsResponse.getJSONObject(i);
-                        reservationsList.add(new Reservation(
-                                reservationObject.getString("username"),
-                                reservationObject.getString("startsOn"),
-                                reservationObject.getString("endsOn"),
-                                reservationObject.getString("venueID"),
-                                reservationObject.getString("pitchName"),
-                                reservationObject.getString("status")
-
-
-                        ));
-                    }
-                }catch(JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        getPitchesThread.start();
-
-        try {
-            //await main thread to join this thread to be able to update interface with data retrieve
-            getPitchesThread.join();
-        }
-        catch(InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return reservationsList;
-    }
-
-    */
 
     /*
      * This function is called by the venue fragment of the admin to get his venue ID
@@ -1135,6 +1075,10 @@ public class ConnectionManager {
                 .build();
     }
 
+    /**
+     * a function that standardize the format of the strings used to send requests and receive responses from the server.
+     * @return
+     */
     public EhgezMal3abAPI createEhgezMal3abService(){
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
@@ -1149,6 +1093,12 @@ public class ConnectionManager {
 
     }
 
+    /**
+     * a request to the server to get a specific player friend requests.
+     * @param requests an adapter to initialize the view of the friend requests
+     * @param progressBar a progress bar to await the response of the server and update of UI.
+     * user must be authorized.
+     */
     public void getMyFriendRequests(final FriendItemAdapter requests, final ProgressBar progressBar){
         EhgezMal3abAPI service = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
@@ -1177,6 +1127,11 @@ public class ConnectionManager {
         });
     }
 
+    /**
+     * to get the friends of specific user.
+     * @param callback a retrofit callback to get a user friends.
+     * user must be authorized.
+     */
     public void getMyFriends(retrofit2.Callback<ArrayList<Friend>> callback)
     {
         EhgezMal3abAPI service = createEhgezMal3abService();
@@ -1187,6 +1142,14 @@ public class ConnectionManager {
         service.getAllFriends("Bearer " + token, "Accepted").enqueue(callback);
     }
 
+
+    /**
+     * send request to server to accept or decline a friend request
+     * @param query the type of response to friend request (accept/decline)
+     * @param friend the friend object to be accepted/declined
+     * @param recyclerView the recyclerView showing which friend request is chosen to respond to.
+     * user must be authorized.
+     */
     public void acceptOrDecline(String query, Friend friend, final FriendItemAdapter recyclerView)
     {
         EhgezMal3abAPI service = createEhgezMal3abService();
@@ -1198,10 +1161,10 @@ public class ConnectionManager {
             @Override
             public void onResponse(retrofit2.Call<Friend> call, retrofit2.Response<Friend> response) {
                 if(response.code() == 200){
-                    Toast.makeText(mainActivity.getApplicationContext(), "Succesfully " + response.body().getFriendshipStatus() + ".", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mainActivity.getApplicationContext(), "Successfully " + response.body().getFriendshipStatus() + ".", Toast.LENGTH_LONG).show();
                     getMyFriendRequests(recyclerView, null);
                 }else{
-                    Toast.makeText(mainActivity.getApplicationContext(), "An error occured.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mainActivity.getApplicationContext(), "An error occurred.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1211,6 +1174,12 @@ public class ConnectionManager {
             }
         });
     }
+
+    /**
+     * send a rating (float) as a review for a certain pitch to the server
+     * @param playerSubmitReview contains pitch name, venue id, reviewing player and rating
+     * user must be authorized.
+     */
     public void setNewPitchRating(PlayerSubmitReview playerSubmitReview) {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE)
@@ -1230,7 +1199,12 @@ public class ConnectionManager {
         });
     }
 
-    public void sendFrogtPasswordUsername(String username)
+    /**
+     * send a forget password request to the server using username
+     * @param username the player/venue admin username to reset password
+     * user must be authorized
+     */
+    public void sendForgetPasswordUsername(String username)
     {
         EhgezMal3abAPI service = createEhgezMal3abService();
         service.forgotPassword(username).enqueue(new retrofit2.Callback<Error>() {
