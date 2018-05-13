@@ -283,6 +283,7 @@ public class ConnectionManager {
         return playerJson;
     }
 
+
     //fires HTTP GET request to get all venues, returns it in an ArrayList<Venue>
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     protected List<Venue> getAllVenues () {
@@ -348,6 +349,11 @@ public class ConnectionManager {
         return venuesList;
     }
 
+
+    /*Gets pitches for a specific venue
+     * Calls set list of the calling adapter
+     * If fail set empty
+     */
     public void getVenuePitches(String id, final PitchItemAdapter adapter){
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         final ArrayList<Pitch>[] pitchList = new ArrayList[1];
@@ -371,14 +377,20 @@ public class ConnectionManager {
     }
 
 
-
+    /*
+     * Get reservations of a specific user by his info and token
+     * On ewsponse set the reservations list of the caller adapter
+     */
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void getReservations(final ReservationItemAdapter adapter) {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
+
+        //Gets the token
         String token = mainActivity.getSharedPreferences("appUserPrefs", MODE_PRIVATE).getString("token", "");
         if (token == "") {
             token = mainActivity.getSharedPreferences("venAdminPrefs", MODE_PRIVATE).getString("token", "");
         }
+
         final ArrayList<Reservation>[] reservationsList = new ArrayList[1];
         ehgezMal3abAPI.getMyReservations("Bearer " + token).enqueue(new retrofit2.Callback<ArrayList<Reservation>>() {
             @Override
@@ -398,6 +410,10 @@ public class ConnectionManager {
         });
     }
 
+
+    /*
+     * Sends an update venue request to the server
+     */
     public void updateVenueInformation(Venue venue, final UpdateVenueFragment updateVenueFragment) {
         EhgezMal3abAPI ehgezMal3abAPI = createEhgezMal3abService();
         String token;
@@ -718,6 +734,7 @@ public class ConnectionManager {
                 }else {
                     //reservationsFragment.showToasMessage(response.body().toString());
                 }
+                reservationsFragment.showToasMessage("Accepted");
                 reservationsFragment.notifyDataChange();
             }
 
@@ -781,6 +798,7 @@ public class ConnectionManager {
                 }else {
                    // reservationsFragment.showToasMessage(mainActivity.getResources().getString(R.string.error));
                 }
+                reservationsFragment.showToasMessage("Declined");
                 reservationsFragment.notifyDataChange();
             }
 
