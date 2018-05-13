@@ -22,6 +22,11 @@ public class RegisterFragment extends Fragment {
     }
 
 
+    /*
+     * Called when creating the fragment view
+     * returns the view to be created
+     * Sets the listeners for register button
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -36,6 +41,11 @@ public class RegisterFragment extends Fragment {
 
     }
 
+    /*
+     * Sets the listener for register button
+     * Checks if info is valid
+     * If so, send the request to server through connection manager
+     */
     private void setListeners(final View registerView) {
         Button registerButton = (Button) registerView.findViewById(R.id.registerBtn);
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +67,9 @@ public class RegisterFragment extends Fragment {
         });
 
 
+        /*
+         * Listener for become venue admin button
+         */
         TextView becomeVenueAdmin = (TextView) registerView.findViewById(R.id.becomeVenAdminBtn);
         becomeVenueAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +80,9 @@ public class RegisterFragment extends Fragment {
     }
 
 
+    /*
+     * Verify all input fields according to the role of each one
+     */
     private boolean verifyUserInput(View registerView)
     {
         boolean isValidInput= true;
@@ -90,6 +106,9 @@ public class RegisterFragment extends Fragment {
 
     }
 
+    /*
+     * Checks username is not empty
+     */
     private boolean isValidUsername(View registerView)
     {
         TextView usernameText = (TextView) registerView.findViewById(R.id.usernameText);
@@ -104,6 +123,10 @@ public class RegisterFragment extends Fragment {
         return true;
     }
 
+    /*
+     * Checks password is not empty
+     *                    more than eight chars
+     */
     private boolean isValidPassword(View registerView)
     {
 
@@ -124,6 +147,9 @@ public class RegisterFragment extends Fragment {
         return true;
     }
 
+    /*
+     * Checks email matches emails format and not empty
+     */
     private boolean isValidEmail(View registerView)
     {
         TextView emailText = (TextView) registerView.findViewById(R.id.emailText);
@@ -143,6 +169,9 @@ public class RegisterFragment extends Fragment {
         return true;
     }
 
+    /*
+     * Checks number is not empty and 11 cahrs
+     */
     private boolean isValidNumber(View registerView)
     {
         TextView numberText = (TextView) registerView.findViewById(R.id.numberText);
@@ -163,6 +192,9 @@ public class RegisterFragment extends Fragment {
         return true;
     }
 
+    /*
+     * Checks full name is not empty
+     */
     private boolean isValidFullName(View registerView)
     {
         TextView fullNameText = (TextView) registerView.findViewById(R.id.fullNameText);
@@ -177,6 +209,9 @@ public class RegisterFragment extends Fragment {
         return true;
     }
 
+    /*
+     * Parse text from all fields and wrap them in player object
+     */
     protected Player readRegisterInfo(View registerView)
     {
         TextView usernameText = (TextView) registerView.findViewById(R.id.usernameText);
@@ -197,6 +232,9 @@ public class RegisterFragment extends Fragment {
         return new Player(username,password,email,number,fullName);
     }
 
+    /*
+     * SHows the response of the register request
+     */
     protected void showRegisterResponseMessage(String message)
     {
         Context context = getContext();
@@ -206,6 +244,10 @@ public class RegisterFragment extends Fragment {
     }
 
 
+    /*
+     * Launches the dial with the general admin contact
+     * Contact is brought from the server
+     */
     public void callGeneralAdmin(String number) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:"+number));

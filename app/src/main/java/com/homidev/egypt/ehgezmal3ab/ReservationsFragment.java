@@ -63,6 +63,9 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     }
 
 
+    /*
+     * Requests the reservation list from the server through the connection manager
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     protected void initializeReservationsList(final View reservationsView)
     {
@@ -108,6 +111,8 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     /*
      Creates the listener in case of player user
      Allows him to cancel or share a reservation
+     If pending allow cancel
+     If accepted allow share
      */
     protected IRecyclerViewClickListener getAppUserListener()
     {
@@ -162,6 +167,9 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     }
 
 
+    /*
+     * Called when a user clicks on share with friend
+     */
     public void createShareWithFriendMenu(){
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -223,6 +231,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     /*
      Creates the listener in case of venue Admin
      Allows him to accept or decline a reservation request
+     For pending only
      */
     protected IRecyclerViewClickListener getVenAdminListener()
     {
@@ -234,8 +243,10 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
                 final Reservation reservation = ReservationItemAdapter.getItem(position);
 
                 if(reservation.getStatus().equals("Pending")){
+                    //Creats the sub menu
                     PopupMenu menu = new PopupMenu(getContext(), (CardView) view.findViewById(R.id.reservationCardView));
                     menu.getMenuInflater().inflate(R.menu.admin_reservations_menu, menu.getMenu());
+                    //Set listener for buttons
                     menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem menuItem) {
@@ -261,6 +272,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     }
 
 
+    //Shows toast message
     public void showToasts(Error error, boolean cancelled){
         if(cancelled){
             Toast.makeText(getContext(), "Cancelled", Toast.LENGTH_SHORT).show();

@@ -124,6 +124,10 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
         return (ArrayList<Reservation>) reservationList;
     }
 
+
+    /*
+     * Called by the connection manager when reservations list is brought from the server
+     */
     public void setReservationList(ArrayList<Reservation> reservations){
         reservationList = reservations;
         this.notifyDataSetChanged();
@@ -131,6 +135,9 @@ public class ReservationItemAdapter extends RecyclerView.Adapter<ReservationItem
         displayTotalReservationsPrice();
     }
 
+    /*
+     * Called when an updating interaction happens to refresh the list and then UI
+     */
     public void refreshData()
     {
         connectionManager.getReservations(this);

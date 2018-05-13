@@ -266,6 +266,12 @@ public class PitchActivity extends AppCompatActivity {
     /*
      * This functions gets called by the connection manager after getting the schedule of the pitch
      * We have 48 buttons for each one get the corresponding slot, check if empty or not, and set the corresponding listener and background color
+     * Listener works as follow:
+     * Select:
+     *  1- If the reservation is null, initialize to the current slot
+     *  2- If not check that the current slot is adjacent to the reservation
+     * Unselect:
+     *  1- Check it is at the end or begining
      */
     public void ShowSchedule(ArrayList<TimeSlot> f_timeSlots)
     {
@@ -292,11 +298,12 @@ public class PitchActivity extends AppCompatActivity {
 
             final TimeSlot currentTimeSlot = timeSlots.get(i);
             final TimeSlot nextTimeSlot;
+
             if(i<47)    {   nextTimeSlot= timeSlots.get(i+1); }
-            else
-            {
+            else {
                 nextTimeSlot=null;
             }
+
             final TimeSlot prevTimeSlot;
             if(i>0){ prevTimeSlot= timeSlots.get(i-1);}
             else { prevTimeSlot = null;}

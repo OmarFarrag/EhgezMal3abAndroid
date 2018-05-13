@@ -12,8 +12,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by engineer on 09/04/18.
+/*
+ * Adapter class of pitches recycler view
  */
 
 public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.PitchItemViewHolder> {
@@ -23,6 +23,12 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
     private Context context;
     private IRecyclerViewClickListener listener;
 
+
+    /*
+     * Constructor
+     * Initializes connection manager
+     * Gets the list of pitches
+     */
     public PitchItemAdapter(Context context, String venueID, IRecyclerViewClickListener listener) {
         this.context = context;
         this.connectionManager = ConnectionManager.getConnectionManager();
@@ -30,6 +36,8 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
         this.listener = listener;
     }
 
+
+    //Returns the view for a certain pitch
     @Override
     public PitchItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -37,6 +45,8 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
         return new PitchItemViewHolder(view, listener);
     }
 
+
+    //Called when a swipe is revealing a new card
     @Override
     public void onBindViewHolder(PitchItemViewHolder holder, int position) {
         if(holder instanceof PitchItemViewHolder) {
@@ -49,6 +59,9 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
         }
     }
 
+    /*
+     * Gets the count of items in list
+     */
     @Override
     public int getItemCount() {
         if(pitchList == null) {
@@ -57,15 +70,21 @@ public class PitchItemAdapter extends RecyclerView.Adapter<PitchItemAdapter.Pitc
         return pitchList.size();
     }
 
+    /*
+     * Sets the pitch list
+     * Called by the connection manager when finish bringing the list from the server
+     */
     public void setPitchList(ArrayList<Pitch> pitches){
         pitchList = pitches;
         notifyDataSetChanged();
     }
 
+    //Get pitch at specific position in list
     public static Pitch getItem(int position) {
         return pitchList.get(position);
     }
 
+    //Sub class of each pitch being constructed
     public class PitchItemViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
 
         private TextView pitchTitle;

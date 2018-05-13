@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
- * Created by engineer on 08/05/18.
+ * Class representing a review submitted by  a user
  */
 
 public class PlayerSubmitReview {

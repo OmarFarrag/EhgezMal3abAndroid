@@ -30,6 +30,13 @@ public class ViewVenueFragment extends  android.support.v4.app.Fragment{
         super.onCreate(savedInstanceState);
     }
 
+
+    /*
+     * Create the view to be displayed
+     * Initialize the recycler view of the pitches
+     * get the passed info
+     * Implement the listener to launch pitch activity
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                          Bundle savedInstanceState) {
@@ -68,6 +75,9 @@ public class ViewVenueFragment extends  android.support.v4.app.Fragment{
         startActivity(intent);
     }
 
+    /*
+     * Show loading dialog
+     */
     protected void showLoading()
     {
         progressBar = new ProgressDialog(getContext());
@@ -81,6 +91,7 @@ public class ViewVenueFragment extends  android.support.v4.app.Fragment{
     {
         progressBar.dismiss();
     }
+
 
     public void setVenueID(String f_venueID, String f_venueName)
     {
