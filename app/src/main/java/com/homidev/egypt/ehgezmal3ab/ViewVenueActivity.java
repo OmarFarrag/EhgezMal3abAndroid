@@ -29,6 +29,13 @@ public class ViewVenueActivity extends AppCompatActivity {
         this.connectionManager = ConnectionManager.getConnectionManager();
     }
 
+
+    /*
+     * Create the view to be displayed
+     * Initialize the recycler view of the pitches
+     * get the passed info
+     * Implement the listener to launch pitch activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +68,7 @@ public class ViewVenueActivity extends AppCompatActivity {
 
         final ImageView imageView = findViewById(R.id.mainVenueImage);
 
+        //Display the venue image
         Picasso
                 .with(this)
                 .load("http://i.imgur.com/AS65Kmg.jpg")
@@ -72,6 +80,8 @@ public class ViewVenueActivity extends AppCompatActivity {
 
     }
 
+
+    //Launch the pitch activity
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void launchPitchActivity(int position) {
         Intent intent = new Intent(this, PitchActivity.class);
